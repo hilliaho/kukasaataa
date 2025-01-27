@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from services.db_service import DBService
 
@@ -9,8 +9,8 @@ db_service = DBService()
 
 @app.route("/api/projects", methods=["GET"])
 def get_data():
-    per_page = 10
-    page = 1
+    page = int(request.args.get("page", 1))
+    per_page = int(request.args.get("per_page", 10))
     try:
         data = db_service.fetch_documents(page, per_page)
         data_list = list(data)
