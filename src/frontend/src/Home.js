@@ -13,21 +13,20 @@ const Home = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [step, setStep] = useState("home");
-  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [resultsPerPage, setResultsPerPage] = useState(10);
+  const [resultsPerPage, setResultsPerPage] = useState(300);
   const [totalSearchResults, setTotalSearchResults] = useState(30)
   const [prefetchedPages, setPrefetchedPages] = useState({})
 
   useEffect(() => {
-    if (projects.length > 0) {
+    if (searchResults.length > 0) {
       const fetchNextPages = async () => {
         const pagesToPrefetch = [currentPage + 1, currentPage + 2];
         for (const page of pagesToPrefetch) {
           if (!prefetchedPages[page]) {
             try {
-              const response = await fetch(`/api/projects?page=${page}&per_page=${resultsPerPage}`);
+              const response = await fetch(`/api/projects?page=${page}&per_page=${resultsPerPage}&search_query=${searchQuery}`);
               const data = await response.json();
               setPrefetchedPages((prev) => ({ ...prev, [page]: data }));
               console.log(`Prefetched page ${page}:`, data);
@@ -39,16 +38,16 @@ const Home = () => {
       };
       fetchNextPages();
     }
-  }, [projects, currentPage, resultsPerPage, prefetchedPages]);
+  }, [searchResults, currentPage, resultsPerPage, prefetchedPages]);
   
   
 
-  const fetchProjects = async (page, perPage) => {
+  const fetchProjects = async (page, perPage, searchQuery) => {
+    console.log(`haetaan projekteja ${perPage} kpl sivulta ${page} hakusanalla ${searchQuery}`)
     setLoading(true)
     try {
-      const response = await fetch(`/api/projects?page=${page}&per_page=${perPage}`);
+      const response = await fetch(`/api/projects?page=${page}&per_page=${perPage}&search_query=${searchQuery}`);
       const data = await response.json();
-      setProjects(data);
       setSearchResults(data);
       console.log("Projects fetched:", data);
     } catch (error) {
@@ -72,10 +71,7 @@ const Home = () => {
   };
 
   const handleSearch = () => {
-    console.log("projects:", projects);
-    const results = projects.filter((project) =>
-      project.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const results = fetchProjects(currentPage, resultsPerPage, searchQuery)
     setSearchResults(results);
     console.log("Search results:", results);
   };
@@ -95,10 +91,9 @@ const Home = () => {
 
   const paginate = (pageNumber, perPage) => {
     if (prefetchedPages[pageNumber]) {
-      setProjects(prefetchedPages[pageNumber]);
       setSearchResults(prefetchedPages[pageNumber]);
     } else {
-      fetchProjects(pageNumber, perPage)
+      fetchProjects(pageNumber, perPage, searchQuery)
     }
     setCurrentPage(pageNumber);
     setResultsPerPage(perPage)
@@ -131,11 +126,11 @@ const Home = () => {
               handleSearch={handleSearch}
             />
             {loading ? (<p>Ladataan hankkeita...</p>) : (<p></p>)}
-            {projects.length > 0 ? (
+            {searchResults.length > 0 ? (
               <>
                 <SelectedProjects
                   selectedProjects={selectedProjects}
-                  projects={projects}
+                  projects={searchResults}
                   handleCheckboxChange={handleCheckboxChange}
                 />
                 <SearchResults
@@ -151,7 +146,7 @@ const Home = () => {
                 totalSearchResults={totalSearchResults}
                 />
               </>
-            ) : (<button onClick={() => fetchProjects(currentPage, resultsPerPage)}>Lataa hankkeet</button>)}
+            ) : (<button onClick={() => fetchProjects(currentPage, resultsPerPage, searchQuery)}>Lataa hankkeet</button>)}
           </div>
           <button className="continue-button" onClick={handleSaveAndContinue}>
             Tallenna ja siirry eteenpäin

@@ -11,8 +11,10 @@ db_service = DBService()
 def get_data():
     page = int(request.args.get("page", 1))
     per_page = int(request.args.get("per_page", 10))
+    search_query = request.args.get("search_query", "")
+    print(f"App.py: hakusana: {search_query}")
     try:
-        data = db_service.fetch_documents(page, per_page)
+        data = db_service.fetch_documents(page, per_page, search_query)
         data_list = list(data)
         return jsonify(data_list), 200
     except Exception as e:
