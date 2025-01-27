@@ -15,11 +15,14 @@ const Home = () => {
   const [step, setStep] = useState("home");
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [resultsPerPage, setResultsPerPage] = useState(300);
+  const [resultsPerPage, setResultsPerPage] = useState(10);
   const [totalSearchResults, setTotalSearchResults] = useState(30)
   const [prefetchedPages, setPrefetchedPages] = useState({})
 
   useEffect(() => {
+    if (searchResults.length === 0) {
+      fetchProjects(1, 10, searchQuery)
+    }
     if (searchResults.length > 0) {
       const fetchNextPages = async () => {
         const pagesToPrefetch = [currentPage + 1, currentPage + 2];
@@ -38,7 +41,7 @@ const Home = () => {
       };
       fetchNextPages();
     }
-  }, [searchResults, currentPage, resultsPerPage, prefetchedPages]);
+  }, [searchResults, currentPage, resultsPerPage, prefetchedPages, searchQuery]);
   
   
 
@@ -53,6 +56,7 @@ const Home = () => {
     } catch (error) {
       console.error("Error fetching projects:", error);
     }
+    setPrefetchedPages({})
     setLoading(false)
   };
 

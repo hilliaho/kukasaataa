@@ -1,5 +1,11 @@
 # Kuka säätää?
 
+## Todo
+Luo oikea tulosten mukainen määrä sivutusnumeronappeja
+Näytä lausunnot käyttöliittymässä (tuloksissa submissions {nimi:, url:})
+Suunnittele käyttöliittymäaskeleiden seuraava vaihe
+Hae lisää dokumenttityyppejä hankeikkunasta
+
 ## käynnistysohjeet
 
 Käynnistä backend
