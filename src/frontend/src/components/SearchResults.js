@@ -4,7 +4,7 @@ import DocumentPage from './ProposalContent';
 
 const SearchResults = ({ results, selectedProjects, handleCheckboxChange, searchQuery }) => {
     return (
-        <div>
+        <div className='projects-container'>
             <h2>Hakutulokset</h2>
             {results.length === 0 ? (
                 <p>Ei hakutuloksia hakusanalla {searchQuery}</p>

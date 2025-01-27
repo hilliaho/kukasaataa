@@ -3,7 +3,7 @@ import ResultItem from "./ResultItem";
 
 const SelectedProjects = ({ selectedProjects, projects, handleCheckboxChange }) => {
     return (
-        <div>
+        <div className="project-container">
         <h2>Valitut hankkeet</h2>
         <ul>
             {selectedProjects.length === 0 ? (
