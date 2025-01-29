@@ -1,3 +1,12 @@
+/*
+1. Käyttäjä avaa sivun
+2. effect: sovellus lataa tulosten kokonaismäärän tyhjällä hakusanalla ja tekee sivutuksen
+3. effect: sovellus lataa ensimmäisen sivun sisällön
+4. effect: sovellus lataa n kpl seuraavia sivuja
+*/
+
+
+
 import React, { useState, useEffect } from "react";
 import SearchResults from "./components/SearchResults";
 import SearchField from "./components/SearchField";
@@ -16,41 +25,33 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsPerPage, setResultsPerPage] = useState(10);
-  const [totalSearchResults, setTotalSearchResults] = useState(30)
+  const [totalSearchResults, setTotalSearchResults] = useState(0)
   const [prefetchedPages, setPrefetchedPages] = useState({})
 
   useEffect(() => {
     if (searchResults.length === 0) {
+      fetchTotalCount(searchQuery)
       fetchProjects(1, 10, searchQuery)
     }
-    if (searchResults.length > 0) {
-      const fetchNextPages = async () => {
-        const pagesToPrefetch = [currentPage + 1, currentPage + 2];
-        for (const page of pagesToPrefetch) {
-          if (!prefetchedPages[page]) {
-            try {
-              const response = await fetch(`/api/projects?page=${page}&per_page=${resultsPerPage}&search_query=${searchQuery}`);
-              const data = await response.json();
-              setPrefetchedPages((prev) => ({ ...prev, [page]: data }));
-              console.log(`Prefetched page ${page}:`, data);
-            } catch (error) {
-              console.error(`Error prefetching page ${page}:`, error);
-            }
-          }
-        }
-      };
-      fetchNextPages();
-    }
-  }, [searchResults, currentPage, resultsPerPage, prefetchedPages, searchQuery]);
-  
-  
+    }, [searchQuery, searchResults.length]);
 
+  const fetchTotalCount = async (searchQuery) => {
+    console.log("fetch total count")
+    setLoading(true)
+    const response = await fetch(`/api/projects/count?search_query=${searchQuery}`)
+    const data = await response.json()
+    console.log("Total search results: ", data.count)
+    setTotalSearchResults(data.count)
+    setLoading(false)
+  }
+  
   const fetchProjects = async (page, perPage, searchQuery) => {
     console.log(`haetaan projekteja ${perPage} kpl sivulta ${page} hakusanalla ${searchQuery}`)
     setLoading(true)
     try {
       const response = await fetch(`/api/projects?page=${page}&per_page=${perPage}&search_query=${searchQuery}`);
       const data = await response.json();
+      console.log(data)
       setSearchResults(data);
       console.log("Projects fetched:", data);
     } catch (error) {
@@ -58,6 +59,33 @@ const Home = () => {
     }
     setPrefetchedPages({})
     setLoading(false)
+  };
+
+  useEffect(() => {
+    const fetchNextPages = async () => {
+      const pagesToPrefetch = [currentPage + 1, currentPage + 2];
+      for (const page of pagesToPrefetch) {
+        if (!prefetchedPages[page]) {
+          try {
+            const response = await fetch(`/api/projects?page=${page}&per_page=${resultsPerPage}&search_query=${searchQuery}`);
+            const data = await response.json();
+            setPrefetchedPages((prev) => ({ ...prev, [page]: data }));
+          } catch (error) {
+            console.error(`Error prefetching page ${page}:`, error);
+          }
+        }
+      }
+    };
+
+    fetchNextPages();
+  }, [currentPage, resultsPerPage, searchQuery, prefetchedPages]);
+
+  const handleSearch = () => {
+    setSearchResults([])
+    setPrefetchedPages({})
+    setTotalSearchResults(0)
+    fetchTotalCount(searchQuery)
+    fetchProjects(1, resultsPerPage, searchQuery)
   };
 
   const handleBackToHome = () => {
@@ -72,12 +100,6 @@ const Home = () => {
 
   const handleBackToSelection = () => {
     setStep("selection");
-  };
-
-  const handleSearch = () => {
-    const results = fetchProjects(currentPage, resultsPerPage, searchQuery)
-    setSearchResults(results);
-    console.log("Search results:", results);
   };
 
   const handleCheckboxChange = (id) => {
@@ -129,8 +151,8 @@ const Home = () => {
               setSearchQuery={setSearchQuery}
               handleSearch={handleSearch}
             />
-            {loading ? (<p>Ladataan hankkeita...</p>) : (<p></p>)}
-            {searchResults.length > 0 ? (
+            {loading && (<p>Ladataan hankkeita...</p>)}
+            {searchResults.length > 0 && (
               <>
                 <SelectedProjects
                   selectedProjects={selectedProjects}
@@ -150,7 +172,8 @@ const Home = () => {
                 totalSearchResults={totalSearchResults}
                 />
               </>
-            ) : (<button onClick={() => fetchProjects(currentPage, resultsPerPage, searchQuery)}>Lataa hankkeet</button>)}
+            )}
+            {!loading && searchResults.length === 0 && <p>Ei hakutuloksia hakusanalla {searchQuery}</p>}
           </div>
           <button className="continue-button" onClick={handleSaveAndContinue}>
             Tallenna ja siirry eteenpäin

@@ -1,20 +1,47 @@
 const Pagination = ({ currentPage, resultsPerPage, paginate, totalSearchResults }) => {
   const pageNumbers = [];
+  const totalPages = Math.ceil(totalSearchResults / resultsPerPage);
+  const maxVisiblePages = 3;
 
-  for (let i = 1; i <= Math.ceil(totalSearchResults / resultsPerPage); i++) {
-    pageNumbers.push(i);
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(i);
+    }
+  } else {
+    pageNumbers.push(1);
+
+    if (currentPage > maxVisiblePages + 2) {
+      pageNumbers.push("...");
+    }
+
+    const startPage = Math.max(2, currentPage - maxVisiblePages);
+    const endPage = Math.min(totalPages - 1, currentPage + maxVisiblePages);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    if (currentPage < totalPages - maxVisiblePages - 1) {
+      pageNumbers.push("...");
+    }
+
+    pageNumbers.push(totalPages);
   }
 
   return (
     <div>
-      <p>Page Numbers:</p>
       <nav className="pagination">
-        {pageNumbers.map((number) => (
-            <button key={number} className={`page-item ${currentPage === number ? "active" : ""}`} onClick={() => paginate(number, resultsPerPage)}>
-              {number}
-            </button>
+        {pageNumbers.map((number, index) => (
+          <button
+            key={index}
+            className={`page-item ${currentPage === number ? "active" : ""}`}
+            onClick={() => typeof number === "number" && paginate(number, resultsPerPage)}
+            disabled={typeof number !== "number"}
+          >
+            {number}
+          </button>
         ))}
-			</nav>
+      </nav>
     </div>
   );
 };
