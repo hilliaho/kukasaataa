@@ -43,6 +43,7 @@ const Home = () => {
     console.log("Total search results: ", data.count)
     setTotalSearchResults(data.count)
     setLoading(false)
+    return data.count
   }
   
   const fetchProjects = async (page, perPage, searchQuery) => {
@@ -84,8 +85,10 @@ const Home = () => {
     setSearchResults([])
     setPrefetchedPages({})
     setTotalSearchResults(0)
-    fetchTotalCount(searchQuery)
-    fetchProjects(1, resultsPerPage, searchQuery)
+    const count = fetchTotalCount(searchQuery)
+    if (count > 0) {
+      fetchProjects(1, resultsPerPage, searchQuery)
+    }
   };
 
   const handleBackToHome = () => {
@@ -173,7 +176,7 @@ const Home = () => {
                 />
               </>
             )}
-            {!loading && searchResults.length === 0 && <p>Ei hakutuloksia hakusanalla {searchQuery}</p>}
+            {!loading && searchResults.length === 0 && totalSearchResults === 0 && <p>Ei hakutuloksia hakusanalla {searchQuery}</p>}
           </div>
           <button className="continue-button" onClick={handleSaveAndContinue}>
             Tallenna ja siirry eteenpäin
