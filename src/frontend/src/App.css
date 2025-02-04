@@ -1,45 +1,45 @@
 /* Yleiset tyylit koko sovellukselle */
 :root {
-    /* colors */
-    --primary: hsl(202, 67%, 36%);
-    --primary-dark: hsl(202, 67%, 28%);
-    --grayish: hsl(202, 20%, 40%);
-    --hilight: hsl(162, 56%, 85%);
-    --hilight-border: hsl(162, 15%, 75%);
-    --divider: hsl(202, 15%, 82%);
-    --background: hsl(210, 5%, 96%);
+	/* colors */
+	--primary: hsl(202, 67%, 36%);
+	--primary-dark: hsl(202, 67%, 28%);
+	--grayish: hsl(202, 20%, 40%);
+	--hilight: hsl(162, 56%, 85%);
+	--hilight-border: hsl(162, 15%, 75%);
+	--divider: hsl(202, 15%, 82%);
+	--background: hsl(210, 5%, 96%);
 }
 
 * {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    height: 100vh;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	font-family: Arial, sans-serif;
+	background-color: #f5f5f5;
+	color: #333;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	height: 100vh;
 }
 
 .center-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin-right: auto;
-    margin-left: auto;
-    max-width: 1000px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 1000px;
 }
 
 .project-container {
-    max-width: 1000px;
-    margin: 0 auto;
+	max-width: 1000px;
+	margin: 0 auto;
 }
 
 h1,
@@ -48,113 +48,112 @@ h3,
 h4,
 h5,
 h6 {
-    color: #444;
+	color: #444;
 }
 
 a {
-    color: var(--primary);
-    text-decoration: none;
+	color: var(--primary);
+	text-decoration: none;
 }
 
 a:hover,
 a:focus {
-    color: var(--primary-dark);
-    text-decoration: underline;
+	color: var(--primary-dark);
+	text-decoration: underline;
 }
 
 ul {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 button {
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
+	background-color: var(--primary);
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	border-radius: 5px;
 }
 
 button:hover {
-    background-color: var(--primary-dark);
+	background-color: var(--primary-dark);
 }
 
 .search-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
 }
 
 input[type="text"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-    margin-top: 20px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-sizing: border-box;
+	margin-bottom: 20px;
+	margin-top: 20px;
 }
 
 .back-button {
-    position: fixed;
-    top: 20px;
-    left: 20px;
+	position: fixed;
+	top: 20px;
+	left: 20px;
 }
 
 .continue-button {
-    position: fixed;
-    bottom: 20px;
-    right: 16px;
+	position: fixed;
+	bottom: 20px;
+	right: 16px;
 }
 
 .he-identifier-button {
-    background: none;
-    border: none;
-    color: var(--primary);
-    font: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
-    text-align: left;
+	background: none;
+	border: none;
+	color: var(--primary);
+	font: inherit;
+	font-weight: bold;
+	cursor: pointer;
+	padding: 0;
+	margin: 0;
+	text-align: left;
 }
 
 .he-identifier-button:hover {
-    background-color: transparent;
-    text-decoration: underline;
+	background-color: transparent;
+	text-decoration: underline;
 }
 
 .proposal-content {
-    margin-top: 30px;
+	margin-top: 30px;
 }
 
 .download-a {
-    margin-top: 10px;
+	margin-top: 10px;
 }
 
 .result-item {
-    border: 1px solid #ccc;
-    padding: 20px;
-    margin-left: 50px;
-    margin-right: 50px;
-    text-align: left;
+	border: 1px solid #ccc;
+	padding: 20px;
+	margin-left: 50px;
+	margin-right: 50px;
+	text-align: left;
 }
 
 .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
 }
 
 .page-item {
-    margin: 0 5px;
-    border: 1px solid var(--primary-dark);
-    padding: 5px 10px;
-    cursor: pointer;
+	margin: 0 5px;
+	border: 1px solid var(--primary-dark);
+	padding: 5px 10px;
+	cursor: pointer;
 }
 
 .page-item.active {
-    background-color: var(--background);
-    color: var(--primary)
+	background-color: var(--background);
+	color: var(--primary)
 }
-  

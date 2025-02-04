@@ -13,6 +13,7 @@ import SearchField from "./components/SearchField";
 import BackButton from "./components/BackButton";
 import SelectedProjects from "./components/SelectedProjects";
 import Pagination from "./components/Pagination";
+import Summary from "./components/Summary";
 import "./App.css";
 
 
@@ -187,10 +188,7 @@ const Home = () => {
           <div className="back-button">
             <BackButton handleFunction={handleBackToSelection} />
           </div>
-          <div className="center-container">
-            <h1>Yhteenveto</h1>
-            <p>Valitut hankkeet:</p>
-          </div>
+          <Summary selectedProjects={selectedProjects}/>
         </>
       )}
     </div>

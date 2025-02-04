@@ -3,7 +3,7 @@ import ResultItem from './ResultItem';
 
 const SearchResults = ({ results, selectedProjects, handleCheckboxChange, searchQuery }) => {
 	return (
-		<div className='projects-container'>
+		<div className='project-container'>
 			{searchQuery ? (<h2>Hakutulokset hakusanalla "{searchQuery}"</h2>):(<h2>Kaikki hankkeet</h2>)}
 			{results.filter(result => !selectedProjects.includes(result)).map(result => (
 					<ResultItem
