@@ -10,7 +10,7 @@ const ResultItem = ({ result, isSelected, handleCheckboxChange }) => {
 			<input
 				type="checkbox"
 				checked={isSelected}
-				onChange={() => handleCheckboxChange(result.id)}
+				onChange={() => handleCheckboxChange(result)}
 			/>
 			<button className='he-identifier-button' onClick={() => setExpandedContent(!expandedContent)}>{result.heIdentifier}</button>
 			<div className="download-a">

@@ -105,16 +105,15 @@ const Home = () => {
     setStep("selection");
   };
 
-  const handleCheckboxChange = (id) => {
-    if (selectedProjects.includes(id)) {
-      setSelectedProjects(selectedProjects.filter((result) => result !== id));
+  const handleCheckboxChange = (project) => {
+    if (selectedProjects.includes(project.id)) {
+      setSelectedProjects(selectedProjects.filter((p) => p.id !== project.id));
     } else {
-      setSelectedProjects([...selectedProjects, id]);
+      setSelectedProjects([...selectedProjects, project]);
     }
   };
 
   const handleSaveAndContinue = () => {
-    console.log("Tallennetaan ja siirrytään eteenpäin");
     setStep("summary");
   };
 

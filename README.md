@@ -4,6 +4,7 @@
 Näytä lausunnot käyttöliittymässä (tuloksissa submissions {nimi:, url:})
 Suunnittele käyttöliittymäaskeleiden seuraava vaihe
 Hae lisää dokumenttityyppejä hankeikkunasta
+Poista tai täydennä tyhjät hallituksen esitykset tietokannasta
 
 ## käynnistysohjeet
 
