@@ -23,8 +23,8 @@ class DBService:
 			if search_query:
 				query = {
 					"$or": [
-							{"name": {"$regex": search_query, "$options": "i"}},
-							{"heIdentifier": {"$regex": search_query, "$options": "i"}},
+							{"heNimi": {"$regex": search_query, "$options": "i"}},
+							{"heTunnus": {"$regex": search_query, "$options": "i"}},
 					]
 				}
 
@@ -37,8 +37,8 @@ class DBService:
 		if search_query:
 			query = {
 				"$or": [
-							{"name": {"$regex": search_query, "$options": "i"}},
-							{"heIdentifier": {"$regex": search_query, "$options": "i"}},
+							{"heNimi": {"$regex": search_query, "$options": "i"}},
+							{"heTunnus": {"$regex": search_query, "$options": "i"}},
 						]
 			}
 		

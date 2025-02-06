@@ -6,10 +6,10 @@ const Project = ({project}) => {
 	console.log("project: ", project)
 	return (
 		<div className="result-item">
-			<p><strong>HANKE {project.heIdentifier}</strong></p>
-			<p>{project.name}</p>
+			<p><strong>HANKE {project.heTunnus}</strong></p>
+			<p>{project.heNimi}</p>
 			<ul>
-				{<DocumentInfo name={"Lausuntokierroksen lausunnot"} documentList={project.submissions ?? []}/>}
+				{<DocumentInfo name={"Lausuntokierroksen lausunnot"} documentList={project.lausunnot ?? []}/>}
 			</ul>
 		</div>
 	)

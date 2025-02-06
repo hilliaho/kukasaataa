@@ -12,13 +12,13 @@ const ResultItem = ({ result, isSelected, handleCheckboxChange }) => {
 				checked={isSelected}
 				onChange={() => handleCheckboxChange(result)}
 			/>
-			<button className='he-identifier-button' onClick={() => setExpandedContent(!expandedContent)}>{result.heIdentifier}</button>
+			<button className='he-identifier-button' onClick={() => setExpandedContent(!expandedContent)}>{result.heTunnus}</button>
 			<div className="download-a">
-				<a href={result.proposalUrl}>{result.name}</a>
+				<a href={result.heUrl}>{result.heNimi}</a>
 			</div>
 			{expandedContent && 
 			<div className='expanded-content'>
-				<PreparatoryDocuments submissions={result.submissions}/>
+				<PreparatoryDocuments submissions={result.lausunnot}/>
 			</div>}
 		</div>
 	);

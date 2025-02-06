@@ -7,9 +7,9 @@ const SearchResults = ({ results, selectedProjects, handleCheckboxChange, search
 			{searchQuery ? (<h2>Hakutulokset hakusanalla "{searchQuery}"</h2>):(<h2>Kaikki hankkeet</h2>)}
 			{results.filter(result => !selectedProjects.includes(result)).map(result => (
 					<ResultItem
-						key={result.id}
+						key={result._id}
 						result={result}
-						isSelected={selectedProjects.includes(result.id)}
+						isSelected={selectedProjects.includes(result._id)}
 						handleCheckboxChange={handleCheckboxChange}
 					/>
 				))}
