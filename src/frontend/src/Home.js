@@ -37,7 +37,6 @@ const Home = () => {
     }, [searchQuery, searchResults.length]);
 
   const fetchTotalCount = async (searchQuery) => {
-    console.log("fetch total count")
     setLoading(true)
     const response = await fetch(`/api/projects/count?search_query=${searchQuery}`)
     const data = await response.json()
