@@ -9,12 +9,13 @@ const SelectedProjects = ({ selectedProjects, projects, handleCheckboxChange }) 
             {selectedProjects.length === 0 ? (
             <p>Ei valittuja hankkeita</p>
             ) : (
-            selectedProjects.map((project) => (
-                <ResultItem
+            selectedProjects.map((project, index) => (
+                <div key={index}><ResultItem
                 key={project.id}
                 result={project}
                 isSelected={true}
                 handleCheckboxChange={handleCheckboxChange}/>
+                </div>
             ))
             )}
         </ul>

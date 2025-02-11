@@ -6,7 +6,7 @@ const ResultItem = ({ result, isSelected, handleCheckboxChange }) => {
 	const [expandedContent, setExpandedContent] = useState(false);
 
 	return (
-		<div className='result-item'>
+		<div key={result._id} className='result-item'>
 			<input
 				type="checkbox"
 				checked={isSelected}
@@ -18,7 +18,7 @@ const ResultItem = ({ result, isSelected, handleCheckboxChange }) => {
 			</div>
 			{expandedContent && 
 			<div className='expanded-content'>
-				<PreparatoryDocuments submissions={result.lausunnot}/>
+				<PreparatoryDocuments submissions={result.dokumentit.lausunnot}/>
 			</div>}
 		</div>
 	);
