@@ -1,19 +1,10 @@
 # Kuka säätää?
 
 ## Todo
-Muuta tietokannan rakennetta niin, että siellä on
-hanke: {
-    ...
-    dokumentit: {
-        lausuntokierroksenLausunnot: []
-        valiokuntaAsiakirjat: []
-        asiantuntijaLausunnot: []
-    }
-}
-Näytä lausunnot käyttöliittymässä (tuloksissa submissions {nimi:, url:})
 Suunnittele käyttöliittymäaskeleiden seuraava vaihe
 Hae lisää dokumenttityyppejä hankeikkunasta
 Poista tai täydennä tyhjät hallituksen esitykset tietokannasta
+Optimoi sisällön lataamista niin että tietoja ei ladata monta kertaa
 
 ## käynnistysohjeet
 
