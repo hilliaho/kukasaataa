@@ -1,6 +1,7 @@
 import Project from "./Project"
 
 const Summary = ({ selectedProjects }) => {
+	console.log("tehdään summary projekteilla: ", selectedProjects)
     return (
 			<div className="center-container">
 				<h1>Yhteenveto</h1>

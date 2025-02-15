@@ -9,7 +9,8 @@ const Project = ({project}) => {
 			<p><strong>HANKE {project.heTunnus}</strong></p>
 			<p>{project.heNimi}</p>
 			<ul>
-				{<DocumentInfo name={"Lausuntokierroksen lausunnot"} documentList={project.lausunnot ?? []}/>}
+				{<DocumentInfo name={"Lausuntokierroksen lausunnot"} documentList={project.dokumentit.lausunnot ?? []}/>}
+				{<DocumentInfo name={"Asiantuntijalausunnot"} documentList={project.dokumentit.asiantuntijalausunnot ?? []}/>}
 			</ul>
 		</div>
 	)

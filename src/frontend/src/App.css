@@ -157,3 +157,17 @@ input[type="text"] {
 	background-color: var(--background);
 	color: var(--primary)
 }
+
+.dropdown-arrow {
+	max-width: 10px;
+	margin-left: 3px;
+}
+
+.document-info-name {
+	cursor: pointer;
+}
+
+.document-info-name:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
