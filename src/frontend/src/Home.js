@@ -106,12 +106,16 @@ const Home = () => {
   };
 
   const handleCheckboxChange = (project) => {
-    if (selectedProjects.includes(project.id)) {
-      setSelectedProjects(selectedProjects.filter((p) => p.id !== project.id));
-    } else {
-      setSelectedProjects([...selectedProjects, project]);
-    }
+    setSelectedProjects((prevSelected) => {
+      const isSelected = prevSelected.some((p) => p._id === project._id);
+      if (isSelected) {
+        return prevSelected.filter((p) => p._id !== project._id);
+      } else {
+        return [...prevSelected, project];
+      }
+    });
   };
+  
 
   const handleSaveAndContinue = () => {
     setStep("summary");
