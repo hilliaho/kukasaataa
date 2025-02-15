@@ -28,8 +28,10 @@ class DBService:
 					]
 				}
 
-			documents = self.collection.find(query, {"_id": 0}).skip(skip_count).limit(page_size)
-			return list(documents)
+			documents = list(self.collection.find(query).skip(skip_count).limit(page_size))
+			for doc in documents:
+				doc["_id"] = str(doc["_id"])
+			return documents
 	
 	def count_documents(self, search_query=""):
 		query = {}
