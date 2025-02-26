@@ -1,7 +1,7 @@
-const Submission = ({name, url}) => {
+const Submission = ({name, type, url}) => {
 	return (
 		<div className="submission">
-			<a href={url}>{name}</a>
+			<a href={url}>{type}: {name}</a>
 		</div>
 	)
 }
