@@ -1,30 +1,67 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from "react"
+import Submission from "./Submission"
 import arrow from '../assets/dropdown-arrow.png'
-import PreparatoryDocuments from './PreparatoryDocuments';
 
 
-const DocumentInfo = ({name, documentList}) => {
+const DocumentInfo = ({ submissions, name }) => {
 	const [expanded, setExpanded] = useState(false)
+	const [submissionList, setSubmissionList] = useState(
+		submissions.map(sub => ({ ...sub, selected: true }))
+	)
+
+	const handleCheckboxChange = () => {
+		const newSelectedState = !submissionList.every(sub => sub.selected)
+		const updatedSubmissions = submissionList.map(sub => ({
+			...sub,
+			selected: newSelectedState
+		}))
+		setSubmissionList(updatedSubmissions)
+	}
+
+	const updateSubmissionSelection = (index, isSelected) => {
+		const updatedSubmissions = [...submissionList]
+		updatedSubmissions[index].selected = isSelected
+		setSubmissionList(updatedSubmissions)
+	}
 
 	return (
 		<div>
-			<p className='document-info-name' onClick={() => setExpanded(!expanded)}>
-			{name} ({documentList.length}) 
-			<img 
-			className='dropdown-arrow' 
-			src={arrow} 
-			alt='dropdown arrow'
-			onClick={() => setExpanded(!expanded)}
+			<div className="content-row">
+			<input
+				type="checkbox"
+				checked={submissionList.some(sub => sub.selected)}
+				onChange={handleCheckboxChange}
 			/>
+			<p className='document-info-name' onClick={() => setExpanded(!expanded)}>
+				{name} ({submissions.length})
+				<img
+					className='dropdown-arrow'
+					src={arrow}
+					alt='dropdown arrow'
+					onClick={() => setExpanded(!expanded)}
+				/>
 			</p>
-			{expanded && 
-			<div>
-				<ul>
-				<PreparatoryDocuments submissions={documentList} />
-				</ul>
 			</div>
+			{expanded &&
+				<div>
+					<ul>
+						<div className="preparatory-documents">
+							{submissionList.length > 0 ? (
+								submissionList.map((submission, index) => (
+									<Submission
+										key={index}
+										submission={submission}
+										onSelectionChange={(isSelected) => updateSubmissionSelection(index, isSelected)}
+									/>
+								))
+							) : (
+								<p>Ei lausuntoja.</p>
+							)}
+						</div>
+					</ul>
+				</div>
 			}
+
 		</div>
 	)
 }

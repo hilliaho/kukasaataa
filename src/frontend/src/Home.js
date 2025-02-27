@@ -111,11 +111,18 @@ const Home = () => {
       if (isSelected) {
         return prevSelected.filter((p) => p._id !== project._id);
       } else {
-        return [...prevSelected, project];
+        const selectedProject = addSelectedFields(project)
+        return [...prevSelected, selectedProject];
       }
     });
   };
-  
+
+  const addSelectedFields = (project) => {
+    project.dokumentit.lausunnot = project.dokumentit.lausunnot.map(lausunto => lausunto = {...lausunto, "selected": true})
+    project.dokumentit.asiantuntijalausunnot = project.dokumentit.asiantuntijalausunnot.map(lausunto => lausunto = {...lausunto, "selected": true})
+    project.dokumentit.valiokuntaAsiakirjat = project.dokumentit.valiokuntaAsiakirjat.map(lausunto => lausunto = {...lausunto, "selected": true})
+    return project
+  }
 
   const handleSaveAndContinue = () => {
     setStep("summary");
