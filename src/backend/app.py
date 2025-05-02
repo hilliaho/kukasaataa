@@ -7,7 +7,9 @@ CORS(app)
 
 db_service = DBService()
 
-@app.route("/api/projects", methods=["GET"])
+
+
+@app.route("/projects", methods=["GET"])
 def get_data():
     page = int(request.args.get("page", 1))
     per_page = int(request.args.get("per_page", 10))
@@ -18,7 +20,7 @@ def get_data():
     except Exception as e:
         return jsonify({"error": "Failed to fetch data"}), 500
     
-@app.route("/api/projects/count", methods=["GET"])
+@app.route("/projects/count", methods=["GET"])
 def get_result_count():
     search_query = request.args.get("search_query", "")
     try:
