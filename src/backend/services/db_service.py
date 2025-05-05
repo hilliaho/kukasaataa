@@ -13,8 +13,8 @@ class DBService:
 					raise ValueError("MONGODB_URI is not set in the .env file")
 			DBService._client = MongoClient(mongodb_uri)
 			
-		self.db = DBService._client["test_database_3"]
-		self.collection = self.db["test_collection"]
+		self.db = DBService._client["kukasaataa"]
+		self.collection = self.db["projects"]
 
 	def fetch_documents(self, page_number, page_size, search_query=""):
 			skip_count = (page_number - 1) * page_size

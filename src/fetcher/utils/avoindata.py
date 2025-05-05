@@ -4,6 +4,7 @@ from services.db_service import DBService
 
 db_service = DBService()
 
+
 def process_preparatory_documents(api_data):
     """Käsittele valmisteluasiakirjat ja muokkaa ne sopivaan muotoon"""
     result_list = api_data["rowData"]
@@ -22,23 +23,28 @@ def process_preparatory_documents(api_data):
         if url_match:
             url = url_match.group(1)
         processed_element = {
-            "he_tunnus": identifier,
+            "heTunnus": identifier,
             "asiakirjatyyppi": doc_type,
             "nimi": name,
-            "url": url
+            "url": url,
         }
         processed_list.append(processed_element)
     return processed_list
 
+
 def remove_vp(he_id):
     he_id = he_id.split(",")[0]
-    return re.sub(r'\s*vp$', '', he_id)
+    return re.sub(r"\s*vp$", "", he_id)
+
 
 def remove_unnecessary_info_from_name(text):
     text = text.strip()
-    name = re.sub(r'^[A-Z]+\s\d{1,3}/\d{4}\svp\s[A-Za-z]+\s\d{2}\.\d{2}\.\d{4}\s', '', text)
-    name = re.sub(r'\s*Asiantuntijalausunto$', '', name)
+    name = re.sub(
+        r"^[A-Z]+\s\d{1,3}/\d{4}\svp\s[A-Za-z]+\s\d{2}\.\d{2}\.\d{4}\s", "", text
+    )
+    name = re.sub(r"\s*Asiantuntijalausunto$", "", name)
     return name
+
 
 def process_and_store_government_proposals(api_data):
     """Käsittelee ja tallentaa datan tietokantaan."""
@@ -49,6 +55,7 @@ def process_and_store_government_proposals(api_data):
             print(f"Lisätty dokumentti {proposal['heTunnus']} tietokantaan")
         else:
             print(f"Dokumentti {proposal['heTunnus']} on jo tietokannassa")
+
 
 def parse_government_proposals(api_data):
     """Käsittele hallituksen esitykset ja muokkaa ne sopivaan muotoon"""
@@ -70,11 +77,16 @@ def parse_government_proposals(api_data):
         processed_element = {
             "heTunnus": he_id,
             "heNimi": name,
-            "heUrl": url
+            "heUrl": url,
+            "dokumentit": {
+                "lausunnot": [],
+                "asiantuntijalausunnot": [],
+                "valiokuntaAsiakirjat": [],
+            },
         }
-        print(f"Processed element: {processed_element}")
         processed_list.append(processed_element)
     return processed_list
+
 
 def parse_xml_name(xml_data):
     wrapped_xml = f"<root>{xml_data}</root>"
@@ -89,6 +101,7 @@ def parse_xml_name(xml_data):
     except ET.ParseError as e:
         print(f"XML-parsinta epäonnistui: {e}")
         return None
+
 
 def parse_xml_doc_type(xml_data):
     wrapped_xml = f"<root>{xml_data}</root>"
@@ -112,9 +125,7 @@ def find_preparatory_identifier(text):
     return matches if matches else None
 
 
-def create_document(
-    he_identifier, name, proposal_url, preparatory_identifier
-):
+def create_document(he_identifier, name, proposal_url, preparatory_identifier):
     return {
         "heNimi": name,
         "heTunnus": he_identifier,

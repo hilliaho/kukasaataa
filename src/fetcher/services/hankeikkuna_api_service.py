@@ -13,27 +13,27 @@ class HankeikkunaApiService:
             }
             if i == 0:
                 query = {
-                    "muokattuPaivaAlku": "2024-01-01T00:00:00",
-                    "muokattuPaivaLoppu": "2025-01-01T23:59:59",
+                    "muokattuPaivaAlku": "2020-01-01T00:00:00",
+                    "muokattuPaivaLoppu": "2025-05-01T23:59:59",
                     "size": per_page,
                     "sort": [
                         {
                             "field": "kohde.muokattu",
-                            "order": "ASC",
+                            "order": "DESC",
                         }
                     ],
                     "tyyppi": ["LAINSAADANTO"],
                 }
             else:
                 query = {
-                    "muokattuPaivaAlku": "2024-01-01T00:00:00",
-                    "muokattuPaivaLoppu": "2025-01-01T23:59:59",
+                    "muokattuPaivaAlku": "2020-01-01T00:00:00",
+                    "muokattuPaivaLoppu": "2025-05-01T23:59:59",
                     "searchAfter": data["nextSearchAfter"],
                     "size": per_page,
                     "sort": [
                         {
                             "field": "kohde.muokattu",
-                            "order": "ASC",
+                            "order": "DESC",
                         }
                     ],
                     "tyyppi": ["LAINSAADANTO"],
