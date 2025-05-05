@@ -28,11 +28,13 @@ services:
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
   nginx:
-    image: nginx:latest
+    image: nginx
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - /root/certificate-20250227:/root/certificate-20250227:ro
     depends_on:
       - frontend
       - backend
@@ -45,7 +47,7 @@ services:
       - mongodb
     environment:
       MONGODB_URI: ${MONGODB_URI}
-    restart: unless-stopped
+    restart: no
 
 
 volumes:
