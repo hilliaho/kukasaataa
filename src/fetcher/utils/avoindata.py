@@ -1,9 +1,5 @@
 import re
 import xml.etree.ElementTree as ET
-from services.db_service import DBService
-
-db_service = DBService()
-
 
 def process_preparatory_documents(api_data):
     """Käsittele valmisteluasiakirjat ja muokkaa ne sopivaan muotoon"""
@@ -46,18 +42,7 @@ def remove_unnecessary_info_from_name(text):
     return name
 
 
-def process_and_store_government_proposals(api_data):
-    """Käsittelee ja tallentaa datan tietokantaan."""
-    government_proposals = parse_government_proposals(api_data)
-    for proposal in government_proposals:
-        if not db_service.document_exists(proposal["heTunnus"]):
-            db_service.add_document(proposal)
-            print(f"Lisätty dokumentti {proposal['heTunnus']} tietokantaan")
-        else:
-            print(f"Dokumentti {proposal['heTunnus']} on jo tietokannassa")
-
-
-def parse_government_proposals(api_data):
+def process_government_proposals(api_data):
     """Käsittele hallituksen esitykset ja muokkaa ne sopivaan muotoon"""
     result_list = api_data["rowData"]
     processed_list = []
@@ -86,7 +71,6 @@ def parse_government_proposals(api_data):
         }
         processed_list.append(processed_element)
     return processed_list
-
 
 def parse_xml_name(xml_data):
     wrapped_xml = f"<root>{xml_data}</root>"
