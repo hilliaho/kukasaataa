@@ -65,9 +65,9 @@ def export_selected_hankeikkuna_data(per_page: int, page:int):
             print(f"Hallituksen esitys: {he_id}")
             print(f"lausuntoja: {len(submissions)}")
             document_type = "lausunnot"
-            modified_count = db_service.push_documents(he_id, submissions, document_type)
+            modified_count = db_service.add_preparatory_id(he_id, preparatory_id)
             if modified_count > 0:
-                print(f"Updated {he_id}")
+                print(f"Lisätty valmistelutunnus {preparatory_id} esitykselle {he_id}")
             else:
                 print(f"Ei lisätty valmistelutunnusta {preparatory_id} esitykselle {he_id}")
             for i in range(len(submissions)):
