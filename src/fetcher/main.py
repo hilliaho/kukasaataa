@@ -69,23 +69,14 @@ def export_selected_hankeikkuna_data(per_page: int, page:int):
             if modified_count > 0:
                 print(f"Updated {he_id}")
             else:
-                print(f"Ei muutoksia {he_id}")
-        except Exception as db_error:
-            print(f"Virhe tietokantaoperaatiossa: ({he_id}){db_error}")
-    
-    try:
-        submission_data = process_hankeikkuna_data(hankeikkuna_data)
-    except Exception as processing_error:
-        print(f"Virhe datan käsittelyssä: {processing_error}")
-        return
-    for i in range(len(submission_data)):
-        try:
-            preparatory_id = submission_data[i]["preparatoryIdentifier"]
-            submissions = submission_data[i]["submissions"]
-            he_id = submission_data[i]["proposalIdentifier"]
-            modified_count = db_service.update_document(he_id, preparatory_id, submissions)
-            if modified_count > 0:
-                print(f"Updated {he_id}")
+                print(f"Ei lisätty valmistelutunnusta {preparatory_id} esitykselle {he_id}")
+            for i in range(len(submissions)):
+                submission = submissions[i]
+                modified_count = db_service.push_document(submission, he_id, document_type)
+                if modified_count > 0:
+                    print(f"Lisätty {modified_count} lausuntoa esitykselle {he_id}")
+                else:
+                    print(f"Ei lisättyjä lausuntoja {he_id}")
         except Exception as db_error:
             print(f"Virhe tietokantaoperaatiossa: ({he_id}){db_error}")
 
@@ -131,7 +122,7 @@ def export_asiantuntijalausunnot_from_api_to_db(max_pages):
         for element in data:
             he_id = element["heTunnus"]
             document_type = "asiantuntijalausunnot"
-            db_service.push_documents(element, he_id, document_type)
+            db_service.push_document(element, he_id, document_type)
         print(i)
         if not has_more:
             break
@@ -154,7 +145,7 @@ def export_valiokunnan_lausunnot_from_api_to_db(max_pages=1000):
         for element in data:
             he_id = element["heTunnus"]
             document_type = "valiokuntaAsiakirjat"
-            db_service.push_documents(element, he_id, document_type)
+            db_service.push_document(element, he_id, document_type)
         print(i)
         if not has_more:
             break
@@ -177,7 +168,7 @@ def export_valiokunnan_mietinnot_from_api_to_db(max_pages=1000):
         for element in data:
             he_id = element["heTunnus"]
             document_type = "valiokuntaAsiakirjat"
-            db_service.push_documents(element, he_id, document_type)
+            db_service.push_document(element, he_id, document_type)
         print(i)
         if not has_more:
             break
