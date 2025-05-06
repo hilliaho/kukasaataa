@@ -16,20 +16,17 @@ def process_hankeikkuna_data(data):
         submission_data.append(project_submissions)
     return submission_data
 
-def find_he_id_from_data(data, he_id):
-    print(f"etsitään {he_id}")
-    size = data["size"]
-    print(f"size: {size}")
-    for i in range(size):
-        he = find_proposal_identifier(data, i)
-        print(f"etsitään {he_id} löydettiin {he}")
-        if he == he_id:
-            return data["result"][i]
-    return None
 
 def find_preparatory_identifier(data, i):
     identifier = data["result"][i]["kohde"]["tunnus"]
     return identifier
+
+
+def find_proposal_identifier(data, i):
+    he_id_list = data["result"][i]["lainsaadanto"]["heTiedot"]["heNumerot"]
+    if he_id_list:
+        return he_id_list[0]
+    return None
 
 
 def find_documents(data, i):
@@ -46,16 +43,3 @@ def find_submissions(documents):
             }
             submissions.append(submission)
     return submissions
-
-
-def find_proposal_identifier(data, i):
-    he_id_list = data["result"][i]["lainsaadanto"]["heTiedot"]["heNumerot"]
-    if he_id_list:
-        return he_id_list[0]
-    return None
-
-def find_proposal_identifier_list(data, i):
-    he_id_list = data["result"][i]["lainsaadanto"]["heTiedot"]["heNumerot"]
-    if he_id_list:
-        return he_id_list
-    return None
