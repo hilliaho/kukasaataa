@@ -1,7 +1,7 @@
 from services.avoindata_api_service import AvoindataApiService as Avoindata
 from services.hankeikkuna_api_service import HankeikkunaApiService as Hankeikkuna
 from services.db_service import DBService
-from utils.avoindata import process_and_store_government_proposals
+from utils.avoindata import process_government_proposals
 from utils.avoindata import process_preparatory_documents
 from utils.hankeikkuna import process_hankeikkuna_data
 
@@ -95,7 +95,14 @@ def export_government_proposals(max_pages=1000):
             if not avoindata_data:
                 print("Tapahtui virhe. Dataa ei voitu hakea.")
                 break
-            process_and_store_government_proposals(avoindata_data)
+            government_proposals = process_government_proposals(avoindata_data)
+            for proposal in government_proposals:
+                if not db_service.document_exists(proposal["heTunnus"]):
+                    db_service.add_document(proposal)
+                    print(f"Lisätty dokumentti {proposal['heTunnus']} tietokantaan")
+                else:
+                    print(f"Dokumentti {proposal['heTunnus']} on jo tietokannassa")
+
             if not avoindata_data.get("hasMore"):
                 print("Ei enempää dataa haettavana.")
                 break
