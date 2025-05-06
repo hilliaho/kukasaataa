@@ -17,11 +17,11 @@ const SearchField = ({ searchQuery, setSearchQuery, handleSearch }) => {
                 onKeyDown={(e) => {
                     if (e.key === "Enter") {
                         setSearchQuery(localQuery)
-                        handleSearch();
+                        handleSearch(localQuery);
                     }
                 }}
             />
-            <button onClick={() => { setSearchQuery(localQuery); handleSearch(); }}>
+            <button onClick={() => { setSearchQuery(localQuery); handleSearch(localQuery); }}>
                 Hae
             </button>  
         </div>

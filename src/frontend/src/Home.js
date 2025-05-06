@@ -90,13 +90,13 @@ const Home = () => {
     fetchNextPages();
   }, [currentPage, resultsPerPage, searchQuery, prefetchedPages]);
 
-  const handleSearch = () => {
+  const handleSearch = (query) => {
     setSearchResults([]);
     setPrefetchedPages({});
     setTotalSearchResults(0);
     fetchTotalCount(searchQuery).then((count) => {
       if (count > 0) {
-        fetchProjects(1, resultsPerPage, searchQuery);
+        fetchProjects(1, resultsPerPage, query);
       }
     });
   };
