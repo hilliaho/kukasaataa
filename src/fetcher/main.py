@@ -21,6 +21,7 @@ def export_all_avoindata():
         export_asiantuntijalausunnot_from_api_to_db(max_pages)
         export_valiokunnan_lausunnot_from_api_to_db(max_pages)
         export_valiokunnan_mietinnot_from_api_to_db(max_pages)
+        db_service.create_search_index()
 
 def export_all_hankeikkuna_data():
     """Vie kaikki käsitelty hankeikkuna-data tietokantaan"""
