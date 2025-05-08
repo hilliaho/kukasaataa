@@ -44,7 +44,6 @@ class DBService:
             print("Tekstihakemisto on jo olemassa.")
 
     def push_document(self, data, he_id, document_type):
-        print(he_id)
         result = self.collection.update_one(
             {"heTunnus": he_id}, {"$addToSet": {f"dokumentit.{document_type}": data}}
         )

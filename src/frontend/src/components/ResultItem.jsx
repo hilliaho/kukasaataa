@@ -6,7 +6,7 @@ const ResultItem = ({ result, isSelected, handleCheckboxChange }) => {
 	const [expandedContent, setExpandedContent] = useState(false);
 
 	return (
-		<div key={result._id} className='result-item'>
+		<div key={result._id} className='project-item'>
 			<input
 				type="checkbox"
 				checked={isSelected}
@@ -20,11 +20,11 @@ const ResultItem = ({ result, isSelected, handleCheckboxChange }) => {
 			<div className='expanded-content'>
 				<h3>Valmisteluasiakirjat</h3>
 				<h4>Lausuntokierroksen lausunnot:</h4>
-				<PreparatoryDocuments submissions={result.dokumentit.lausunnot}/>
+				<PreparatoryDocuments submissions={result.dokumentit.lausunnot} name={"lausunnot"} />
 				<h4>Asiantuntijalausunnot</h4>
-				<PreparatoryDocuments submissions={result.dokumentit.asiantuntijalausunnot}/>
+				<PreparatoryDocuments submissions={result.dokumentit.asiantuntijalausunnot} name={"asiantuntijalausunnot"}/>
 				<h4>Valiokunta-asiakirjat</h4>
-				<PreparatoryDocuments submissions={result.dokumentit.valiokuntaAsiakirjat}/>
+				<PreparatoryDocuments submissions={result.dokumentit.valiokuntaAsiakirjat} name={"valiokunta-asiakirjat"}/>
 			</div>}
 		</div>
 	);

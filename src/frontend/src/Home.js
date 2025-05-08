@@ -5,6 +5,7 @@ import BackButton from "./components/BackButton";
 import SelectedProjects from "./components/SelectedProjects";
 import Pagination from "./components/Pagination";
 import Summary from "./components/Summary";
+import StudentView from "./components/StudentView";
 import "./App.css";
 
 const debugLog = (...args) => {
@@ -20,7 +21,7 @@ const debugError = (...args) => {
 };
 
 const Home = () => {
-  const API_URL = process.env.REACT_APP_API_URL || '/api';
+  const API_URL = process.env.REACT_APP_API_URL;
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedProjects, setSelectedProjects] = useState([]);
@@ -30,6 +31,10 @@ const Home = () => {
   const [resultsPerPage, setResultsPerPage] = useState(10);
   const [totalSearchResults, setTotalSearchResults] = useState(0);
   const [prefetchedPages, setPrefetchedPages] = useState({});
+  const [codeNotification, setCodeNotification] = useState(false);
+  const [code, setCode] = useState("");
+  const [role, setRole] = useState("student");
+  const [studentProjects, setStudentProjects] = useState([]);
 
   useEffect(() => {
     if (searchResults.length === 0) {
@@ -60,7 +65,12 @@ const Home = () => {
     try {
       const response = await fetch(`${API_URL}/projects?page=${page}&per_page=${perPage}&search_query=${searchQuery}`);
       const data = await response.json();
-      setSearchResults(data);
+      const normalizedData = data.map((item) => ({
+        ...item,
+        dokumentit: item.dokumentit ?? {},
+      }));
+
+      setSearchResults(normalizedData);
       debugLog("Projects fetched:", data);
     } catch (error) {
       debugError("Error fetching projects:", error);
@@ -78,7 +88,11 @@ const Home = () => {
           try {
             const response = await fetch(`${API_URL}/projects?page=${page}&per_page=${resultsPerPage}&search_query=${searchQuery}`);
             const data = await response.json();
-            setPrefetchedPages((prev) => ({ ...prev, [page]: data }));
+            const normalizedData = data.map((item) => ({
+              ...item,
+              dokumentit: item.dokumentit ?? {},
+            }));
+            setPrefetchedPages((prev) => ({ ...prev, [page]: normalizedData }));
             debugLog(`Prefetched page ${page}`, data);
           } catch (error) {
             debugError(`Error prefetching page ${page}:`, error);
@@ -125,20 +139,34 @@ const Home = () => {
   };
 
   const addSelectedFields = (project) => {
-    project.dokumentit.lausunnot = project.dokumentit.lausunnot.map((lausunto) => ({
-      ...lausunto,
-      selected: true,
-    }));
-    project.dokumentit.asiantuntijalausunnot = project.dokumentit.asiantuntijalausunnot.map((lausunto) => ({
-      ...lausunto,
-      selected: true,
-    }));
-    project.dokumentit.valiokuntaAsiakirjat = project.dokumentit.valiokuntaAsiakirjat.map((lausunto) => ({
-      ...lausunto,
-      selected: true,
-    }));
+    if (!project.dokumentit) {
+      project.dokumentit = {};
+    }
+
+    if (Array.isArray(project.dokumentit.lausunnot)) {
+      project.dokumentit.lausunnot = project.dokumentit.lausunnot.map((lausunto) => ({
+        ...lausunto,
+        selected: true,
+      }));
+    }
+
+    if (Array.isArray(project.dokumentit.asiantuntijalausunnot)) {
+      project.dokumentit.asiantuntijalausunnot = project.dokumentit.asiantuntijalausunnot.map((lausunto) => ({
+        ...lausunto,
+        selected: true,
+      }));
+    }
+
+    if (Array.isArray(project.dokumentit.valiokuntaAsiakirjat)) {
+      project.dokumentit.valiokuntaAsiakirjat = project.dokumentit.valiokuntaAsiakirjat.map((lausunto) => ({
+        ...lausunto,
+        selected: true,
+      }));
+    }
+
     return project;
   };
+
 
   const handleSaveAndContinue = () => {
     setStep("summary");
@@ -154,17 +182,142 @@ const Home = () => {
     setResultsPerPage(perPage);
   };
 
+  const createCode = async () => {
+    setLoading(true);
+    console.log("Create code: Selected projects:", selectedProjects);
+  
+    const generateCode = () => {
+      const chars = '123456789';
+      let result = '';
+      for (let i = 0; i < 4; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    };
+  
+    const code = generateCode();
+    setCode(code);
+    setCodeNotification(true);
+  
+    const cleanedProjects = selectedProjects
+      .map((project) => {
+        const cleanedDokumentit = {};
+  
+        for (const [key, docs] of Object.entries(project.dokumentit)) {
+          if (Array.isArray(docs)) {
+            const selectedDocs = docs.filter((doc) => doc.selected);
+            if (selectedDocs.length > 0) {
+              cleanedDokumentit[key] = selectedDocs;
+            }
+          }
+        }
+  
+        const hasSelectedDocuments = Object.values(cleanedDokumentit).some(
+          (docs) => docs.length > 0
+        );
+  
+        if (!hasSelectedDocuments) {
+          return null;
+        }
+  
+        return {
+          ...project,
+          dokumentit: cleanedDokumentit,
+        };
+      })
+      .filter((p) => p !== null);
+  
+    const payload = {
+      code,
+      documents: cleanedProjects,
+    };
+  
+    try {
+      const response = await fetch(`${API_URL}/selections`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      debugLog("Selection: ", payload)
+      const data = await response.json();
+      debugLog("Code created:", code);
+      return data;
+    } catch (error) {
+      debugError("Error creating code:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+  const handleJoinWithCode = async () => {
+    try {
+      const res = await fetch(`${API_URL}/selections/${code}`);
+      const data = await res.json();
+
+      if (data) {
+        console.log("Oppilaan data:", data);
+        setStudentProjects(data.documents);
+        setRole("student");
+        setStep("studentView");
+      } else {
+        alert("Koodilla ei löytynyt dokumentteja.");
+      }
+    } catch (error) {
+      console.error("Virhe liittyessä peliin:", error);
+      alert("Jokin meni pieleen. Yritä uudelleen.");
+    }
+  };
+
+
+
+
   return (
     <div>
       {step === "home" && (
         <div className="center-container">
           <h1>Kuka säätää?</h1>
-          <button onClick={() => setStep("selection")} style={{ marginTop: "50px" }}>
+
+          <button
+            onClick={() => {
+              setRole("teacher");
+              setStep("selection");
+            }}
+            style={{ marginTop: "40px" }}
+          >
             Luo uusi peli
           </button>
+
+          <div style={{ marginTop: "60px" }}>
+            <h2>Osallistu oppilaana</h2>
+            <input
+              type="text"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="Syötä opettajan antama koodi"
+              style={{ padding: "10px", fontSize: "16px", marginTop: "10px" }}
+            />
+            <button
+              onClick={handleJoinWithCode}
+              style={{ marginTop: "15px" }}
+            >
+              Liity peliin
+            </button>
+          </div>
         </div>
       )}
-      {step === "selection" && (
+
+      {role === "student" && step === "studentView" && (
+        <div className="center-container">
+          <StudentView projects={studentProjects} />
+        </div>
+      )}
+
+
+
+      {role === "teacher" && step === "selection" && (
         <>
           <div className="back-button">
             <BackButton handleFunction={handleBackToHome} />
@@ -197,25 +350,41 @@ const Home = () => {
                 />
               </>
             )}
-            {!loading && searchResults.length === 0 && totalSearchResults === 0 && (
-              <p>Ei hakutuloksia hakusanalla {searchQuery}</p>
-            )}
+            {!loading &&
+              searchResults.length === 0 &&
+              totalSearchResults === 0 && (
+                <p>Ei hakutuloksia hakusanalla {searchQuery}</p>
+              )}
           </div>
           <button className="continue-button" onClick={handleSaveAndContinue}>
             Tallenna ja siirry eteenpäin
           </button>
         </>
       )}
-      {step === "summary" && (
+
+      {role === "teacher" && step === "summary" && (
         <>
           <div className="back-button">
             <BackButton handleFunction={handleBackToSelection} />
           </div>
-          <Summary selectedProjects={selectedProjects} />
+          <Summary
+            selectedProjects={selectedProjects}
+            setSelectedProjects={setSelectedProjects}
+          />
+          <div className="code-notification">
+            {codeNotification && (
+              <p>
+                Koodi on luotu onnistuneesti. Koodi on: <strong>{code}</strong>
+              </p>
+            )}
+          </div>
+          <button className="continue-button" onClick={createCode}>
+            Tallenna valinnat ja luo koodi
+          </button>
         </>
       )}
     </div>
   );
-};
+}
 
 export default Home;

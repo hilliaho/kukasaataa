@@ -1,31 +1,67 @@
 import re
 import xml.etree.ElementTree as ET
+import pdfplumber
+import requests
 
 def process_preparatory_documents(api_data):
     """Käsittele valmisteluasiakirjat ja muokkaa ne sopivaan muotoon"""
     result_list = api_data["rowData"]
     processed_list = []
+
     for i in range(len(result_list)):
-        identifier = result_list[i][1]
-        identifier = remove_vp(identifier)
         xml_name = result_list[i][3]
         xml_doc_type = result_list[i][4]
         xml_url = result_list[i][5]
+
         name_row = parse_xml_name(xml_name)
         doc_type = parse_xml_doc_type(xml_doc_type)
         name = remove_unnecessary_info_from_name(name_row)
+
         url_match = re.search(r'href="([^"]+)"', xml_url)
-        url = ""
-        if url_match:
-            url = url_match.group(1)
-        processed_element = {
-            "heTunnus": identifier,
-            "asiakirjatyyppi": doc_type,
-            "nimi": name,
-            "url": url,
-        }
-        processed_list.append(processed_element)
+        url = url_match.group(1) if url_match else ""
+
+        identifier = result_list[i][1]
+        if identifier is None:
+            identifier = find_proposal_identifier_from_pdf(url)
+
+        identifier = remove_vp(identifier)
+
+        if all([identifier, doc_type, name, url]):
+            processed_element = {
+                "heTunnus": identifier,
+                "asiakirjatyyppi": doc_type,
+                "nimi": name,
+                "url": url,
+            }
+            processed_list.append(processed_element)
+
     return processed_list
+
+
+
+def find_proposal_identifier_from_pdf(url):
+    """Etsi HE-tunnus PDF-tiedostosta"""
+    print(f"Etsitään HE-tunnusta PDF-tiedostosta: {url}")
+    text = extract_text_from_pdf(url)
+    match = re.search(r"HE\s\d{1,3}/\d{4}", text)
+    return match.group(0) if match else None
+
+
+
+def extract_text_from_pdf(pdf_url):
+    response = requests.get(pdf_url)
+    if response.status_code == 200:
+        temp_pdf_path = "temp.pdf"
+        with open(temp_pdf_path, "wb") as f:
+            f.write(response.content)
+        text = ""
+        with pdfplumber.open(temp_pdf_path) as pdf:
+            for page in pdf.pages:
+                text += page.extract_text()
+        return text
+    else:
+        print(f"Failed to fetch PDF: {response.status_code}")
+        return None
 
 
 def remove_vp(he_id):
@@ -47,8 +83,6 @@ def process_government_proposals(api_data):
     result_list = api_data["rowData"]
     processed_list = []
     for i in range(len(result_list)):
-        he_id = result_list[i][1]
-        he_id = remove_vp(he_id)
         xml_name = result_list[i][3]
         xml_url = result_list[i][5]
         name_row = parse_xml_name(xml_name)
@@ -57,19 +91,22 @@ def process_government_proposals(api_data):
         url = ""
         if url_match:
             url = url_match.group(1)
-        else:
-            continue
-        processed_element = {
-            "heTunnus": he_id,
-            "heNimi": name,
-            "heUrl": url,
-            "dokumentit": {
-                "lausunnot": [],
-                "asiantuntijalausunnot": [],
-                "valiokuntaAsiakirjat": [],
-            },
-        }
-        processed_list.append(processed_element)
+        he_id = result_list[i][1]
+        he_id = remove_vp(he_id)
+        if he_id is None:
+            he_id = find_proposal_identifier_from_pdf(url)
+        if all([he_id, name, url]):
+            processed_element = {
+                "heTunnus": he_id,
+                "heNimi": name,
+                "heUrl": url,
+                "dokumentit": {
+                    "lausunnot": [],
+                    "asiantuntijalausunnot": [],
+                    "valiokuntaAsiakirjat": [],
+                },
+            }
+            processed_list.append(processed_element)
     return processed_list
 
 def parse_xml_name(xml_data):
@@ -101,18 +138,3 @@ def parse_xml_doc_type(xml_data):
         print(f"XML-parsinta epäonnistui: {e}")
         return None
 
-
-def find_preparatory_identifier(text):
-    pattern = r"[A-Z]{2,3}\d{3}:\d{2}/\d{4}"
-    matches = re.findall(pattern, text)
-    print(f"Matches found: {matches}")
-    return matches if matches else None
-
-
-def create_document(he_identifier, name, proposal_url, preparatory_identifier):
-    return {
-        "heNimi": name,
-        "heTunnus": he_identifier,
-        "valmistelutunnus": preparatory_identifier,
-        "heUrl": proposal_url,
-    }

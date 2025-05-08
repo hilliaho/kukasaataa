@@ -1,4 +1,5 @@
 def process_hankeikkuna_data(data):
+    """Poimi sivullisesta hankeikkuna-dataa lausuntokierroksen lausunnot, valmistelutunnukset ja he-tunnukset"""
     submission_data = []
     size = data["size"]
     for i in range(size):
@@ -38,8 +39,11 @@ def find_submissions(documents):
     for i in range(len(documents)):
         if documents[i]["tyyppi"] == "LAUSUNTO":
             submission = {
-                "nimi": documents[i]["nimi"]["fi"],
+                "nimi": documents[i]["nimi"].get("fi")
+                or documents[i]["nimi"].get("sv")
+                or documents[i]["nimi"].get("en"),
                 "url": documents[i]["url"],
             }
+
             submissions.append(submission)
     return submissions
