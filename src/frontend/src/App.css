@@ -175,3 +175,21 @@ input[type="text"] {
 	cursor: pointer;
 	text-decoration: underline;
 }
+
+.preparatory-documents {
+	text-align: left;
+}
+
+.code-notification {
+	padding: 10px;
+	margin: 20px 0;
+}
+
+.code-notification p {
+	margin-top: 1rem;
+}
+
+.code-notification strong {
+	margin-top: 1rem;
+	color: var(--primary)
+}
