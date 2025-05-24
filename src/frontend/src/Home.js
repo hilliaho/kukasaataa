@@ -32,7 +32,8 @@ const Home = () => {
   const [totalSearchResults, setTotalSearchResults] = useState(0);
   const [prefetchedPages, setPrefetchedPages] = useState({});
   const [codeNotification, setCodeNotification] = useState(false);
-  const [code, setCode] = useState("");
+  const [joinCode, setJoinCode] = useState("");
+  const [editCode, setEditCode] = useState("");
   const [role, setRole] = useState("student");
   const [studentProjects, setStudentProjects] = useState([]);
 
@@ -185,24 +186,26 @@ const Home = () => {
   const createCode = async () => {
     setLoading(true);
     console.log("Create code: Selected projects:", selectedProjects);
-  
+
     const generateCode = () => {
       const chars = '123456789';
       let result = '';
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 5; i++) {
         result += chars.charAt(Math.floor(Math.random() * chars.length));
       }
       return result;
     };
-  
-    const code = generateCode();
-    setCode(code);
+
+    const joinCode = generateCode();
+    const editCode = generateCode();
+    setEditCode(editCode);
+    setJoinCode(joinCode);
     setCodeNotification(true);
-  
+
     const cleanedProjects = selectedProjects
       .map((project) => {
         const cleanedDokumentit = {};
-  
+
         for (const [key, docs] of Object.entries(project.dokumentit)) {
           if (Array.isArray(docs)) {
             const selectedDocs = docs.filter((doc) => doc.selected);
@@ -211,27 +214,28 @@ const Home = () => {
             }
           }
         }
-  
+
         const hasSelectedDocuments = Object.values(cleanedDokumentit).some(
           (docs) => docs.length > 0
         );
-  
+
         if (!hasSelectedDocuments) {
           return null;
         }
-  
+
         return {
           ...project,
           dokumentit: cleanedDokumentit,
         };
       })
       .filter((p) => p !== null);
-  
+
     const payload = {
-      code,
+      joinCode,
+      editCode,
       documents: cleanedProjects,
     };
-  
+
     try {
       const response = await fetch(`${API_URL}/selections`, {
         method: "POST",
@@ -242,7 +246,8 @@ const Home = () => {
       });
       debugLog("Selection: ", payload)
       const data = await response.json();
-      debugLog("Code created:", code);
+      debugLog("Code created:", joinCode);
+      debugLog("Edit code created:", editCode);
       return data;
     } catch (error) {
       debugError("Error creating code:", error);
@@ -250,11 +255,11 @@ const Home = () => {
       setLoading(false);
     }
   };
-  
+
 
   const handleJoinWithCode = async () => {
     try {
-      const res = await fetch(`${API_URL}/selections/${code}`);
+      const res = await fetch(`${API_URL}/selections/${joinCode}`);
       const data = await res.json();
 
       if (data) {
@@ -294,8 +299,8 @@ const Home = () => {
             <h2>Osallistu oppilaana</h2>
             <input
               type="text"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value)}
               placeholder="Syötä opettajan antama koodi"
               style={{ padding: "10px", fontSize: "16px", marginTop: "10px" }}
             />
@@ -373,14 +378,26 @@ const Home = () => {
           />
           <div className="code-notification">
             {codeNotification && (
-              <p>
-                Koodi on luotu onnistuneesti. Koodi on: <strong>{code}</strong>
-              </p>
+              <div className="code-notification">
+                <h3>
+                  Materiaalivalinnat tallennettu.
+                </h3>
+                <p>
+                Pelialustan liittymiskoodi: 
+                </p>
+                <strong>{joinCode}</strong>
+                <p>
+                Pelialustan muokkaamiskoodi: 
+                </p>
+                <strong>{editCode}</strong>
+              </div>
             )}
           </div>
-          <button className="continue-button" onClick={createCode}>
-            Tallenna valinnat ja luo koodi
-          </button>
+          {!codeNotification && (
+            <button className="continue-button" onClick={createCode}>
+              Tallenna valinnat ja luo koodi
+            </button>
+          )}
         </>
       )}
     </div>
