@@ -22,7 +22,7 @@ class SelectionDbService:
 
 	def find_by_code(self, code: str):
 		"""Hae valikoima annetulla koodilla"""
-		result = self.collection.find_one({"code": code})
+		result = self.collection.find_one({"joinCode": code})
 		if result:
 			result["_id"] = str(result["_id"])
 		return result

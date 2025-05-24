@@ -3,7 +3,7 @@ import DocumentInfo from "./DocumentInfo"
 
 const Project = ({project, setSelectedProjects}) => {
 	return (
-		<div className="result-item">
+		<div className="project-item">
 			<p><strong>HANKE {project.heTunnus}</strong></p>
 			<p>{project.heNimi}</p>
 			<ul>
