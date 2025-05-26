@@ -158,8 +158,15 @@ const Home = () => {
       }));
     }
 
-    if (Array.isArray(project.dokumentit.valiokuntaAsiakirjat)) {
-      project.dokumentit.valiokuntaAsiakirjat = project.dokumentit.valiokuntaAsiakirjat.map((lausunto) => ({
+    if (Array.isArray(project.dokumentit.valiokunnanLausunnot)) {
+      project.dokumentit.valiokunnanLausunnot = project.dokumentit.valiokunnanLausunnot.map((lausunto) => ({
+        ...lausunto,
+        selected: true,
+      }));
+    }
+
+        if (Array.isArray(project.dokumentit.valiokunnanMietinnot)) {
+      project.dokumentit.valiokunnanMietinnot = project.dokumentit.valiokunnanMietinnot.map((lausunto) => ({
         ...lausunto,
         selected: true,
       }));

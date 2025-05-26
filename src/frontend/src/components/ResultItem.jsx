@@ -20,11 +20,13 @@ const ResultItem = ({ result, isSelected, handleCheckboxChange }) => {
 			<div className='expanded-content'>
 				<h3>Valmisteluasiakirjat</h3>
 				<h4>Lausuntokierroksen lausunnot:</h4>
-				<PreparatoryDocuments submissions={result.dokumentit.lausunnot} name={"lausunnot"} />
+				<PreparatoryDocuments submissions={result.dokumentit.lausunnot} name={"Lausunnot"} />
 				<h4>Asiantuntijalausunnot</h4>
-				<PreparatoryDocuments submissions={result.dokumentit.asiantuntijalausunnot} name={"asiantuntijalausunnot"}/>
-				<h4>Valiokunta-asiakirjat</h4>
-				<PreparatoryDocuments submissions={result.dokumentit.valiokuntaAsiakirjat} name={"valiokunta-asiakirjat"}/>
+				<PreparatoryDocuments submissions={result.dokumentit.asiantuntijalausunnot} name={"Asiantuntijalausunnot"}/>
+				<h4>Valiokunnan lausunnot</h4>
+				<PreparatoryDocuments submissions={result.dokumentit.valiokunnanLausunnot} name={"Valiokunnan lausunnot"}/>
+				<h4>Valiokunnan mietinnöt</h4>
+				<PreparatoryDocuments submissions={result.dokumentit.valiokunnanMietinnot} name={"Valiokunnan mietinnöt"}/>
 			</div>}
 		</div>
 	);

@@ -16,7 +16,8 @@ const StudentProject = ({ project }) => {
             <h3>Valmisteluasiakirjat</h3>
             <PreparatoryDocuments submissions={project.dokumentit.lausunnot} name={"Lausunnot"} />
             <PreparatoryDocuments submissions={project.dokumentit.asiantuntijalausunnot} name={"Asiantuntijalausunnot"} />
-            <PreparatoryDocuments submissions={project.dokumentit.valiokuntaAsiakirjat} name={"Valiokunta-asiakirjat"} />
+            <PreparatoryDocuments submissions={project.dokumentit.valiokunnanLausunnot} name={"Valiokunnan lausunnot"} />
+            <PreparatoryDocuments submissions={project.dokumentit.valiokunnanMietinnot} name={"Valiokunnan mietinnöt"} />
           </div>}
       </div>
   )
