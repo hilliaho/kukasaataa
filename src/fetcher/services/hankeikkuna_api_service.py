@@ -14,7 +14,6 @@ class HankeikkunaApiService:
             if i == 0:
                 query = {
                     "muokattuPaivaAlku": "2020-01-01T00:00:00",
-                    "muokattuPaivaLoppu": "2025-05-01T23:59:59",
                     "size": per_page,
                     "sort": [
                         {
@@ -27,7 +26,6 @@ class HankeikkunaApiService:
             else:
                 query = {
                     "muokattuPaivaAlku": "2020-01-01T00:00:00",
-                    "muokattuPaivaLoppu": "2025-05-01T23:59:59",
                     "searchAfter": data["nextSearchAfter"],
                     "size": per_page,
                     "sort": [

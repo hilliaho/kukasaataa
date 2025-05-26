@@ -2,6 +2,7 @@ import re
 import xml.etree.ElementTree as ET
 import pdfplumber
 import requests
+import datetime
 
 def process_preparatory_documents(api_data):
     """Käsittele valmisteluasiakirjat ja muokkaa ne sopivaan muotoon"""
@@ -103,7 +104,8 @@ def process_government_proposals(api_data):
                 "dokumentit": {
                     "lausunnot": [],
                     "asiantuntijalausunnot": [],
-                    "valiokuntaAsiakirjat": [],
+                    "valiokunnanLausunnot": [],
+                    "valiokunnanMietinnot": [],
                 },
             }
             processed_list.append(processed_element)
@@ -137,4 +139,9 @@ def parse_xml_doc_type(xml_data):
     except ET.ParseError as e:
         print(f"XML-parsinta epäonnistui: {e}")
         return None
+    
+def get_avoindata_document_index(api_data):
+    index = api_data["rowData"][0][0]
+    return int(index) if index else None
+
 

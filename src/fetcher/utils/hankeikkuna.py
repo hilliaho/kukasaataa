@@ -1,3 +1,5 @@
+from datetime import datetime
+
 def process_hankeikkuna_data(data):
     """Poimi sivullisesta hankeikkuna-dataa lausuntokierroksen lausunnot, valmistelutunnukset ja he-tunnukset"""
     submission_data = []
@@ -5,10 +7,10 @@ def process_hankeikkuna_data(data):
     for i in range(size):
         preparatory_identifier = find_preparatory_identifier(data, i)
         proposal_identifier = find_proposal_identifier(data, i)
-        if not proposal_identifier:
-            continue
         documents = find_documents(data, i)
         submissions = find_submissions(documents)
+        if not preparatory_identifier or not proposal_identifier or not submissions:
+            continue
         project_submissions = {
             "preparatoryIdentifier": preparatory_identifier,
             "proposalIdentifier": proposal_identifier,
@@ -17,6 +19,11 @@ def process_hankeikkuna_data(data):
         submission_data.append(project_submissions)
     return submission_data
 
+def get_hankeikkuna_modified_date(data):
+    modified = data["result"][0]["kohde"]["muokattu"]
+    if modified:
+        return datetime.fromisoformat(modified)
+    return None
 
 def find_preparatory_identifier(data, i):
     identifier = data["result"][i]["kohde"]["tunnus"]
