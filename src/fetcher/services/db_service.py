@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
 import re
+import logging
 
 
 class DBService:
@@ -24,7 +25,7 @@ class DBService:
 
     def add_document(self, document):
         result = self.collection.insert_one(document)
-        print(f"Lisätty {document['heTunnus']}")
+        logging.info(f"Lisätty {document['heTunnus']}")
         return result.inserted_id
 
     def document_exists(self, document_id):
@@ -41,16 +42,16 @@ class DBService:
             self.collection.create_index(
                 [("heNimi", "text"), ("heTunnus", "text"), ("valmistelutunnus", "text")]
             )
-            print("Tekstihakemisto luotu.")
+            logging.info("Tekstihakemisto luotu.")
         else:
-            print("Tekstihakemisto on jo olemassa.")
+            logging.info("Tekstihakemisto on jo olemassa.")
 
     def push_document(self, data, he_id, document_type):
         result = self.collection.update_one(
             {"heTunnus": he_id}, {"$addToSet": {f"dokumentit.{document_type}": data}}
         )
         if result.modified_count > 0:
-            print(f"Lisätty {he_id}: {document_type}: {data['nimi']}")
+            logging.info(f"Lisätty {he_id}: {document_type}: {data['nimi']}")
         return result.modified_count
 
     def count_documents(self, search_query=""):
@@ -67,7 +68,7 @@ class DBService:
             count = self.collection.count_documents(query)
             return count
         except Exception as e:
-            print(f"Error in count_documents: {e}")
+            logging.error(f"Error in count_documents: {e}")
             return 0
 
     def get_last_modified(self, document_type):
@@ -79,7 +80,7 @@ class DBService:
                 return last_doc["viimeisinMuokattu"]
             return 0
         except Exception as e:
-            print(f"Error in get_last_modified: {e}")
+            logging.error(f"Error in get_last_modified: {e}")
             return 0
 
     def add_last_modified(self, document_type, data):
@@ -90,5 +91,5 @@ class DBService:
                 upsert=True,
             )
         except Exception as e:
-            print(f"Error in add_last_modified: {e}")
+            logging.error(f"Error in add_last_modified: {e}")
         return None
