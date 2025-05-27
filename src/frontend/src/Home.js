@@ -280,7 +280,7 @@ const Home = () => {
         alert("Koodilla ei löytynyt dokumentteja.");
       }
     } catch (error) {
-      console.error("Virhe liittyessä peliin:", error);
+      debugError("Virhe liittyessä peliin:", error);
       alert("Jokin meni pieleen. Yritä uudelleen.");
     }
   };
@@ -343,7 +343,6 @@ const Home = () => {
               handleSearch={handleSearch}
             />
             {loading && <p>Ladataan hankkeita...</p>}
-            {searchResults.length > 0 && (
               <>
                 <SelectedProjects
                   selectedProjects={selectedProjects}
@@ -363,11 +362,22 @@ const Home = () => {
                   totalSearchResults={totalSearchResults}
                 />
               </>
-            )}
             {!loading &&
               searchResults.length === 0 &&
               totalSearchResults === 0 && (
-                <p>Ei hakutuloksia hakusanalla {searchQuery}</p>
+                <div>
+                  <p>Ei hakutuloksia hakusanalla {searchQuery}.</p>
+                  <button
+                    onClick={() => {
+                      setSearchQuery("");
+                      setSearchResults([]);
+                      setTotalSearchResults(0);
+                    }}
+                    className="reset-search-button"
+                  >
+                    Peruuta haku
+                  </button>
+                </div>
               )}
           </div>
           <button className="continue-button" onClick={handleSaveAndContinue}>

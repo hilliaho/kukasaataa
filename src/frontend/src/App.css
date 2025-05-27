@@ -193,3 +193,19 @@ input[type="text"] {
 	margin-top: 1rem;
 	color: var(--primary)
 }
+
+.reset-search-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: var(--primary)
+}
+
+.reset-search-button:hover {
+	text-decoration: underline;
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: var(--primary)
+}
+
