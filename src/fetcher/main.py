@@ -68,19 +68,19 @@ def export_all_hankeikkuna_data():
     max_pages = 5
     max_retries = 5
 
-    newest_submission_date = db_service.get_last_modified("lausuntokierroksenLausunnot")
-    newest_submission_date = newest_submission_date or datetime.datetime.min
+    db_last_modified = db_service.get_last_modified("lausuntokierroksenLausunnot")
+    db_last_modified = db_last_modified or datetime.datetime.min
+    newest_submission_date = db_last_modified
 
     for page in range(1, max_pages + 1):
         result = retry_with_backoff(
-            lambda: export_one_page_of_hankeikkuna_data(per_page, page, newest_submission_date),
+            lambda: export_one_page_of_hankeikkuna_data(per_page, page, db_last_modified),
             max_retries=max_retries,
             delay=5
         )
 
         if result is None:
             logging.info("Lausuntokierroksen lausunnot ovat ajan tasalla")
-            db_service.add_last_modified("lausuntokierroksenLausunnot", newest_submission_date)
             return
 
         if isinstance(result, datetime.datetime):
@@ -94,6 +94,7 @@ def export_one_page_of_hankeikkuna_data(
     per_page: int, page: int, last_modified: datetime.datetime
 ):
     """Vie sivullinen käsiteltyä hankeikkuna-dataa tietokantaan"""
+    logging.info(f"Haetaan Hankeikkuna-dataa sivulta {page}:")
     hankeikkuna_data = Hankeikkuna.fetch_data_from_api(per_page, page)
     submission_data = process_hankeikkuna_data(hankeikkuna_data)
     last_modified = last_modified or datetime.datetime.min
