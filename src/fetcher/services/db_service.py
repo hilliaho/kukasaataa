@@ -24,9 +24,19 @@ class DBService:
         return result.modified_count
 
     def add_document(self, document):
+        if "heTunnus" in document:
+            match = re.match(r"(HE|KAA)\s+(\d+)/(\d{4})", document["heTunnus"])
+            if match:
+                document["tunnusTyyppi"] = match.group(1)
+                document["numero"] = int(match.group(2))
+                document["vuosi"] = int(match.group(3))
+            else:
+                logging.warning(f"Tunnusta ei voitu jäsentää: {document['heTunnus']}")
+
         result = self.collection.insert_one(document)
-        logging.info(f"Lisätty {document['heTunnus']}")
+        logging.info(f"Lisätty {document.get('heTunnus', 'tuntematon tunnus')}")
         return result.inserted_id
+
 
     def document_exists(self, document_id):
         return self.collection.find_one({"id": document_id}) is not None
@@ -84,6 +94,7 @@ class DBService:
             return 0
 
     def add_last_modified(self, document_type, data):
+        logging.info(f"Adding last modified date for {document_type}: {data}")
         try:
             self.collection_metadata.update_one(
                 {"dokumenttiTyyppi": document_type},
