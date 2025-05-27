@@ -13,7 +13,7 @@ class HankeikkunaApiService:
             }
             if i == 0:
                 query = {
-                    "muokattuPaivaAlku": "2020-01-01T00:00:00",
+                    "muokattuPaivaAlku": "2015-01-01T00:00:00",
                     "size": per_page,
                     "sort": [
                         {
@@ -25,7 +25,7 @@ class HankeikkunaApiService:
                 }
             else:
                 query = {
-                    "muokattuPaivaAlku": "2020-01-01T00:00:00",
+                    "muokattuPaivaAlku": "2015-01-01T00:00:00",
                     "searchAfter": data["nextSearchAfter"],
                     "size": per_page,
                     "sort": [
