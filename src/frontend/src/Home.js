@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SearchResults from "./components/SearchResults";
 import SearchField from "./components/SearchField";
 import BackButton from "./components/BackButton";
@@ -37,6 +37,8 @@ const Home = () => {
   const [role, setRole] = useState("student");
   const [studentProjects, setStudentProjects] = useState([]);
 
+  const prefetchedPagesRef = useRef({});
+
   useEffect(() => {
     if (searchResults.length === 0) {
       fetchTotalCount(searchQuery);
@@ -72,11 +74,11 @@ const Home = () => {
       }));
 
       setSearchResults(normalizedData);
-      debugLog("Projects fetched:", data);
+      debugLog("Projects fetched:", data.map((project) => project.heTunnus));
     } catch (error) {
       debugError("Error fetching projects:", error);
     } finally {
-      setPrefetchedPages({});
+      prefetchedPagesRef.current = {};
       setLoading(false);
     }
   };
@@ -84,8 +86,9 @@ const Home = () => {
   useEffect(() => {
     const fetchNextPages = async () => {
       const pagesToPrefetch = [currentPage + 1, currentPage + 2];
+
       for (const page of pagesToPrefetch) {
-        if (!prefetchedPages[page]) {
+        if (!prefetchedPagesRef.current[page]) {
           try {
             const response = await fetch(`${API_URL}/projects?page=${page}&per_page=${resultsPerPage}&search_query=${searchQuery}`);
             const data = await response.json();
@@ -93,7 +96,7 @@ const Home = () => {
               ...item,
               dokumentit: item.dokumentit ?? {},
             }));
-            setPrefetchedPages((prev) => ({ ...prev, [page]: normalizedData }));
+            prefetchedPagesRef.current[page] = normalizedData;
             debugLog(`Prefetched page ${page}`, data);
           } catch (error) {
             debugError(`Error prefetching page ${page}:`, error);
@@ -103,8 +106,7 @@ const Home = () => {
     };
 
     fetchNextPages();
-  }, [currentPage, resultsPerPage, searchQuery, prefetchedPages]);
-
+  }, [currentPage, resultsPerPage, searchQuery]);
   const handleSearch = (query) => {
     setSearchResults([]);
     setPrefetchedPages({});
