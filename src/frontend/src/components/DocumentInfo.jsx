@@ -39,7 +39,6 @@ const DocumentInfo = ({ projectId, submissions, objectName, header,  setSelected
 				return project
 			})
 		})
-		console.log(`Updated selected projects for ${objectName} (${projectId}):`, submissionList)
 	}, [submissionList, projectId, objectName, setSelectedProjects])
 
 	return (

@@ -343,25 +343,25 @@ const Home = () => {
               handleSearch={handleSearch}
             />
             {loading && <p>Ladataan hankkeita...</p>}
-              <>
-                <SelectedProjects
-                  selectedProjects={selectedProjects}
-                  projects={searchResults}
-                  handleCheckboxChange={handleCheckboxChange}
-                />
-                <SearchResults
-                  results={searchResults}
-                  selectedProjects={selectedProjects}
-                  handleCheckboxChange={handleCheckboxChange}
-                  searchQuery={searchQuery}
-                />
-                <Pagination
-                  currentPage={currentPage}
-                  resultsPerPage={resultsPerPage}
-                  paginate={paginate}
-                  totalSearchResults={totalSearchResults}
-                />
-              </>
+            <>
+              <SelectedProjects
+                selectedProjects={selectedProjects}
+                projects={searchResults}
+                handleCheckboxChange={handleCheckboxChange}
+              />
+              <SearchResults
+                results={searchResults}
+                selectedProjects={selectedProjects}
+                handleCheckboxChange={handleCheckboxChange}
+                searchQuery={searchQuery}
+              />
+              <Pagination
+                currentPage={currentPage}
+                resultsPerPage={resultsPerPage}
+                paginate={paginate}
+                totalSearchResults={totalSearchResults}
+              />
+            </>
             {!loading &&
               searchResults.length === 0 &&
               totalSearchResults === 0 && (
