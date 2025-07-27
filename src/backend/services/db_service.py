@@ -25,6 +25,7 @@ class DBService:
                 "$or": [
                     {"heNimi": {"$regex": search_query, "$options": "i"}},
                     {"heTunnus": {"$regex": search_query, "$options": "i"}},
+                    {"heSisalto": {"$regex": search_query, "$options": "i"}},
                 ]
             }
 

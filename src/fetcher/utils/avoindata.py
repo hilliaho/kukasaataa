@@ -1,8 +1,9 @@
 import re
 import xml.etree.ElementTree as ET
-import pdfplumber
+import fitz
 import requests
-import datetime
+import tempfile
+
 
 def process_preparatory_documents(api_data):
     """Käsittele valmisteluasiakirjat ja muokkaa ne sopivaan muotoon"""
@@ -51,18 +52,21 @@ def find_proposal_identifier_from_pdf(url):
 
 def extract_text_from_pdf(pdf_url):
     response = requests.get(pdf_url)
-    if response.status_code == 200:
-        temp_pdf_path = "temp.pdf"
-        with open(temp_pdf_path, "wb") as f:
-            f.write(response.content)
-        text = ""
-        with pdfplumber.open(temp_pdf_path) as pdf:
-            for page in pdf.pages:
-                text += page.extract_text()
-        return text
-    else:
+    if response.status_code != 200:
         print(f"Failed to fetch PDF: {response.status_code}")
         return None
+
+    with tempfile.NamedTemporaryFile(suffix=".pdf", delete=True) as tmp:
+        tmp.write(response.content)
+        tmp.flush()
+
+        text = ""
+        with fitz.open(tmp.name) as pdf:
+            for page in pdf:
+                page_text = page.get_text()
+                if page_text:
+                    text += page_text
+        return text
 
 
 def remove_vp(he_id):
@@ -90,8 +94,12 @@ def process_government_proposals(api_data):
         name = remove_unnecessary_info_from_name(name_row)
         url_match = re.search(r'href="([^"]+)"', xml_url)
         url = ""
+        proposal_content = None
         if url_match:
             url = url_match.group(1)
+            proposal_content = extract_text_from_pdf(url)
+        if proposal_content is None:
+            proposal_content = ""
         he_id = result_list[i][1]
         he_id = remove_vp(he_id)
         if he_id is None:
@@ -101,6 +109,7 @@ def process_government_proposals(api_data):
                 "heTunnus": he_id,
                 "heNimi": name,
                 "heUrl": url,
+                "heSisalto": proposal_content,
                 "dokumentit": {
                     "lausunnot": [],
                     "asiantuntijalausunnot": [],
