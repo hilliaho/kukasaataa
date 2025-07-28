@@ -36,14 +36,12 @@ def process_preparatory_documents(api_data):
                 "url": url,
             }
             processed_list.append(processed_element)
-
     return processed_list
 
 
 
 def find_proposal_identifier_from_pdf(url):
     """Etsi HE-tunnus PDF-tiedostosta"""
-    print(f"Etsitään HE-tunnusta PDF-tiedostosta: {url}")
     text = extract_text_from_pdf(url)
     match = re.search(r"HE\s\d{1,3}/\d{4}", text)
     return match.group(0) if match else None
@@ -62,11 +60,9 @@ def extract_text_from_pdf(pdf_url):
 
         text = ""
         with fitz.open(tmp.name) as pdf:
-            for page in pdf:
-                page_text = page.get_text()
-                if page_text:
-                    text += page_text
-        return text
+            text = pdf[0].get_text()
+            clean_text = re.sub(r'\s+', ' ', text).strip()
+        return clean_text
 
 
 def remove_vp(he_id):
