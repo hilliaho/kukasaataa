@@ -37,9 +37,8 @@ class DBService:
         logging.info(f"Lisätty {document.get('heTunnus', 'tuntematon tunnus')}")
         return result.inserted_id
 
-
     def document_exists(self, document_id):
-        return self.collection.find_one({"id": document_id}) is not None
+        return self.collection.find_one({"heTunnus": document_id}) is not None
 
     def create_search_index(self):
         existing_indexes = self.collection.list_indexes()
@@ -63,23 +62,6 @@ class DBService:
         if result.modified_count > 0:
             logging.info(f"Lisätty {he_id}: {document_type}: {data['nimi']}")
         return result.modified_count
-
-    def count_documents(self, search_query=""):
-        query = {}
-
-        if search_query:
-            query = {
-                "$or": [
-                    {"heNimi": {"$regex": search_query, "$options": "i"}},
-                    {"heTunnus": {"$regex": search_query, "$options": "i"}},
-                ]
-            }
-        try:
-            count = self.collection.count_documents(query)
-            return count
-        except Exception as e:
-            logging.error(f"Error in count_documents: {e}")
-            return 0
 
     def get_last_modified(self, document_type):
         try:
