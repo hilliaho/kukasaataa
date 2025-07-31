@@ -45,12 +45,12 @@ def find_submissions(documents):
     submissions = []
     for i in range(len(documents)):
         if documents[i]["tyyppi"] == "LAUSUNTO":
-            submission = {
-                "nimi": documents[i]["nimi"].get("fi")
-                or documents[i]["nimi"].get("sv")
-                or documents[i]["nimi"].get("en"),
-                "url": documents[i]["url"],
-            }
-
-            submissions.append(submission)
+            name = documents[i]["nimi"].get("fi") or documents[i]["nimi"].get("sv") or documents[i]["nimi"].get("en")
+            url = documents[i]["url"]
+            if (url and name):
+                submission = {
+                    "nimi": name,
+                    "url": url
+                }
+                submissions.append(submission)
     return submissions
