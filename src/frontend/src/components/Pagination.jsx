@@ -1,6 +1,6 @@
-const Pagination = ({ currentPage, resultsPerPage, paginate, totalSearchResults }) => {
+const Pagination = ({ currentPage, paginate, totalSearchResults }) => {
   const pageNumbers = [];
-  const totalPages = Math.ceil(totalSearchResults / resultsPerPage);
+  const totalPages = Math.ceil(totalSearchResults / 10);
   const maxVisiblePages = 3;
 
   if (totalPages <= 7) {
@@ -35,7 +35,7 @@ const Pagination = ({ currentPage, resultsPerPage, paginate, totalSearchResults 
           <button
             key={index}
             className={`page-item ${currentPage === number ? "active" : ""}`}
-            onClick={() => typeof number === "number" && paginate(number, resultsPerPage)}
+            onClick={() => typeof number === "number" && paginate(number)}
             disabled={typeof number !== "number"}
           >
             {number}

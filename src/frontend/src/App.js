@@ -22,19 +22,14 @@ const debugError = (...args) => {
 };
 
 function App() {
-  //const API_URL = process.env.REACT_APP_API_URL;
-  const API_URL = ''
+  const API_URL = process.env.REACT_APP_API_URL;
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [resultsPerPage, setResultsPerPage] = useState(10);
   const [totalSearchResults, setTotalSearchResults] = useState(0);
-  const [prefetchedPages, setPrefetchedPages] = useState({});
   const [joinCode, setJoinCode] = useState("");
   const [editCode, setEditCode] = useState("");
-  const [role, setRole] = useState("student");
   const [studentProjects, setStudentProjects] = useState([]);
 
   const prefetchedPagesRef = useRef({});
@@ -63,11 +58,11 @@ function App() {
     }
   };
 
-  const fetchProjects = async (page, perPage, searchQuery) => {
-    debugLog(`Haetaan projekteja ${perPage} kpl sivulta ${page} hakusanalla "${searchQuery}"`);
+  const fetchProjects = async (page, searchQuery) => {
+    debugLog(`Haetaan projekteja sivulta ${page} hakusanalla "${searchQuery}"`);
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/projects?page=${page}&per_page=${perPage}&search_query=${searchQuery}`);
+      const response = await fetch(`${API_URL}/projects?page=${page}&per_page=10&search_query=${searchQuery}`);
       const data = await response.json();
       const normalizedData = data.map((item) => ({
         ...item,
@@ -84,140 +79,43 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    const fetchNextPages = async () => {
-      const pagesToPrefetch = [currentPage + 1, currentPage + 2];
-
-      for (const page of pagesToPrefetch) {
-        if (!prefetchedPagesRef.current[page]) {
-          try {
-            const response = await fetch(`${API_URL}/projects?page=${page}&per_page=${resultsPerPage}&search_query=${searchQuery}`);
-            const data = await response.json();
-            const normalizedData = data.map((item) => ({
-              ...item,
-              dokumentit: item.dokumentit ?? {},
-            }));
-            prefetchedPagesRef.current[page] = normalizedData;
-            debugLog(`Prefetched page ${page}`, data);
-          } catch (error) {
-            debugError(`Error prefetching page ${page}:`, error);
-          }
-        }
-      }
-    };
-
-    fetchNextPages();
-  }, [currentPage, resultsPerPage, searchQuery]);
-  const handleSearch = (query) => {
-    setSearchResults([]);
-    setPrefetchedPages({});
-    setTotalSearchResults(0);
-    fetchTotalCount(searchQuery).then((count) => {
-      if (count > 0) {
-        fetchProjects(1, resultsPerPage, query);
-      }
-    });
-  };
-
-  const handleCheckboxChange = (project) => {
-    setSelectedProjects((prevSelected) => {
-      const isSelected = prevSelected.some((p) => p._id === project._id);
-      if (isSelected) {
-        return prevSelected.filter((p) => p._id !== project._id);
-      } else {
-        const selectedProject = addSelectedFields(project);
-        return [...prevSelected, selectedProject];
-      }
-    });
-  };
-
-  const addSelectedFields = (project) => {
-    if (!project.dokumentit) {
-      project.dokumentit = {};
-    }
-
-    if (Array.isArray(project.dokumentit.lausunnot)) {
-      project.dokumentit.lausunnot = project.dokumentit.lausunnot.map((lausunto) => ({
-        ...lausunto,
-        selected: true,
-      }));
-    }
-
-    if (Array.isArray(project.dokumentit.asiantuntijalausunnot)) {
-      project.dokumentit.asiantuntijalausunnot = project.dokumentit.asiantuntijalausunnot.map((lausunto) => ({
-        ...lausunto,
-        selected: true,
-      }));
-    }
-
-    if (Array.isArray(project.dokumentit.valiokunnanLausunnot)) {
-      project.dokumentit.valiokunnanLausunnot = project.dokumentit.valiokunnanLausunnot.map((lausunto) => ({
-        ...lausunto,
-        selected: true,
-      }));
-    }
-
-    if (Array.isArray(project.dokumentit.valiokunnanMietinnot)) {
-      project.dokumentit.valiokunnanMietinnot = project.dokumentit.valiokunnanMietinnot.map((lausunto) => ({
-        ...lausunto,
-        selected: true,
-      }));
-    }
-
-    return project;
-  };
-
-  const paginate = (pageNumber, perPage) => {
-    if (prefetchedPages[pageNumber]) {
-      setSearchResults(prefetchedPages[pageNumber]);
-    } else {
-      fetchProjects(pageNumber, perPage, searchQuery);
-    }
-    setCurrentPage(pageNumber);
-    setResultsPerPage(perPage);
-  };
-
-  
-
-
-
   return (
     <Router>
       <div className="App">
         <Routes>
           <Route exact path="/" element={<HomeView
             API_URL={API_URL}
-            setRole={setRole}
             joinCode={joinCode}
             setJoinCode={setJoinCode}
             setStudentProjects={setStudentProjects}
             debugError={debugError}
-            />} />
+          />} />
           <Route exact path="/select-projects" element={<ProjectSelectionView
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            handleSearch={handleSearch}
             loading={loading}
             selectedProjects={selectedProjects}
+            setSelectedProjects={setSelectedProjects}
             searchResults={searchResults}
-            handleCheckboxChange={handleCheckboxChange}
-            currentPage={currentPage}
-            resultsPerPage={resultsPerPage}
-            paginate={paginate}
             totalSearchResults={totalSearchResults}
             setSearchResults={setSearchResults}
             setTotalSearchResults={setTotalSearchResults}
- />} />
+            fetchProjects={fetchProjects}
+            fetchTotalCount={fetchTotalCount}
+            prefetchedPagesRef={prefetchedPagesRef}
+            debugLog={debugLog}
+            debugError={debugError}
+          />} />
           <Route exact path="/select-documents" element={<DocumentSelectionView
             API_URL={API_URL}
             selectedProjects={selectedProjects}
             setSelectedProjects={setSelectedProjects}
-            setLoading={setLoading} 
-            setEditCode={setEditCode} 
-            setJoinCode={setJoinCode} 
-            debugLog={debugLog} 
+            setLoading={setLoading}
+            setEditCode={setEditCode}
+            setJoinCode={setJoinCode}
+            debugLog={debugLog}
             debugError={debugError}
-            />} />
+          />} />
           <Route exact path="/summary" element={<SummaryView joinCode={joinCode}
             editCode={editCode}
             selectedProjects={selectedProjects} />} />

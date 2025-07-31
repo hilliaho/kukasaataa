@@ -1,4 +1,5 @@
 import React from "react"
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton";
 import SearchField from "../components/SearchField";
@@ -6,15 +7,111 @@ import SelectedProjects from "../components/SelectedProjects";
 import SearchResults from "../components/SearchResults";
 import Pagination from "../components/Pagination";
 
-const ProjectSelectionView = ({ searchQuery, setSearchQuery, handleSearch, loading, selectedProjects, searchResults,
-  handleCheckboxChange, currentPage, resultsPerPage, paginate, totalSearchResults,
-  setSearchResults, setTotalSearchResults
+const ProjectSelectionView = ({ API_URL, searchQuery, setSearchQuery, loading, selectedProjects, searchResults,
+  totalSearchResults,
+  setSearchResults, setTotalSearchResults, fetchProjects, setSelectedProjects, fetchTotalCount, prefetchedPagesRef, debugLog, debugError
 }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [prefetchedPages, setPrefetchedPages] = useState({});
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const fetchNextPages = async () => {
+      const pagesToPrefetch = [currentPage + 1, currentPage + 2];
+
+      for (const page of pagesToPrefetch) {
+        if (!prefetchedPagesRef.current[page]) {
+          try {
+            const response = await fetch(`${API_URL}/projects?page=${page}&per_page=10&search_query=${searchQuery}`);
+            const data = await response.json();
+            const normalizedData = data.map((item) => ({
+              ...item,
+              dokumentit: item.dokumentit ?? {},
+            }));
+            prefetchedPagesRef.current[page] = normalizedData;
+            debugLog(`Prefetched page ${page}`, data);
+          } catch (error) {
+            debugError(`Error prefetching page ${page}:`, error);
+          }
+        }
+      }
+    };
+
+    fetchNextPages();
+  }, [API_URL, currentPage, debugError, debugLog, prefetchedPagesRef, searchQuery]);
 
   const handleBackToHome = () => {
     navigate('/')
   }
+
+  const handleSearch = (query) => {
+    setSearchResults([]);
+    setPrefetchedPages({});
+    setTotalSearchResults(0);
+    fetchTotalCount(searchQuery).then((count) => {
+      if (count > 0) {
+        fetchProjects(1, 10, query);
+      }
+    });
+  };
+
+  const paginate = (pageNumber) => {
+      if (prefetchedPages[pageNumber]) {
+        setSearchResults(prefetchedPages[pageNumber]);
+      } else {
+        fetchProjects(pageNumber, searchQuery);
+      }
+      setCurrentPage(pageNumber);
+    };
+
+  const handleCheckboxChange = (project) => {
+    setSelectedProjects((prevSelected) => {
+      const isSelected = prevSelected.some((p) => p._id === project._id);
+      if (isSelected) {
+        return prevSelected.filter((p) => p._id !== project._id);
+      } else {
+        const selectedProject = addSelectedFields(project);
+        return [...prevSelected, selectedProject];
+      }
+    });
+  };
+
+
+  const addSelectedFields = (project) => {
+    if (!project.dokumentit) {
+      project.dokumentit = {};
+    }
+
+    if (Array.isArray(project.dokumentit.lausunnot)) {
+      project.dokumentit.lausunnot = project.dokumentit.lausunnot.map((lausunto) => ({
+        ...lausunto,
+        selected: true,
+      }));
+    }
+
+    if (Array.isArray(project.dokumentit.asiantuntijalausunnot)) {
+      project.dokumentit.asiantuntijalausunnot = project.dokumentit.asiantuntijalausunnot.map((lausunto) => ({
+        ...lausunto,
+        selected: true,
+      }));
+    }
+
+    if (Array.isArray(project.dokumentit.valiokunnanLausunnot)) {
+      project.dokumentit.valiokunnanLausunnot = project.dokumentit.valiokunnanLausunnot.map((lausunto) => ({
+        ...lausunto,
+        selected: true,
+      }));
+    }
+
+    if (Array.isArray(project.dokumentit.valiokunnanMietinnot)) {
+      project.dokumentit.valiokunnanMietinnot = project.dokumentit.valiokunnanMietinnot.map((lausunto) => ({
+        ...lausunto,
+        selected: true,
+      }));
+    }
+
+    return project;
+  };
 
   return (
     <>
@@ -42,7 +139,6 @@ const ProjectSelectionView = ({ searchQuery, setSearchQuery, handleSearch, loadi
           />
           <Pagination
             currentPage={currentPage}
-            resultsPerPage={resultsPerPage}
             paginate={paginate}
             totalSearchResults={totalSearchResults}
           />

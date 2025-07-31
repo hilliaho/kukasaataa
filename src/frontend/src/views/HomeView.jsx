@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const HomeView = ({API_URL, setStudentProjects, setRole, joinCode, setJoinCode, debugError}) => {
+const HomeView = ({API_URL, setStudentProjects, joinCode, setJoinCode, debugError}) => {
   const navigate = useNavigate()
 
 
@@ -13,7 +13,6 @@ const HomeView = ({API_URL, setStudentProjects, setRole, joinCode, setJoinCode, 
       if (data) {
         console.log("Oppilaan data:", data);
         setStudentProjects(data.documents);
-        setRole("student");
         navigate('/student')
       } else {
         alert("Koodilla ei löytynyt dokumentteja.");
@@ -30,7 +29,6 @@ const HomeView = ({API_URL, setStudentProjects, setRole, joinCode, setJoinCode, 
 
           <button
             onClick={() => {
-              setRole("teacher");
               navigate('/select-projects')
             }}
             style={{ marginTop: "40px" }}
