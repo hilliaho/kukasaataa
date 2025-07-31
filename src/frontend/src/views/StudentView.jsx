@@ -1,5 +1,5 @@
 import React from 'react';
-import StudentProject from './StudentProject';
+import StudentProject from '../components/StudentProject';
 const StudentView = ({ projects }) => {
 
   return (
