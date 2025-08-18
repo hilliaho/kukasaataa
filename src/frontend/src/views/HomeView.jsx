@@ -9,11 +9,9 @@ const HomeView = ({API_URL, setStudentProjects, joinCode, setJoinCode, debugErro
     try {
       const res = await fetch(`${API_URL}/selections/${joinCode}`);
       const data = await res.json();
-
       if (data) {
         console.log("Oppilaan data:", data);
-        setStudentProjects(data.documents);
-        navigate('/student')
+        navigate(`/student/${joinCode}`)
       } else {
         alert("Koodilla ei löytynyt dokumentteja.");
       }

@@ -30,7 +30,6 @@ function App() {
   const [totalSearchResults, setTotalSearchResults] = useState(0);
   const [joinCode, setJoinCode] = useState("");
   const [editCode, setEditCode] = useState("");
-  const [studentProjects, setStudentProjects] = useState([]);
 
   const prefetchedPagesRef = useRef({});
 
@@ -87,7 +86,6 @@ function App() {
             API_URL={API_URL}
             joinCode={joinCode}
             setJoinCode={setJoinCode}
-            setStudentProjects={setStudentProjects}
             debugError={debugError}
           />} />
           <Route exact path="/select-projects" element={<ProjectSelectionView
@@ -120,7 +118,7 @@ function App() {
           <Route exact path="/summary" element={<SummaryView joinCode={joinCode}
             editCode={editCode}
             selectedProjects={selectedProjects} />} />
-          <Route exact path="/student" element={<StudentView projects={studentProjects} />} />
+          <Route exact path="/student/:joinCode" element={<StudentView API_URL={API_URL} debugError={debugError}/>} />
         </Routes>
       </div>
     </Router>
