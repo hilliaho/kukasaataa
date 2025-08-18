@@ -23,14 +23,8 @@ const PreparatoryDocuments = ({ submissions = [], name }) => {
 						<div className="preparatory-documents">
 							{submissions.length > 0 ? (
 								submissions.map((submission) => (
-									<div>
-									{submission.asiakirjatyyppi ? (
-										<a href={submission.url}>
-											{submission.nimi}
-										</a>
-									) : (
+									<div key={submission.url}>
 										<a href={submission.url}>{submission.nimi}</a>
-									)}
 									</div>
 								))
 							) : (
