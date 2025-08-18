@@ -26,7 +26,7 @@ const PreparatoryDocuments = ({ submissions = [], name }) => {
 									<div>
 									{submission.asiakirjatyyppi ? (
 										<a href={submission.url}>
-											{submission.asiakirjatyyppi}: {submission.nimi}
+											{submission.nimi}
 										</a>
 									) : (
 										<a href={submission.url}>{submission.nimi}</a>

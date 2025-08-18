@@ -14,14 +14,14 @@ def process_preparatory_documents(api_data):
         xml_name = result_list[i][3]
         xml_doc_type = result_list[i][4]
         xml_url = result_list[i][5]
-
-        name_row = parse_xml_name(xml_name)
         doc_type = parse_xml_doc_type(xml_doc_type)
-        name = remove_unnecessary_info_from_name(name_row)
-
         url_match = re.search(r'href="([^"]+)"', xml_url)
         url = url_match.group(1) if url_match else ""
-
+        if doc_type == "Asiantuntijalausunto":
+            name_row = parse_xml_name(xml_name)
+            name = remove_unnecessary_info_from_name(name_row)
+        else:
+            name = find_valiokunta_name_from_pdf(url)
         identifier = result_list[i][1]
         if identifier is None:
             identifier = find_proposal_identifier_from_pdf(url)
@@ -31,7 +31,6 @@ def process_preparatory_documents(api_data):
         if all([identifier, doc_type, name, url]):
             processed_element = {
                 "heTunnus": identifier,
-                "asiakirjatyyppi": doc_type,
                 "nimi": name,
                 "url": url,
             }
@@ -42,11 +41,42 @@ def process_preparatory_documents(api_data):
 
 def find_proposal_identifier_from_pdf(url):
     """Etsi HE-tunnus PDF-tiedostosta"""
+    if len(url)==0:
+        return ""
     text = extract_text_from_pdf(url)
     match = re.search(r"HE\s\d{1,3}/\d{4}", text)
     return match.group(0) if match else None
 
+def find_valiokunta_name_from_pdf(url):
+    """Etsi valiokunnan nimi pdf-tiedostosta"""
+    if len(url)==0:
+        return ""
+    text = extract_text_from_pdf(url)
+    valiokunnat = [
+    "Hallintovaliokunta",
+    "Lakivaliokunta",
+    "Liikenne- ja viestintävaliokunta",
+    "Maa- ja metsätalousvaliokunta",
+    "Pankkivaliokunta",
+    "Perustuslakivaliokunta",
+    "Puolustusvaliokunta",
+    "Sivistysvaliokunta",
+    "Sosiaali- ja terveysvaliokunta",
+    "Suuri valiokunta",
+    "Talousvaliokunta",
+    "Tarkastusvaliokunta",
+    "Tiedusteluvalvontavaliokunta",
+    "Toinen lakivaliokunta",
+    "Tulevaisuusvaliokunta",
+    "Työelämä- ja tasa-arvovaliokunta",
+    "Ulkoasiainvaliokunta",
+    "Valtiovarainvaliokunta",
+    "Ympäristövaliokunta",
+    ]
 
+    name_pattern = r"\b(" + "|".join(map(re.escape, valiokunnat)) + r")\b"
+    matches = re.findall(name_pattern, text, flags=re.IGNORECASE)
+    return matches[0] if len(matches)>0 else ''
 
 def extract_text_from_pdf(pdf_url):
     response = requests.get(pdf_url)

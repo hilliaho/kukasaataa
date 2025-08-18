@@ -20,13 +20,7 @@ const Submission = ({ submission, onSelectionChange }) => {
                 checked={isSelected}
                 onChange={handleCheckboxChange}
             />
-            {submission.asiakirjatyyppi ? (
-                <a href={submission.url}>
-                    {submission.asiakirjatyyppi}: {submission.nimi}
-                </a>
-            ) : (
-                <a href={submission.url}>{submission.nimi}</a>
-            )}
+            {<a href={submission.url}>{submission.nimi}</a>}
         </div>
     )
 }
