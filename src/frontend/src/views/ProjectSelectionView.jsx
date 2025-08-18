@@ -7,12 +7,13 @@ import SelectedProjects from "../components/SelectedProjects";
 import SearchResults from "../components/SearchResults";
 import Pagination from "../components/Pagination";
 
-const ProjectSelectionView = ({ API_URL, searchQuery, setSearchQuery, loading, selectedProjects, searchResults,
+const ProjectSelectionView = ({ API_URL, searchQuery, setSearchQuery, selectedProjects, searchResults,
   totalSearchResults,
   setSearchResults, setTotalSearchResults, fetchProjects, setSelectedProjects, fetchTotalCount, prefetchedPagesRef, debugLog, debugError
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [prefetchedPages, setPrefetchedPages] = useState({});
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -45,14 +46,16 @@ const ProjectSelectionView = ({ API_URL, searchQuery, setSearchQuery, loading, s
   }
 
   const handleSearch = (query) => {
+    setLoading(true)
     setSearchResults([]);
     setPrefetchedPages({});
     setTotalSearchResults(0);
     fetchTotalCount(searchQuery).then((count) => {
       if (count > 0) {
-        fetchProjects(1, 10, query);
+        fetchProjects(1, query);
       }
     });
+    setLoading(false)
   };
 
   const paginate = (pageNumber) => {

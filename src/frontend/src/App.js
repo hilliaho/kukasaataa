@@ -38,7 +38,7 @@ function App() {
   useEffect(() => {
     if (searchResults.length === 0) {
       fetchTotalCount(searchQuery);
-      fetchProjects(1, 10, searchQuery);
+      fetchProjects(1, searchQuery);
     }
   }, [searchQuery, searchResults.length]);
 
@@ -91,6 +91,7 @@ function App() {
             debugError={debugError}
           />} />
           <Route exact path="/select-projects" element={<ProjectSelectionView
+            API_URL={API_URL}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             loading={loading}
