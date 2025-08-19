@@ -28,8 +28,7 @@ function App() {
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [totalSearchResults, setTotalSearchResults] = useState(0);
-  const [joinCode, setJoinCode] = useState("");
-  const [editCode, setEditCode] = useState("");
+  const [joinCode, setJoinCode] = useState('')
 
   const prefetchedPagesRef = useRef({});
 
@@ -84,12 +83,14 @@ function App() {
         <Routes>
           <Route exact path="/" element={<HomeView
             API_URL={API_URL}
+            debugError={debugError}
             joinCode={joinCode}
             setJoinCode={setJoinCode}
-            debugError={debugError}
+            setSelectedProjects={setSelectedProjects}
           />} />
-          <Route exact path="/select-projects" element={<ProjectSelectionView
+          <Route exact path="/:editCode/select-projects" element={<ProjectSelectionView
             API_URL={API_URL}
+            joinCode={joinCode}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             loading={loading}
@@ -105,20 +106,19 @@ function App() {
             debugLog={debugLog}
             debugError={debugError}
           />} />
-          <Route exact path="/select-documents" element={<DocumentSelectionView
+          <Route exact path="/:editCode/select-documents" element={<DocumentSelectionView
             API_URL={API_URL}
             selectedProjects={selectedProjects}
             setSelectedProjects={setSelectedProjects}
             setLoading={setLoading}
-            setEditCode={setEditCode}
-            setJoinCode={setJoinCode}
+            joinCode={joinCode}
             debugLog={debugLog}
             debugError={debugError}
           />} />
-          <Route exact path="/summary" element={<SummaryView joinCode={joinCode}
-            editCode={editCode}
+          <Route exact path="/:editCode/summary" element={<SummaryView
+            joinCode={joinCode}
             selectedProjects={selectedProjects} />} />
-          <Route exact path="/student/:joinCode" element={<StudentView API_URL={API_URL} debugError={debugError}/>} />
+          <Route exact path="/student/:joinCode" element={<StudentView API_URL={API_URL} debugError={debugError} />} />
         </Routes>
       </div>
     </Router>

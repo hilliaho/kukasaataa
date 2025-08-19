@@ -43,10 +43,22 @@ def get_selection_data():
         print(f"Error fetching data: {e}")
         return jsonify({"error": "Failed to fetch data"}), 500
     
-@app.route("/selections/<code>", methods=["GET"])
-def get_selection_by_code(code):
+@app.route("/selections/join/<code>", methods=["GET"])
+def get_selection_by_joincode(code):
     try:
-        selection = selection_db_service.find_by_code(code)
+        selection = selection_db_service.find_by_joincode(code)
+        if selection:
+            return jsonify(selection), 200
+        else:
+            return jsonify({"error": "Selection not found"}), 404
+    except Exception as e:
+        print(f"Error fetching selection by code: {e}")
+        return jsonify({"error": "Failed to fetch selection"}), 500
+    
+@app.route("/selections/edit/<code>", methods=["GET"])
+def get_selection_by_editcode(code):
+    try:
+        selection = selection_db_service.find_by_editcode(code)
         if selection:
             return jsonify(selection), 200
         else:
@@ -64,5 +76,9 @@ def create_selection():
     except Exception as e:
         print(f"Error creating selection: {e}")
         return jsonify({"error": "Failed to create selection"}), 500
+    
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 

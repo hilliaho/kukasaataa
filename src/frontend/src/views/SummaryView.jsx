@@ -1,19 +1,30 @@
 import React from "react"
 import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import SummaryItem from "../components/SummaryItem"
+import BackButton from "../components/BackButton"
 
-const SummaryView = ({ joinCode, editCode, selectedProjects }) => {
+const SummaryView = ({ joinCode, selectedProjects }) => {
   const navigate = useNavigate()
+  const location = useLocation()
+  const editCode = location.pathname.split("/")[1]
+
 
   useEffect(() => {
-    if(!joinCode || !editCode || !selectedProjects) {
-      navigate('/select-documents')
+    if(!joinCode || !selectedProjects) {
+      navigate(`/${editCode}/select-documents`)
     }
   }, [joinCode, editCode, selectedProjects, navigate]);
 
+  const handleBackToSelection = () => {
+    navigate(`/${editCode}/select-documents`)
+  }
+
   return (
     <div>
+      <div className="back-button">
+        <BackButton handleFunction={handleBackToSelection} />
+      </div>
       <div className="code-notification">
         <h3>
           Materiaalivalinnat tallennettu.
@@ -27,7 +38,7 @@ const SummaryView = ({ joinCode, editCode, selectedProjects }) => {
         </p>
         <strong>{editCode}</strong>
       </div>
-      <h3>Valitut asiakirjat</h3>
+      <h3 className="summary-selected-documents-h3">Valitut asiakirjat</h3>
       <ul>
         {selectedProjects.map((project, index) => <div key={index}><SummaryItem project={project}/></div>)}
       </ul>

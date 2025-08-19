@@ -78,6 +78,7 @@ button {
 	padding: 10px 20px;
 	cursor: pointer;
 	border-radius: 5px;
+	margin: 0.4rem;
 }
 
 button:hover {
@@ -182,7 +183,7 @@ input[type="text"] {
 
 .code-notification {
 	padding: 10px;
-	margin: 20px 0;
+	margin: 5rem 3rem;
 }
 
 .code-notification p {
@@ -207,5 +208,9 @@ input[type="text"] {
 	border: none;
 	cursor: pointer;
 	color: var(--primary)
+}
+
+.summary-selected-documents-h3 {
+	margin: 3rem;
 }
 

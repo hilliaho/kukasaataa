@@ -20,9 +20,16 @@ class SelectionDbService:
 		"""Tallenna valikoima dokumentteja koodilla"""
 		self.collection.insert_one(data)
 
-	def find_by_code(self, code: str):
+	def find_by_joincode(self, code: str):
 		"""Hae valikoima annetulla koodilla"""
 		result = self.collection.find_one({"joinCode": code})
+		if result:
+			result["_id"] = str(result["_id"])
+		return result
+
+	def find_by_editcode(self, code: str):
+		"""Hae valikoima annetulla koodilla"""
+		result = self.collection.find_one({"editCode": code})
 		if result:
 			result["_id"] = str(result["_id"])
 		return result

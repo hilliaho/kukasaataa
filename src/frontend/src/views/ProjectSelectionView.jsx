@@ -1,13 +1,13 @@
 import React from "react"
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import BackButton from "../components/BackButton";
 import SearchField from "../components/SearchField";
 import SelectedProjects from "../components/SelectedProjects";
 import SearchResults from "../components/SearchResults";
 import Pagination from "../components/Pagination";
 
-const ProjectSelectionView = ({ API_URL, searchQuery, setSearchQuery, selectedProjects, searchResults,
+const ProjectSelectionView = ({ API_URL, joinCode, searchQuery, setSearchQuery, selectedProjects, searchResults,
   totalSearchResults,
   setSearchResults, setTotalSearchResults, fetchProjects, setSelectedProjects, fetchTotalCount, prefetchedPagesRef, debugLog, debugError
 }) => {
@@ -15,8 +15,14 @@ const ProjectSelectionView = ({ API_URL, searchQuery, setSearchQuery, selectedPr
   const [prefetchedPages, setPrefetchedPages] = useState({});
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
+  const editCode = location.pathname.split("/")[1]
+
 
   useEffect(() => {
+    if(!joinCode || !selectedProjects) {
+      navigate(`/`)
+    }
     const fetchNextPages = async () => {
       const pagesToPrefetch = [currentPage + 1, currentPage + 2];
 
@@ -43,6 +49,10 @@ const ProjectSelectionView = ({ API_URL, searchQuery, setSearchQuery, selectedPr
 
   const handleBackToHome = () => {
     navigate('/')
+  }
+
+  const handleContinue = () => {
+    navigate(`/${editCode}/select-documents`)
   }
 
   const handleSearch = (query) => {
@@ -164,7 +174,7 @@ const ProjectSelectionView = ({ API_URL, searchQuery, setSearchQuery, selectedPr
             </div>
           )}
       </div>
-      <button className="continue-button" onClick={()=>navigate('/select-documents')}>
+      <button className="continue-button" onClick={handleContinue}>
         Tallenna ja siirry eteenpäin
       </button>
     </>

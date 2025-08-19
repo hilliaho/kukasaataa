@@ -2,38 +2,27 @@ import React, { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import BackButton from "../components/BackButton"
 import Project from "../components/Project"
+import { useLocation } from 'react-router-dom'
 
-const DocumentSelectionView = ({ API_URL, selectedProjects, setSelectedProjects, setLoading, setEditCode, setJoinCode, debugLog, debugError }) => {
+const DocumentSelectionView = ({ API_URL, selectedProjects, setSelectedProjects, setLoading, joinCode, debugLog, debugError }) => {
   
   const navigate = useNavigate()
+  const location = useLocation()
+  const editCode = location.pathname.split("/")[1]
 
   useEffect(() => {
     if (selectedProjects.length === 0) {
-      navigate('/select-projects')
+      navigate(`/${editCode}/select-projects`)
     }
-  }, [selectedProjects, navigate]);
+  }, [selectedProjects, navigate, editCode]);
 
   const handleBackToSelection = () => {
-    navigate('/select-projects')
+    navigate(`/${editCode}/select-projects`)
   }
 
-  const createCode = async () => {
+  const createSelection = async () => {
     setLoading(true);
-    console.log("Create code: Selected projects:", selectedProjects);
-
-    const generateCode = () => {
-      const chars = '123456789';
-      let result = '';
-      for (let i = 0; i < 5; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return result;
-    };
-
-    const joinCode = generateCode();
-    const editCode = generateCode();
-    setEditCode(editCode);
-    setJoinCode(joinCode);
+    console.log("Create selection: Selected projects:", selectedProjects);
 
     const cleanedProjects = selectedProjects
       .map((project) => {
@@ -79,9 +68,7 @@ const DocumentSelectionView = ({ API_URL, selectedProjects, setSelectedProjects,
       });
       debugLog("Selection: ", payload)
       const data = await response.json();
-      debugLog("Code created:", joinCode);
-      debugLog("Edit code created:", editCode);
-      navigate('/summary')
+      navigate(`/${editCode}/summary`)
 
       return data;
     } catch (error) {
@@ -105,8 +92,8 @@ const DocumentSelectionView = ({ API_URL, selectedProjects, setSelectedProjects,
           )}
         </ul>
       </div>
-      <button className="continue-button" onClick={createCode}>
-        Tallenna valinnat ja luo koodi
+      <button className="continue-button" onClick={createSelection}>
+        Tallenna valinnat
       </button>
     </>
   )

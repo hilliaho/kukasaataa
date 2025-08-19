@@ -1,13 +1,15 @@
 import React from "react";
+import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
-const HomeView = ({API_URL, setStudentProjects, joinCode, setJoinCode, debugError}) => {
+const HomeView = ({ API_URL, joinCode, setJoinCode, debugError, setSelectedProjects }) => {
   const navigate = useNavigate()
-
+  const [showEditCodeInput, setShowEditCodeInput] = useState(false)
+  const [editCode, setEditCode] = useState('')
 
   const handleJoinWithCode = async () => {
     try {
-      const res = await fetch(`${API_URL}/selections/${joinCode}`);
+      const res = await fetch(`${API_URL}/selections/join/${joinCode}`);
       const data = await res.json();
       if (data) {
         console.log("Oppilaan data:", data);
@@ -16,41 +18,104 @@ const HomeView = ({API_URL, setStudentProjects, joinCode, setJoinCode, debugErro
         alert("Koodilla ei löytynyt dokumentteja.");
       }
     } catch (error) {
-      debugError("Virhe liittyessä peliin:", error);
+      debugError("Virhe liittyessä alustalle:", error);
       alert("Jokin meni pieleen. Yritä uudelleen.");
     }
   };
 
+  const handleEdit = async () => {
+    try {
+      const res = await fetch(`${API_URL}/selections/edit/${editCode}`);
+      const data = await res.json();
+      if (data) {
+        console.log("Oppilaan data:", data);
+        setSelectedProjects(data.documents)
+        setJoinCode(data.joinCode)
+        navigate(`/${editCode}/select-projects`)
+      } else {
+        alert("Koodilla ei löytynyt dokumentteja.");
+      }
+    } catch (error) {
+      debugError("Virhe liittyessä alustalle:", error);
+      alert("Jokin meni pieleen. Yritä uudelleen.");
+    }
+  }
+
+  const createNewSession = () => {
+    const join = generateCode();
+    const edit = generateCode();
+    setJoinCode(join);
+    navigate(`/${edit}/select-projects`)
+  }
+
+  const generateCode = () => {
+    const chars = '123456789';
+    let result = '';
+    for (let i = 0; i < 5; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  };
+
+
+
   return (
-        <div className="center-container">
-          <h1>Kuka säätää?</h1>
+    <div className="center-container">
+      <h1>Kuka säätää?</h1>
 
+      <div style={{ marginTop: "60px" }}>
+        <h2>Osallistu oppilaana</h2>
+        <input
+          type="text"
+          value={joinCode}
+          onChange={(e) => setJoinCode(e.target.value)}
+          placeholder="Syötä koodi"
+          style={{ padding: "10px", fontSize: "16px", marginTop: "10px" }}
+        />
+        <button
+          onClick={handleJoinWithCode}
+          style={{ marginTop: "15px" }}
+        >
+          Liity alustalle
+        </button>
+      </div>
+
+      <div style={{ marginTop: "40px" }}>
+        <h3>Luo uusi tai muokkaa dokumenttivalikoimaa</h3>
+        <button
+          onClick={createNewSession}
+        >
+          Luo uusi
+        </button>
+        {showEditCodeInput &&
+          <>
+            <div>
+              <input
+                type="text"
+                value={editCode}
+                onChange={(e) => setEditCode(e.target.value)}
+                placeholder="Syötä muokkauskoodi"
+                style={{ padding: "10px", fontSize: "16px", marginTop: "10px" }}
+              />
+              <button
+                onClick={() => handleEdit()}
+                style={{ marginTop: "15px" }}
+              >
+                Muokkaa
+              </button>
+            </div>
+          </>}
+        {!showEditCodeInput &&
           <button
-            onClick={() => {
-              navigate('/select-projects')
-            }}
-            style={{ marginTop: "40px" }}
+            onClick={() => setShowEditCodeInput(true)}
+            style={{ marginTop: "15px" }}
           >
-            Luo uusi peli
+            Muokkaa
           </button>
+        }
+      </div>
 
-          <div style={{ marginTop: "60px" }}>
-            <h2>Osallistu oppilaana</h2>
-            <input
-              type="text"
-              value={joinCode}
-              onChange={(e) => setJoinCode(e.target.value)}
-              placeholder="Syötä opettajan antama koodi"
-              style={{ padding: "10px", fontSize: "16px", marginTop: "10px" }}
-            />
-            <button
-              onClick={handleJoinWithCode}
-              style={{ marginTop: "15px" }}
-            >
-              Liity peliin
-            </button>
-          </div>
-        </div>
+    </div>
   )
 }
 
