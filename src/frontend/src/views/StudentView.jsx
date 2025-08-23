@@ -1,27 +1,29 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import StudentProject from '../components/StudentProject';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const StudentView = ({ API_URL, debugError }) => {
+const StudentView = ({ API_URL, debugLog, debugError }) => {
   const [projects, setProjects] = useState([])
   const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchStudentProjects = async () => {
       const joinCode = location.pathname.split("/")[2]
-      console.log('joincode: ', joinCode)
+      debugLog('joincode: ', joinCode)
       try {
-        const res = await fetch(`${API_URL}/selections/${joinCode}`);
+        const res = await fetch(`${API_URL}/selections/join/${joinCode}`);
         const data = await res.json();
         if (data) {
-          console.log("Oppilaan data:", data);
+          debugLog("[StudentView]: Oppilaan data:", data);
           setProjects(data.documents);
         } else {
           alert("Koodilla ei löytynyt dokumentteja.");
         }
       } catch (error) {
-        debugError("Virhe haettaessa oppilaan näkymän projekteja:", error);
+        debugError("[StudentView]: Virhe haettaessa oppilaan näkymän projekteja:", error);
+        navigate("/")
         alert("Jokin meni pieleen. Yritä uudelleen.");
       }
     }

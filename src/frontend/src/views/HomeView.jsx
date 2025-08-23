@@ -2,23 +2,24 @@ import React from "react";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
-const HomeView = ({ API_URL, joinCode, setJoinCode, debugError, setSelectedProjects }) => {
+const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSelectedProjects }) => {
   const navigate = useNavigate()
   const [showEditCodeInput, setShowEditCodeInput] = useState(false)
   const [editCode, setEditCode] = useState('')
 
-  const handleJoinWithCode = async () => {
+  const handleJoinWithCode = async (e) => {
     try {
+      e.preventDefault();
       const res = await fetch(`${API_URL}/selections/join/${joinCode}`);
       const data = await res.json();
-      if (data) {
-        console.log("Oppilaan data:", data);
-        navigate(`/student/${joinCode}`)
-      } else {
-        alert("Koodilla ei löytynyt dokumentteja.");
+      if (!res.ok) {
+        alert(`Koodilla ${joinCode} ei löytynyt dokumentteja. Tarkista, että koodi on oikein.`);
+        return;
       }
+      debugLog("[HomeView]: Oppilaan data:", data);
+      navigate(`/student/${joinCode}`)
     } catch (error) {
-      debugError("Virhe liittyessä alustalle:", error);
+      debugError("[HomeView]: Virhe liittyessä alustalle:", error);
       alert("Jokin meni pieleen. Yritä uudelleen.");
     }
   };
@@ -28,7 +29,7 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugError, setSelectedProje
       const res = await fetch(`${API_URL}/selections/edit/${editCode}`);
       const data = await res.json();
       if (data) {
-        console.log("Oppilaan data:", data);
+        debugLog("Muokattava data:", data);
         setSelectedProjects(data.documents)
         setJoinCode(data.joinCode)
         navigate(`/${editCode}/select-projects`)
@@ -65,19 +66,21 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugError, setSelectedProje
 
       <div style={{ marginTop: "60px" }}>
         <h2>Osallistu oppilaana</h2>
-        <input
-          type="text"
-          value={joinCode}
-          onChange={(e) => setJoinCode(e.target.value)}
-          placeholder="Syötä koodi"
-          style={{ padding: "10px", fontSize: "16px", marginTop: "10px" }}
-        />
-        <button
-          onClick={handleJoinWithCode}
-          style={{ marginTop: "15px" }}
-        >
-          Liity alustalle
-        </button>
+        <form onSubmit={handleJoinWithCode}>
+          <input
+            type="text"
+            value={joinCode}
+            onChange={(e) => setJoinCode(e.target.value)}
+            placeholder="Syötä koodi"
+            style={{ padding: "10px", fontSize: "16px", marginTop: "10px" }}
+          />
+          <button
+            type="submit"
+            style={{ marginTop: "15px" }}
+          >
+            Liity alustalle
+          </button>
+        </form>
       </div>
 
       <div style={{ marginTop: "40px" }}>
