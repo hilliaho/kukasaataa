@@ -12,7 +12,6 @@ const ProjectSelectionView = ({ API_URL, joinCode, searchQuery, setSearchQuery, 
   setSearchResults, setTotalSearchResults, fetchProjects, setSelectedProjects, fetchTotalCount, prefetchedPagesRef, debugLog, debugError
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [prefetchedPages, setPrefetchedPages] = useState({});
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -20,7 +19,7 @@ const ProjectSelectionView = ({ API_URL, joinCode, searchQuery, setSearchQuery, 
 
 
   useEffect(() => {
-    if(!joinCode || !selectedProjects) {
+    if (!joinCode || !selectedProjects) {
       navigate(`/`)
     }
     const fetchNextPages = async () => {
@@ -36,7 +35,7 @@ const ProjectSelectionView = ({ API_URL, joinCode, searchQuery, setSearchQuery, 
               dokumentit: item.dokumentit ?? {},
             }));
             prefetchedPagesRef.current[page] = normalizedData;
-            debugLog(`Prefetched page ${page}`, data);
+            debugLog(`[ProjectSelectionView] Prefetched page ${page}`, data);
           } catch (error) {
             debugError(`Error prefetching page ${page}:`, error);
           }
@@ -58,7 +57,7 @@ const ProjectSelectionView = ({ API_URL, joinCode, searchQuery, setSearchQuery, 
   const handleSearch = (query) => {
     setLoading(true)
     setSearchResults([]);
-    setPrefetchedPages({});
+    prefetchedPagesRef.current = []
     setTotalSearchResults(0);
     fetchTotalCount(searchQuery).then((count) => {
       if (count > 0) {
@@ -69,13 +68,15 @@ const ProjectSelectionView = ({ API_URL, joinCode, searchQuery, setSearchQuery, 
   };
 
   const paginate = (pageNumber) => {
-      if (prefetchedPages[pageNumber]) {
-        setSearchResults(prefetchedPages[pageNumber]);
-      } else {
-        fetchProjects(pageNumber, searchQuery);
-      }
-      setCurrentPage(pageNumber);
-    };
+    if (prefetchedPagesRef.current[pageNumber]) {
+      let onePageResults = prefetchedPagesRef.current[pageNumber]
+      onePageResults = onePageResults.filter((p) => !selectedProjects.map((p)=>p._id).includes(p._id))
+      setSearchResults(onePageResults);
+    } else {
+      fetchProjects(pageNumber, searchQuery);
+    }
+    setCurrentPage(pageNumber);
+  };
 
   const handleCheckboxChange = (project) => {
     setSelectedProjects((prevSelected) => {

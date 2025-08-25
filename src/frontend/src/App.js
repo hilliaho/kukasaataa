@@ -57,7 +57,7 @@ function App() {
   };
 
   const fetchProjects = async (page, searchQuery) => {
-    debugLog(`Haetaan projekteja sivulta ${page} hakusanalla "${searchQuery}"`);
+    debugLog(`[App] Haetaan projekteja sivulta ${page} hakusanalla "${searchQuery}"`);
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/projects?page=${page}&per_page=10&search_query=${searchQuery}`);

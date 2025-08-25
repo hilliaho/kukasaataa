@@ -16,7 +16,7 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
         alert(`Koodilla ${joinCode} ei löytynyt dokumentteja. Tarkista, että koodi on oikein.`);
         return;
       }
-      debugLog("[HomeView]: Oppilaan data:", data);
+      debugLog("[HomeView] Oppilaan data:", data);
       navigate(`/student/${joinCode}`)
     } catch (error) {
       debugError("[HomeView]: Virhe liittyessä alustalle:", error);
@@ -29,7 +29,7 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
       const res = await fetch(`${API_URL}/selections/edit/${editCode}`);
       const data = await res.json();
       if (data) {
-        debugLog("Muokattava data:", data);
+        debugLog("[HomeView] Muokattava data:", data);
         setSelectedProjects(data.documents)
         setJoinCode(data.joinCode)
         navigate(`/${editCode}/select-projects`)
