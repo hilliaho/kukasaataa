@@ -10,15 +10,10 @@ const SummaryItem = ({ project }) => {
       </div>
 
       <div className='expanded-content'>
-        <h3>Valmisteluasiakirjat</h3>
-        <h4>Lausuntokierroksen lausunnot:</h4>
-        <PreparatoryDocuments submissions={project.dokumentit.lausunnot} name={"Lausunnot"} />
-        <h4>Asiantuntijalausunnot</h4>
-        <PreparatoryDocuments submissions={project.dokumentit.asiantuntijalausunnot} name={"Asiantuntijalausunnot"} />
-        <h4>Valiokunnan lausunnot</h4>
-        <PreparatoryDocuments submissions={project.dokumentit.valiokunnanLausunnot} name={"Valiokunnan lausunnot"} />
-        <h4>Valiokunnan mietinnöt</h4>
-        <PreparatoryDocuments submissions={project.dokumentit.valiokunnanMietinnot} name={"Valiokunnan mietinnöt"} />
+        <PreparatoryDocuments submissions={project.dokumentit.lausunnot.filter((d) => d.selected)} name={"Lausunnot"} />
+        <PreparatoryDocuments submissions={project.dokumentit.asiantuntijalausunnot.filter((d) => d.selected)} name={"Asiantuntijalausunnot"} />
+        <PreparatoryDocuments submissions={project.dokumentit.valiokunnanLausunnot.filter((d) => d.selected)} name={"Valiokunnan lausunnot"} />
+        <PreparatoryDocuments submissions={project.dokumentit.valiokunnanMietinnot.filter((d) => d.selected)} name={"Valiokunnan mietinnöt"} />
       </div>
     </div>
   )

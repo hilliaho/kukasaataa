@@ -1,9 +1,19 @@
 import React from 'react';
 import { useState } from 'react';
 import PreparatoryDocuments from './PreparatoryDocuments';
+import arrow from '../assets/dropdown-arrow.png'
 
 const ResultItem = ({ result, isSelected, handleCheckboxChange }) => {
 	const [expandedContent, setExpandedContent] = useState(false);
+
+	const countDocuments = () => {
+		const docs = result.dokumentit
+		let documentCount = 0
+		Object.values(docs).forEach((docList) => documentCount = documentCount + docList.length)
+		return documentCount
+	}
+
+	const documentCount = countDocuments()
 
 	return (
 		<div key={result._id} className='project-item'>
@@ -12,22 +22,26 @@ const ResultItem = ({ result, isSelected, handleCheckboxChange }) => {
 				checked={isSelected}
 				onChange={() => handleCheckboxChange(result)}
 			/>
-			<button className='he-identifier-button' onClick={() => setExpandedContent(!expandedContent)}>{result.heTunnus}</button>
+			<strong>{result.heTunnus}</strong>
 			<div className="download-a">
 				<a href={result.heUrl}>{result.heNimi}</a>
 			</div>
-			{expandedContent && 
-			<div className='expanded-content'>
-				<h3>Valmisteluasiakirjat</h3>
-				<h4>Lausuntokierroksen lausunnot:</h4>
-				<PreparatoryDocuments submissions={result.dokumentit.lausunnot} name={"Lausunnot"} />
-				<h4>Asiantuntijalausunnot</h4>
-				<PreparatoryDocuments submissions={result.dokumentit.asiantuntijalausunnot} name={"Asiantuntijalausunnot"}/>
-				<h4>Valiokunnan lausunnot</h4>
-				<PreparatoryDocuments submissions={result.dokumentit.valiokunnanLausunnot} name={"Valiokunnan lausunnot"}/>
-				<h4>Valiokunnan mietinnöt</h4>
-				<PreparatoryDocuments submissions={result.dokumentit.valiokunnanMietinnot} name={"Valiokunnan mietinnöt"}/>
-			</div>}
+			<p className='document-info-name' onClick={() => setExpandedContent(!expandedContent)}>
+				Valmisteluasiakirjat ({documentCount})
+				<img
+					className='dropdown-arrow'
+					src={arrow}
+					alt='dropdown arrow'
+					onClick={() => setExpandedContent(!expandedContent)}
+				/>
+			</p>
+			{expandedContent &&
+				<div className='expanded-content'>
+					<PreparatoryDocuments submissions={result.dokumentit.lausunnot} name={"Lausuntokierroksen lausunnot"} />
+					<PreparatoryDocuments submissions={result.dokumentit.asiantuntijalausunnot} name={"Asiantuntijalausunnot"} />
+					<PreparatoryDocuments submissions={result.dokumentit.valiokunnanLausunnot} name={"Valiokunnan lausunnot"} />
+					<PreparatoryDocuments submissions={result.dokumentit.valiokunnanMietinnot} name={"Valiokunnan mietinnöt"} />
+				</div>}
 		</div>
 	);
 };
