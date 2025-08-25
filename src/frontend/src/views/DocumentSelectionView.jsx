@@ -31,18 +31,8 @@ const DocumentSelectionView = ({ API_URL, selectedProjects, setSelectedProjects,
         for (const [key, docs] of Object.entries(project.dokumentit)) {
           if (Array.isArray(docs)) {
             const selectedDocs = docs.filter((doc) => doc.selected);
-            if (selectedDocs.length > 0) {
-              cleanedDokumentit[key] = selectedDocs;
-            }
+            cleanedDokumentit[key] = selectedDocs;
           }
-        }
-
-        const hasSelectedDocuments = Object.values(cleanedDokumentit).some(
-          (docs) => docs.length > 0
-        );
-
-        if (!hasSelectedDocuments) {
-          return null;
         }
 
         return {
