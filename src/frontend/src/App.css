@@ -177,6 +177,16 @@ input[type="text"] {
 	text-decoration: underline;
 }
 
+.document-info-name-grey {
+	cursor: pointer;
+	color: grey;
+}
+
+.document-info-name-grey:hover {
+	text-decoration: none;
+	cursor: default;
+}
+
 .preparatory-documents {
 	text-align: left;
 }

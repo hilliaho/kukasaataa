@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react"
 import Submission from "./Submission"
 import arrow from '../assets/dropdown-arrow.png'
+import greyArrow from '../assets/grey-dropdown-arrow.png'
 
-const DocumentInfo = ({ projectId, submissions, objectName, header,  setSelectedProjects }) => {
+
+const DocumentInfo = ({ projectId, submissions, objectName, header, setSelectedProjects }) => {
 	const [expanded, setExpanded] = useState(false)
 	const [submissionList, setSubmissionList] = useState(
 		submissions.map(sub => ({ ...sub, selected: true }))
@@ -49,15 +51,27 @@ const DocumentInfo = ({ projectId, submissions, objectName, header,  setSelected
 					checked={submissionList.some(sub => sub.selected)}
 					onChange={handleCheckboxChange}
 				/>
-				<p className='document-info-name' onClick={() => setExpanded(!expanded)}>
-					{header} ({submissions.length})
-					<img
-						className='dropdown-arrow'
-						src={arrow}
-						alt='dropdown arrow'
-						onClick={() => setExpanded(!expanded)}
-					/>
-				</p>
+				{submissions.length > 0 ? (
+					<p className='document-info-name' onClick={() => setExpanded(!expanded)}>
+						{header} ({submissions.length})
+						<img
+							className='dropdown-arrow'
+							src={arrow}
+							alt='dropdown arrow'
+							onClick={() => setExpanded(!expanded)}
+						/>
+					</p>
+				) : (
+					<p className='document-info-name-grey'>
+						{header} ({submissions.length})
+						<img
+							className='dropdown-arrow'
+							src={greyArrow}
+							alt='dropdown arrow'
+						/>
+					</p>
+				)
+				}
 			</div>
 			{expanded &&
 				<div>

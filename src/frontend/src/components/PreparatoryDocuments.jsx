@@ -4,18 +4,29 @@ import arrow from '../assets/dropdown-arrow.png'
 
 const PreparatoryDocuments = ({ submissions = [], name }) => {
 	const [expanded, setExpanded] = useState(false)
+
 	return (
 		<div className="preparatory-documents">
 			<div className="content-row">
-				<p className='document-info-name' onClick={() => setExpanded(!expanded)}>
-					{name} ({submissions.length})
-					<img
-						className='dropdown-arrow'
-						src={arrow}
-						alt='dropdown arrow'
-						onClick={() => setExpanded(!expanded)}
-					/>
-				</p>
+				{submissions.length > 0 ? (
+					<p className='document-info-name' onClick={() => setExpanded(!expanded)}>
+						{name} ({submissions.length})
+						<img
+							className='dropdown-arrow'
+							src={arrow}
+							alt='dropdown arrow'
+							onClick={() => setExpanded(!expanded)}
+						/>
+					</p>) : (
+					<p className='document-info-name-grey'>
+						{name} ({submissions.length})
+						<img
+							className='dropdown-arrow'
+							src={arrow}
+							alt='dropdown arrow'
+						/>
+					</p>
+				)}
 			</div>
 			{expanded &&
 				<div>
