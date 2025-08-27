@@ -4,10 +4,10 @@ import arrow from '../assets/dropdown-arrow.png'
 import greyArrow from '../assets/grey-dropdown-arrow.png'
 
 
-const DocumentInfo = ({ projectId, submissions, objectName, header, setSelectedProjects }) => {
+const DocumentInfo = ({ type, projectId, submissions, objectName, header, setSelectedProjects }) => {
 	const [expanded, setExpanded] = useState(false)
 	const [submissionList, setSubmissionList] = useState(
-		submissions.map(sub => ({ ...sub, selected: true }))
+		submissions
 	)
 
 	const handleCheckboxChange = () => {
@@ -26,31 +26,35 @@ const DocumentInfo = ({ projectId, submissions, objectName, header, setSelectedP
 	}
 
 	useEffect(() => {
-		setSelectedProjects(prev => {
-			return prev.map(project => {
-				if (project._id === projectId) {
-					const updatedDokumentit = {
-						...(project.dokumentit || {}),
-						[objectName]: submissionList
+		if (type === "checkbox") {
+			setSelectedProjects(prev => {
+				return prev.map(project => {
+					if (project._id === projectId) {
+						const updatedDokumentit = {
+							...(project.dokumentit || {}),
+							[objectName]: submissionList
+						}
+						return {
+							...project,
+							dokumentit: updatedDokumentit
+						}
 					}
-					return {
-						...project,
-						dokumentit: updatedDokumentit
-					}
-				}
-				return project
+					return project
+				})
 			})
-		})
-	}, [submissionList, projectId, objectName, setSelectedProjects])
+		}
+	}, [submissionList, projectId, objectName, setSelectedProjects, type])
 
 	return (
 		<div>
 			<div className="content-row">
-				<input
-					type="checkbox"
-					checked={submissionList.some(sub => sub.selected)}
-					onChange={handleCheckboxChange}
-				/>
+				{type === "checkbox" &&
+					<input
+						type="checkbox"
+						checked={submissionList.some(sub => sub.selected)}
+						onChange={handleCheckboxChange}
+					/>
+				}
 				{submissions.length > 0 ? (
 					<p className='document-info-name' onClick={() => setExpanded(!expanded)}>
 						{header} ({submissions.length})
@@ -80,6 +84,7 @@ const DocumentInfo = ({ projectId, submissions, objectName, header, setSelectedP
 							{submissionList.length > 0 ? (
 								submissionList.map((submission, index) => (
 									<Submission
+										type={type}
 										key={index}
 										submission={submission}
 										onSelectionChange={(isSelected) =>

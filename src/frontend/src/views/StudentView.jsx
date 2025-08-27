@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import StudentProject from '../components/StudentProject';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Project from '../components/Project';
 
 const StudentView = ({ API_URL, debugLog, debugError }) => {
   const [projects, setProjects] = useState([])
@@ -30,14 +30,14 @@ const StudentView = ({ API_URL, debugLog, debugError }) => {
     fetchStudentProjects()
 
 
-  }, [API_URL, debugError])
+  }, [API_URL, debugError, debugLog, location.pathname, navigate])
 
   return (
     <div className='student-view'>
       <h1>Kuka säätää?</h1>
       {projects.map((project) => (
         <div key={project._id} className='student-project'>
-          <StudentProject project={project} />
+          <Project step={"student"} project={project} />
         </div>
       ))}
     </div>);

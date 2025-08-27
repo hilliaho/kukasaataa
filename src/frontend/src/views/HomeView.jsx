@@ -11,11 +11,11 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
     try {
       e.preventDefault();
       const res = await fetch(`${API_URL}/selections/join/${joinCode}`);
-      const data = await res.json();
       if (!res.ok) {
         alert(`Koodilla ${joinCode} ei löytynyt dokumentteja. Tarkista, että koodi on oikein.`);
         return;
       }
+      const data = await res.json();
       debugLog("[HomeView] Oppilaan data:", data);
       navigate(`/student/${joinCode}`)
     } catch (error) {
@@ -27,15 +27,15 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
   const handleEdit = async () => {
     try {
       const res = await fetch(`${API_URL}/selections/edit/${editCode}`);
-      const data = await res.json();
-      if (data) {
-        debugLog("[HomeView] Muokattava data:", data);
-        setSelectedProjects(data.documents)
-        setJoinCode(data.joinCode)
-        navigate(`/${editCode}/select-projects`)
-      } else {
-        alert("Koodilla ei löytynyt dokumentteja.");
+      if (!res.ok) {
+        alert(`Koodilla ${editCode} ei löytynyt dokumentteja. Tarkista, että koodi on oikein.`);
+        return;
       }
+      const data = await res.json();
+      debugLog("[HomeView] Muokattava data:", data);
+      setSelectedProjects(data.documents)
+      setJoinCode(data.joinCode)
+      navigate(`/${editCode}/select-projects`)
     } catch (error) {
       debugError("Virhe liittyessä alustalle:", error);
       alert("Jokin meni pieleen. Yritä uudelleen.");

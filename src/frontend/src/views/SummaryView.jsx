@@ -1,8 +1,8 @@
 import React from "react"
 import { useEffect } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
-import SummaryItem from "../components/SummaryItem"
 import BackButton from "../components/BackButton"
+import Project from "../components/Project"
 
 const SummaryView = ({ joinCode, setJoinCode, selectedProjects, setSelectedProjects }) => {
   const navigate = useNavigate()
@@ -49,7 +49,14 @@ const SummaryView = ({ joinCode, setJoinCode, selectedProjects, setSelectedProje
       </div>
       <h3 className="summary-selected-documents-h3">Valitut asiakirjat</h3>
       <ul>
-        {selectedProjects.map((project, index) => <div key={index}><SummaryItem project={project}/></div>)}
+        {selectedProjects.map((project, index) => <div key={index}>
+          <Project 
+            step={"summary"}
+            project={project}
+            selectedProjects={selectedProjects}
+            setSelectedProjects={setSelectedProjects}
+          />
+          </div>)}
       </ul>
     </div>
   )

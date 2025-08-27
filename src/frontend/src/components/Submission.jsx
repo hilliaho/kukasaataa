@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-const Submission = ({ submission, onSelectionChange }) => {
+const Submission = ({ submission, onSelectionChange, type }) => {
     const [isSelected, setSelected] = useState(submission.selected)
 
     useEffect(() => {
@@ -15,12 +15,13 @@ const Submission = ({ submission, onSelectionChange }) => {
 
     return (
         <div className="submission">
+            {type === "checkbox" &&
             <input
                 type="checkbox"
                 checked={isSelected}
                 onChange={handleCheckboxChange}
-            />
-            {<a href={submission.url}>{submission.nimi}</a>}
+            />}
+            {<a href={submission.url} target="_blank" rel="noopener noreferrer">{submission.nimi}</a>}
         </div>
     )
 }

@@ -82,54 +82,6 @@ const ProjectSelectionView = ({ API_URL, joinCode, setJoinCode, searchQuery, set
     setCurrentPage(pageNumber);
   };
 
-  const handleCheckboxChange = (project) => {
-    setSelectedProjects((prevSelected) => {
-      const isSelected = prevSelected.some((p) => p._id === project._id);
-      if (isSelected) {
-        return prevSelected.filter((p) => p._id !== project._id);
-      } else {
-        const selectedProject = addSelectedFields(project);
-        return [...prevSelected, selectedProject];
-      }
-    });
-  };
-
-
-  const addSelectedFields = (project) => {
-    if (!project.dokumentit) {
-      project.dokumentit = {};
-    }
-
-    if (Array.isArray(project.dokumentit.lausunnot)) {
-      project.dokumentit.lausunnot = project.dokumentit.lausunnot.map((lausunto) => ({
-        ...lausunto,
-        selected: true,
-      }));
-    }
-
-    if (Array.isArray(project.dokumentit.asiantuntijalausunnot)) {
-      project.dokumentit.asiantuntijalausunnot = project.dokumentit.asiantuntijalausunnot.map((lausunto) => ({
-        ...lausunto,
-        selected: true,
-      }));
-    }
-
-    if (Array.isArray(project.dokumentit.valiokunnanLausunnot)) {
-      project.dokumentit.valiokunnanLausunnot = project.dokumentit.valiokunnanLausunnot.map((lausunto) => ({
-        ...lausunto,
-        selected: true,
-      }));
-    }
-
-    if (Array.isArray(project.dokumentit.valiokunnanMietinnot)) {
-      project.dokumentit.valiokunnanMietinnot = project.dokumentit.valiokunnanMietinnot.map((lausunto) => ({
-        ...lausunto,
-        selected: true,
-      }));
-    }
-
-    return project;
-  };
 
   return (
     <>
@@ -146,13 +98,12 @@ const ProjectSelectionView = ({ API_URL, joinCode, setJoinCode, searchQuery, set
         <>
           <SelectedProjects
             selectedProjects={selectedProjects}
-            projects={searchResults}
-            handleCheckboxChange={handleCheckboxChange}
+            setSelectedProjects={setSelectedProjects}
           />
           <SearchResults
             results={searchResults}
             selectedProjects={selectedProjects}
-            handleCheckboxChange={handleCheckboxChange}
+            setSelectedProjects={setSelectedProjects}
             searchQuery={searchQuery}
           />
           <Pagination
