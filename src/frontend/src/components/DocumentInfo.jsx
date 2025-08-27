@@ -7,7 +7,15 @@ import greyArrow from '../assets/grey-dropdown-arrow.png'
 const DocumentInfo = ({ type, projectId, submissions, objectName, header, setSelectedProjects }) => {
 	const [expanded, setExpanded] = useState(false)
 	const [submissionList, setSubmissionList] = useState(
-		submissions
+		submissions.sort(function (a, b) {
+		if (a.nimi < b.nimi) {
+			return -1;
+		}
+		if (a.nimi > b.nimi) {
+			return 1
+		}
+		return 0
+	})
 	)
 
 	const handleCheckboxChange = () => {
