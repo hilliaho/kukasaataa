@@ -94,6 +94,7 @@ function App() {
             <ProjectSelectionView
               API_URL={API_URL}
               joinCode={joinCode}
+              setJoinCode={setJoinCode}
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               loading={loading}
@@ -122,7 +123,9 @@ function App() {
           <Route exact path="/:editCode/summary" element={
             <SummaryView
               joinCode={joinCode}
-              selectedProjects={selectedProjects} />} />
+              setJoinCode={setJoinCode}
+              selectedProjects={selectedProjects}
+              setSelectedProjects={setSelectedProjects} />} />
           <Route exact path="/student/:joinCode" element={
             <StudentView
               API_URL={API_URL}

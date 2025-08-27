@@ -7,7 +7,7 @@ import SelectedProjects from "../components/SelectedProjects";
 import SearchResults from "../components/SearchResults";
 import Pagination from "../components/Pagination";
 
-const ProjectSelectionView = ({ API_URL, joinCode, searchQuery, setSearchQuery, selectedProjects, searchResults,
+const ProjectSelectionView = ({ API_URL, joinCode, setJoinCode, searchQuery, setSearchQuery, selectedProjects, searchResults,
   totalSearchResults,
   setSearchResults, setTotalSearchResults, fetchProjects, setSelectedProjects, fetchTotalCount, prefetchedPagesRef, debugLog, debugError
 }) => {
@@ -44,10 +44,14 @@ const ProjectSelectionView = ({ API_URL, joinCode, searchQuery, setSearchQuery, 
     };
 
     fetchNextPages();
-  }, [API_URL, currentPage, debugError, debugLog, prefetchedPagesRef, searchQuery]);
+  }, [API_URL, currentPage, debugError, debugLog, joinCode, navigate, prefetchedPagesRef, searchQuery, selectedProjects]);
 
   const handleBackToHome = () => {
-    navigate('/')
+    if (window.confirm("Tehdyt valinnat menetetään, haluatko varmasti palata etusivulle?")) {
+      setJoinCode('')
+      setSelectedProjects([])
+      navigate('/')
+    }
   }
 
   const handleContinue = () => {

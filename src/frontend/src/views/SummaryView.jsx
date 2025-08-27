@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom"
 import SummaryItem from "../components/SummaryItem"
 import BackButton from "../components/BackButton"
 
-const SummaryView = ({ joinCode, selectedProjects }) => {
+const SummaryView = ({ joinCode, setJoinCode, selectedProjects, setSelectedProjects }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const editCode = location.pathname.split("/")[1]
@@ -20,10 +20,19 @@ const SummaryView = ({ joinCode, selectedProjects }) => {
     navigate(`/${editCode}/select-documents`)
   }
 
+  const handleBackToHome = () => {
+    if(window.confirm("Otithan liittymis- ja muokkaamiskoodin talteen? Haluatko varmasti siirtyä etusivulle?")) {
+      setJoinCode('')
+      setSelectedProjects([])
+      navigate("/")
+    }
+  }
+
   return (
     <div>
       <div className="back-button">
         <BackButton handleFunction={handleBackToSelection} />
+        <button onClick={handleBackToHome}>Etusivulle</button>
       </div>
       <div className="code-notification">
         <h3>
