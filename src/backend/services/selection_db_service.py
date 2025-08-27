@@ -18,7 +18,7 @@ class SelectionDbService:
 
 	def create_selection(self, data):
 		"""Tallenna valikoima dokumentteja koodilla"""
-		self.collection.insert_one(data)
+		self.collection.replace_one({"editCode": data["editCode"]}, data, upsert=True)
 
 	def find_by_joincode(self, code: str):
 		"""Hae valikoima annetulla koodilla"""
