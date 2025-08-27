@@ -25,7 +25,7 @@ db_service = DBService()
 
 def export_all_avoindata():
     """Vie kaikki avoindata tietokantaan"""
-    max_pages = 5  # 10000
+    max_pages = 1000
     document_types = [
         ("Asiantuntijalausunto", "asiantuntijalausunnot"),
         ("Valiokunnan+lausunto", "valiokunnanLausunnot"),
@@ -65,7 +65,7 @@ def export_all_avoindata():
 def export_all_hankeikkuna_data():
     """Hae hankeikkunasta lausuntokierroksen lausunnot ja vie ne tietokantaan"""
     per_page = 10
-    max_pages = 5
+    max_pages = 1000
     max_retries = 5
 
     db_last_modified = db_service.get_last_modified("lausuntokierroksenLausunnot") or datetime.datetime.min
