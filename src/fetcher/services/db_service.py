@@ -21,14 +21,28 @@ class DBService:
         self.collection_metadata = self.db["projects_metadata"]
 
     def add_document(self, document):
-        if "heTunnus" in document:
+        if document.get("heTunnus"):
             match = re.match(r"(HE|KAA)\s+(\d+)/(\d{4})", document["heTunnus"])
             if match:
                 document["tunnusTyyppi"] = match.group(1)
                 document["numero"] = int(match.group(2))
                 document["vuosi"] = int(match.group(3))
             else:
-                logging.warning(f"Tunnusta ei voitu jäsentää: {document['heTunnus']}")
+                logger.warning("Ei lisätty tunnusta", document.get("heTunnus"))
+        elif document.get("valmistelutunnus"):
+
+            match = re.match(
+                r"^[A-ZÅÄÖ]+(\d+):(\d+)/(\d{4})$", document["valmistelutunnus"]
+            )
+            if match:
+                document["tunnusTyyppi"] = "valmistelu"
+                numero_str = match.group(1) + match.group(2)
+                document["numero"] = int(numero_str)
+                document["vuosi"] = int(match.group(3))
+            else:
+                logger.warning("Ei lisätty tunnusta", document["valmistelutunnus"])
+        else:
+            logger.warning(f"Tunnusta ei voitu jäsentää: {document['heTunnus']}")
 
         result = self.collection.insert_one(document)
         project_id = document.get('heTunnus') or document.get('valmistelutunnus')
@@ -61,14 +75,42 @@ class DBService:
             logger.info(f"Lisätty {he_id}: {document_type}: {data['nimi']}")
         return result.modified_count
 
+    def push_submissions(self, project, he_id, document_type):
+        for submission in project.get("submissions"):
+            self.push_document(submission, he_id, document_type)
+
+    def add_drafts(self, data):
+        he_id = data.get("heTunnus")
+        if he_id and self.document_exists(he_id):
+            self.push_document(
+                data["dokumentit"]["heLuonnokset"][0], data["heTunnus"], "heLuonnokset"
+            )
+        else:
+            self.add_document(data)
+
     def get_last_modified(self, document_type):
         try:
             last_doc = self.collection_metadata.find_one(
                 {"dokumenttiTyyppi": document_type}
             )
-            if last_doc and "viimeisinMuokattu" in last_doc:
-                return last_doc["viimeisinMuokattu"]
-            return 0
+
+            if not last_doc:
+                return (
+                    datetime.fromisoformat("2015-01-01T00:00:00")
+                    if document_type in ["lausuntokierroksenLausunnot", "heLuonnokset"]
+                    else 0
+                )
+
+            modified_value = last_doc.get("viimeisinMuokattu")
+            if not modified_value:
+                return (
+                    datetime.fromisoformat("2015-01-01T00:00:00")
+                    if document_type in ["lausuntokierroksenLausunnot", "heLuonnokset"]
+                    else 0
+                )
+
+            return modified_value
+
         except Exception as e:
             logger.error(f"Error in get_last_modified: {e}")
             return 0

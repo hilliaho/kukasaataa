@@ -39,6 +39,13 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 			project.dokumentit = {};
 		}
 
+		if (Array.isArray(project.dokumentit.heLuonnokset)) {
+			project.dokumentit.heLuonnokset = project.dokumentit.heLuonnokset.map((lausunto) => ({
+				...lausunto,
+				selected: true,
+			}));
+		}
+
 		if (Array.isArray(project.dokumentit.lausunnot)) {
 			project.dokumentit.lausunnot = project.dokumentit.lausunnot.map((lausunto) => ({
 				...lausunto,
@@ -79,7 +86,8 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 					onChange={() => handleCheckboxChange(project)}
 				/>
 			}
-			<strong>{project.heTunnus}</strong>
+			{project.heTunnus && <strong>{project.heTunnus}</strong>}
+			{!project.heTunnus && <strong>{project.valmistelutunnus}</strong>}
 			<div className="download-a">
 				<a href={project.heUrl} target='_blank' rel='noopener noreferrer'>{project.heNimi}</a>
 			</div>
@@ -96,14 +104,16 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 				<div className='expanded-content'>
 					{(step === "summary" || step==="student") &&
 						<div>
-							{<DocumentInfo type={type} projectId={project._id} objectName={"lausunnot"} header={"Lausuntokierroksen lausunnot"} submissions={project.dokumentit.lausunnot.filter((submission) => submission.selected)} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"heLuonnokset"} header={"Luonnos hallituksen esitykseksi"} submissions={project.dokumentit.heLuonnokset.filter((submission) => submission.selected)} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"lausuntokierroksenLausunnot"} header={"Lausuntokierroksen lausunnot"} submissions={project.dokumentit.lausuntokierroksenLausunnot.filter((submission) => submission.selected)} />}
 							{<DocumentInfo type={type} projectId={project._id} objectName={"asiantuntijalausunnot"} header={"Asiantuntijalausunnot"} submissions={project.dokumentit.asiantuntijalausunnot.filter((submission) => submission.selected)} />}
 							{<DocumentInfo type={type} projectId={project._id} objectName={"valiokunnanLausunnot"} header={"Valiokunnan lausunnot"} submissions={project.dokumentit.valiokunnanLausunnot.filter((submission) => submission.selected)} />}
 							{<DocumentInfo type={type} projectId={project._id} objectName={"valiokunnanMietinnot"} header={"Valiokunnan mietinnöt"} submissions={project.dokumentit.valiokunnanMietinnot.filter((submission) => submission.selected)} />}
 						</div>}
 					{(step === "project selection" || step === "document selection") &&
 						<div>
-							{<DocumentInfo type={type} projectId={project._id} objectName={"lausunnot"} header={"Lausuntokierroksen lausunnot"} submissions={project.dokumentit.lausunnot ?? []} setSelectedProjects={setSelectedProjects} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"heLuonnokset"} header={"Luonnos hallituksen esitykseksi"} submissions={project.dokumentit.heLuonnokset ?? []} setSelectedProjects={setSelectedProjects} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"lausuntokierroksenLausunnot"} header={"Lausuntokierroksen lausunnot"} submissions={project.dokumentit.lausuntokierroksenLausunnot ?? []} setSelectedProjects={setSelectedProjects} />}
 							{<DocumentInfo type={type} projectId={project._id} objectName={"asiantuntijalausunnot"} header={"Asiantuntijalausunnot"} submissions={project.dokumentit.asiantuntijalausunnot ?? []} setSelectedProjects={setSelectedProjects} />}
 							{<DocumentInfo type={type} projectId={project._id} objectName={"valiokunnanLausunnot"} header={"Valiokunnan lausunnot"} submissions={project.dokumentit.valiokunnanLausunnot ?? []} setSelectedProjects={setSelectedProjects} />}
 							{<DocumentInfo type={type} projectId={project._id} objectName={"valiokunnanMietinnot"} header={"Valiokunnan mietinnöt"} submissions={project.dokumentit.valiokunnanMietinnot ?? []} setSelectedProjects={setSelectedProjects} />}
