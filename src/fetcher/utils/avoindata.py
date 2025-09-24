@@ -180,3 +180,7 @@ def get_avoindata_document_index(api_data):
     return int(index) if index else None
 
 
+def continue_condition(data):
+    if data.get("hasMore"):
+        return True
+    return False
