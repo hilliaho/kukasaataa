@@ -20,13 +20,6 @@ class DBService:
         self.collection = self.db["projects"]
         self.collection_metadata = self.db["projects_metadata"]
 
-    def add_preparatory_id(self, he_id, preparatory_id):
-        result = self.collection.update_one(
-            {"heTunnus": he_id},
-            {"$set": {"valmistelutunnus": preparatory_id}},
-        )
-        return result.modified_count
-
     def add_document(self, document):
         if "heTunnus" in document:
             match = re.match(r"(HE|KAA)\s+(\d+)/(\d{4})", document["heTunnus"])
