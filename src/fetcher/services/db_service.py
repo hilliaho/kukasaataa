@@ -3,9 +3,13 @@ from dotenv import load_dotenv
 import os
 import re
 import logging
+from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 
 class DBService:
+
     def __init__(self):
         load_dotenv()
         mongodb_uri = os.getenv("MONGODB_URI")
@@ -34,7 +38,8 @@ class DBService:
                 logging.warning(f"Tunnusta ei voitu jäsentää: {document['heTunnus']}")
 
         result = self.collection.insert_one(document)
-        logging.info(f"Lisätty {document.get('heTunnus', 'tuntematon tunnus')}")
+        project_id = document.get('heTunnus') or document.get('valmistelutunnus')
+        logger.info(f"Lisätty {project_id}")
         return result.inserted_id
 
     def document_exists(self, document_id):
@@ -51,16 +56,16 @@ class DBService:
             self.collection.create_index(
                 [("heNimi", "text"), ("heTunnus", "text"), ("valmistelutunnus", "text")]
             )
-            logging.info("Tekstihakemisto luotu.")
+            logger.info("Tekstihakemisto luotu.")
         else:
-            logging.info("Tekstihakemisto on jo olemassa.")
+            logger.info("Tekstihakemisto on jo olemassa.")
 
     def push_document(self, data, he_id, document_type):
         result = self.collection.update_one(
             {"heTunnus": he_id}, {"$addToSet": {f"dokumentit.{document_type}": data}}
         )
         if result.modified_count > 0:
-            logging.info(f"Lisätty {he_id}: {document_type}: {data['nimi']}")
+            logger.info(f"Lisätty {he_id}: {document_type}: {data['nimi']}")
         return result.modified_count
 
     def get_last_modified(self, document_type):
@@ -72,11 +77,11 @@ class DBService:
                 return last_doc["viimeisinMuokattu"]
             return 0
         except Exception as e:
-            logging.error(f"Error in get_last_modified: {e}")
+            logger.error(f"Error in get_last_modified: {e}")
             return 0
 
     def add_last_modified(self, document_type, data):
-        logging.info(f"Adding last modified date for {document_type}: {data}")
+        logger.info(f"Adding last modified date for {document_type}: {data}")
         try:
             self.collection_metadata.update_one(
                 {"dokumenttiTyyppi": document_type},
@@ -84,5 +89,5 @@ class DBService:
                 upsert=True,
             )
         except Exception as e:
-            logging.error(f"Error in add_last_modified: {e}")
+            logger.error(f"Error in add_last_modified: {e}")
         return None

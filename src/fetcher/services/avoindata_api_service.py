@@ -1,5 +1,7 @@
 import requests
-import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 class AvoindataApiService:
 
@@ -10,5 +12,5 @@ class AvoindataApiService:
         if response.status_code == 200:
             return response.json()
         else:
-            print("Fetching data failed:", response.status_code)
+            logger.error("Fetching data failed:", response.status_code)
             return None
