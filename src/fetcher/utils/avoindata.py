@@ -134,12 +134,17 @@ def process_government_proposals(api_data):
             proposal_content = ""
         he_id = result_list[i][1]
         he_id = remove_vp(he_id)
+        try:
+            date = datetime.fromisoformat(result_list[i][2])
+        except (ValueError, TypeError):
+            date = datetime.now()
         if he_id is None:
             he_id = find_proposal_identifier_from_pdf(url)
         if all([he_id, name, url]):
             processed_element = {
                 "heTunnus": he_id,
-                "heNimi": name,
+                "paivamaara": date,
+                "heNimi": name, #2025-09-22 16:54:25
                 "heUrl": url,
                 "heSisalto": proposal_content,
                 "dokumentit": {
@@ -151,6 +156,7 @@ def process_government_proposals(api_data):
             }
             processed_list.append(processed_element)
     return processed_list
+
 
 def parse_xml_name(xml_data):
     wrapped_xml = f"<root>{xml_data}</root>"
