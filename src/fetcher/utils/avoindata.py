@@ -3,6 +3,11 @@ import xml.etree.ElementTree as ET
 import fitz
 import requests
 import tempfile
+import logging
+from datetime import datetime
+
+
+logger = logging.getLogger(__name__)
 
 
 def process_preparatory_documents(api_data):
@@ -38,50 +43,51 @@ def process_preparatory_documents(api_data):
     return processed_list
 
 
-
 def find_proposal_identifier_from_pdf(url):
     """Etsi HE-tunnus PDF-tiedostosta"""
-    if len(url)==0:
+    if len(url) == 0:
         return ""
     text = extract_text_from_pdf(url)
     match = re.search(r"HE\s\d{1,3}/\d{4}", text)
     return match.group(0) if match else None
 
+
 def find_valiokunta_name_from_pdf(url):
     """Etsi valiokunnan nimi pdf-tiedostosta"""
-    if len(url)==0:
+    if len(url) == 0:
         return ""
     text = extract_text_from_pdf(url)
     valiokunnat = [
-    "Hallintovaliokunta",
-    "Lakivaliokunta",
-    "Liikenne- ja viestintävaliokunta",
-    "Maa- ja metsätalousvaliokunta",
-    "Pankkivaliokunta",
-    "Perustuslakivaliokunta",
-    "Puolustusvaliokunta",
-    "Sivistysvaliokunta",
-    "Sosiaali- ja terveysvaliokunta",
-    "Suuri valiokunta",
-    "Talousvaliokunta",
-    "Tarkastusvaliokunta",
-    "Tiedusteluvalvontavaliokunta",
-    "Toinen lakivaliokunta",
-    "Tulevaisuusvaliokunta",
-    "Työelämä- ja tasa-arvovaliokunta",
-    "Ulkoasiainvaliokunta",
-    "Valtiovarainvaliokunta",
-    "Ympäristövaliokunta",
+        "Hallintovaliokunta",
+        "Lakivaliokunta",
+        "Liikenne- ja viestintävaliokunta",
+        "Maa- ja metsätalousvaliokunta",
+        "Pankkivaliokunta",
+        "Perustuslakivaliokunta",
+        "Puolustusvaliokunta",
+        "Sivistysvaliokunta",
+        "Sosiaali- ja terveysvaliokunta",
+        "Suuri valiokunta",
+        "Talousvaliokunta",
+        "Tarkastusvaliokunta",
+        "Tiedusteluvalvontavaliokunta",
+        "Toinen lakivaliokunta",
+        "Tulevaisuusvaliokunta",
+        "Työelämä- ja tasa-arvovaliokunta",
+        "Ulkoasiainvaliokunta",
+        "Valtiovarainvaliokunta",
+        "Ympäristövaliokunta",
     ]
 
     name_pattern = r"\b(" + "|".join(map(re.escape, valiokunnat)) + r")\b"
     matches = re.findall(name_pattern, text, flags=re.IGNORECASE)
-    return matches[0] if len(matches)>0 else ''
+    return matches[0] if len(matches) > 0 else ""
+
 
 def extract_text_from_pdf(pdf_url):
     response = requests.get(pdf_url)
     if response.status_code != 200:
-        print(f"Failed to fetch PDF: {response.status_code}")
+        logger.error(f"Failed to fetch PDF: {response.status_code}")
         return None
 
     with tempfile.NamedTemporaryFile(suffix=".pdf", delete=True) as tmp:
@@ -91,7 +97,7 @@ def extract_text_from_pdf(pdf_url):
         text = ""
         with fitz.open(tmp.name) as pdf:
             text = pdf[0].get_text()
-            clean_text = re.sub(r'\s+', ' ', text).strip()
+            clean_text = re.sub(r"\s+", " ", text).strip()
         return clean_text
 
 
@@ -157,7 +163,7 @@ def parse_xml_name(xml_data):
         name = names[0]
         return name.text
     except ET.ParseError as e:
-        print(f"XML-parsinta epäonnistui: {e}")
+        logger.error(f"XML-parsinta epäonnistui: {e}")
         return None
 
 
@@ -172,9 +178,10 @@ def parse_xml_doc_type(xml_data):
         name = names[0]
         return name.text
     except ET.ParseError as e:
-        print(f"XML-parsinta epäonnistui: {e}")
+        logger.error(f"XML-parsinta epäonnistui: {e}")
         return None
-    
+
+
 def get_avoindata_document_index(api_data):
     index = api_data["rowData"][0][0]
     return int(index) if index else None
