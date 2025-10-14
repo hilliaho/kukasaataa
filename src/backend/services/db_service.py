@@ -31,7 +31,7 @@ class DBService:
 
         documents = list(
             self.collection.find(query)
-            .sort("paivamaara")
+            .sort("paivamaara", -1)
             .skip(skip_count)
             .limit(page_size)
         )
