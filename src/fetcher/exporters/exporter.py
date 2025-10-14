@@ -3,7 +3,8 @@ from typing import Callable, Iterable, Optional
 
 from services.avoindata_api_service import AvoindataApiService
 from services.hankeikkuna_api_service import HankeikkunaApiService
-from utils import avoindata, hankeikkuna
+from utils.avoindata import processors as avoindata
+from utils.hankeikkuna import processors as hankeikkuna
 from utils.retry import retry_with_backoff
 
 
