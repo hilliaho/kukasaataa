@@ -144,7 +144,7 @@ def process_government_proposals(api_data):
             processed_element = {
                 "heTunnus": he_id,
                 "paivamaara": date,
-                "heNimi": name, #2025-09-22 16:54:25
+                "heNimi": name,
                 "heUrl": url,
                 "heSisalto": proposal_content,
                 "dokumentit": {

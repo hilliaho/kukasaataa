@@ -30,7 +30,7 @@ class Exporter:
                 "document_type": "Hallituksen+esitys",
                 "collection": "hallituksenEsitykset",
                 "processor": avoindata.process_government_proposals,
-                "checker": self.db.document_exists,
+                "checker": self.db.he_exists,
                 "index_getter": avoindata.get_avoindata_document_index,
                 "continue_checker": avoindata.continue_condition,
                 "adder": self.db.add_document,
@@ -39,7 +39,7 @@ class Exporter:
                 "document_type": "Kansalaisaloite",
                 "collection": "kansalaisaloitteet",
                 "processor": avoindata.process_government_proposals,
-                "checker": self.db.document_exists,
+                "checker": self.db.he_exists,
                 "index_getter": avoindata.get_avoindata_document_index,
                 "continue_checker": avoindata.continue_condition,
                 "adder": self.db.add_document,
@@ -48,7 +48,7 @@ class Exporter:
                 "document_type": "Hankeikkuna",
                 "collection": "heLuonnokset",
                 "processor": hankeikkuna.find_proposal_drafts,
-                "checker": None,
+                "checker": self.db.draft_exists,
                 "index_getter": hankeikkuna.get_hankeikkuna_modified_date,
                 "continue_checker": hankeikkuna.continue_condition,
                 "adder": self.db.add_drafts,
@@ -141,7 +141,7 @@ class Exporter:
                 logger.info(f"{collection_name} is up to date")
                 break
             for doc in processor(api_data) or []:
-                if not checker or not checker(doc.get("heTunnus")):
+                if not checker or not checker(doc):
                     adder(doc)
             if not continue_checker or not continue_checker(api_data):
                 break

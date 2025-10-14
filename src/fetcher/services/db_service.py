@@ -49,8 +49,26 @@ class DBService:
         logger.info(f"Lisätty {project_id}")
         return result.inserted_id
 
-    def document_exists(self, document_id):
-        return self.collection.find_one({"heTunnus": document_id}) is not None
+    def draft_exists(self, api_doc):
+        preparatory_id = api_doc.get("valmistelutunnus")
+        he_id = api_doc.get("heTunnus")
+        db_doc = self.collection.find_one({"valmistelutunnus": preparatory_id})
+        if db_doc is not None:
+            if he_id and not db_doc.get("heTunnus"):
+                logger.info(f"Päivitetään {preparatory_id}: lisätään he-tunnus {he_id}")
+                return False
+            return True
+        return False
+    
+    def he_exists(self, api_doc):
+        he_id = api_doc.get("heTunnus")
+        db_doc = self.collection.find_one({"heTunnus": he_id}) 
+        if db_doc is not None:
+            if not db_doc.get("heNimi"):
+                self.add_he_info(he_id, api_doc.get("heNimi"), api_doc.get("heUrl"), api_doc.get("heSisalto"), api_doc.get("paivamaara"))
+            return True
+        return False
+        
 
     def create_search_index(self):
         existing_indexes = self.collection.list_indexes()
@@ -67,6 +85,14 @@ class DBService:
         else:
             logger.info("Tekstihakemisto on jo olemassa.")
 
+    def add_he_info(self, he_id, name, url, content, date):
+        logger.info(f"Lisätään puuttuvat he-tiedot {he_id}")
+        result = self.collection.update_one(
+            {"heTunnus": he_id}, {"$addToSet": {"heNimi": name, "heUrl": url, "heSisalto": content, "paivamaara": date}}
+        )
+        if result.modified_count > 0:
+            logger.info(f"Lisätty puuttuvat he-tiedot {he_id}")
+
     def push_document(self, data, he_id, document_type):
         result = self.collection.update_one(
             {"heTunnus": he_id}, {"$addToSet": {f"dokumentit.{document_type}": data}}
@@ -81,7 +107,7 @@ class DBService:
 
     def add_drafts(self, data):
         he_id = data.get("heTunnus")
-        if he_id and self.document_exists(he_id):
+        if he_id and self.he_exists(data):
             self.push_document(
                 data["dokumentit"]["heLuonnokset"][0], data["heTunnus"], "heLuonnokset"
             )
