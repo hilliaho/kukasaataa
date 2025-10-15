@@ -6,7 +6,7 @@ const SearchResults = ({ results, selectedProjects, setSelectedProjects, searchQ
 		<div className='project-container'>
 			{searchQuery ? (<h2>Hakutulokset hakusanalla "{searchQuery}"</h2>):(<h2>Kaikki hankkeet</h2>)}
 			{results.filter(result => !selectedProjects.includes(result)).map((project, index) => (
-					<div key={index}>
+					<div className='project-container' key={index}>
 						<Project
 						step={"project selection"}
 						project={project}

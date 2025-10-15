@@ -10,7 +10,7 @@ const SelectedProjects = ({ selectedProjects, setSelectedProjects }) => {
                     <p>Ei valittuja hankkeita</p>
                 ) : (
                     selectedProjects.map((project, index) => (
-                        <div key={index}>
+                        <div className='project-container' key={index}>
                             <Project
                             step={"project selection"}
                             project={project}
