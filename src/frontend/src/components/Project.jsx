@@ -1,9 +1,10 @@
-import React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import LanguageContext from "../LanguageContext"
 import DocumentInfo from './DocumentInfo';
 import arrow from '../assets/dropdown-arrow.png'
 
 const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
+	const { language } = useContext(LanguageContext)
 	const [expandedContent, setExpandedContent] = useState(false);
 	const isSelected = step === "student" ? true : selectedProjects.includes(project._id)
 	const type = step === "document selection" ? "checkbox" : "link"
@@ -11,10 +12,10 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 	const countDocuments = () => {
 		const docs = project.dokumentit
 		let documentCount = 0
-		if (step==="summary" || step==="student") {
-		Object.values(docs).forEach((docList) => documentCount = documentCount + docList.filter((doc) => doc.selected).length)
+		if (step === "summary" || step === "student") {
+			Object.values(docs).forEach((docList) => documentCount = documentCount + docList.filter((doc) => doc.selected).length)
 		} else {
-		Object.values(docs).forEach((docList) => documentCount = documentCount + docList.length)
+			Object.values(docs).forEach((docList) => documentCount = documentCount + docList.length)
 		}
 		return documentCount
 	}
@@ -77,6 +78,7 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 		return project;
 	};
 
+
 	return (
 		<div key={project._id} className='project-item'>
 			{step === "project selection" &&
@@ -88,9 +90,10 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 			}
 			{project.heTunnus && <strong>{project.heTunnus}</strong>}
 			{!project.heTunnus && <strong>{project.valmistelutunnus}</strong>}
-			<div className="download-a">
-				<a href={project.heUrl} target='_blank' rel='noopener noreferrer'>{project.heNimi}</a>
-			</div>
+			{project.heNimi &&
+				<div className="download-a">
+					{<a href={project["heUrl"][`${language[0]}`]} target='_blank' rel='noopener noreferrer'>{project["heNimi"][`${language[0]}`]||project["heNimi"][`${language[1]}`]}</a>}
+				</div>}
 			<p className='document-info-name' onClick={() => setExpandedContent(!expandedContent)}>
 				Valmisteluasiakirjat ({documentCount})
 				<img
@@ -102,7 +105,7 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 			</p>
 			{expandedContent &&
 				<div className='expanded-content'>
-					{(step === "summary" || step==="student") &&
+					{(step === "summary" || step === "student") &&
 						<div>
 							{<DocumentInfo type={type} projectId={project._id} objectName={"heLuonnokset"} header={"Luonnos hallituksen esitykseksi"} submissions={project.dokumentit.heLuonnokset.filter((submission) => submission.selected)} />}
 							{<DocumentInfo type={type} projectId={project._id} objectName={"lausuntokierroksenLausunnot"} header={"Lausuntokierroksen lausunnot"} submissions={project.dokumentit.lausuntokierroksenLausunnot.filter((submission) => submission.selected)} />}
