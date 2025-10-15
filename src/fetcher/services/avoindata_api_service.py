@@ -7,7 +7,7 @@ class AvoindataApiService:
 
     def fetch_data_from_api(per_page, page, document_type):
         """Hae dokumentteja avoindata-rajapinnasta"""
-        if document_type == "Regeringens+proposition":
+        if document_type == "Regeringens+proposition" or document_type == "Medborgarinitiativ":
             lang_code = "sv"
         else:
             lang_code = "fi"

@@ -104,7 +104,7 @@ def find_proposal_drafts(data: dict) -> list[dict]:
                     "valiokunnanMietinnot": [],
                 },
                 "heTunnus": proposal_identifier,
-                "paivamaara": {f"{lang_code}": date},
+                "paivamaara": date,
                 "heSisalto":  {f"{lang_code}": proposal_content},
                 "valmistelutunnus": preparatory_identifier,
             })

@@ -55,7 +55,17 @@ class Exporter:
                 "index_getter": avoindata.get_avoindata_document_index,
                 "continue_checker": avoindata.continue_condition,
                 "adder": self.db.add_document,
-                "updater": None
+                "updater": self.db.add_he_info
+            },
+            {
+                "document_type": "Medborgarinitiativ",
+                "collection": "medborgarinitiativ",
+                "processor": avoindata.process_government_proposals,
+                "checker": self.db.he_exists,
+                "index_getter": avoindata.get_avoindata_document_index,
+                "continue_checker": avoindata.continue_condition,
+                "adder": self.db.add_document,
+                "updater": self.db.add_he_info
             },
             {
                 "document_type": "Hankeikkuna",

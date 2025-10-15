@@ -18,12 +18,15 @@ def clean_he_id(he_id: str | None) -> str:
         return ""
     he_id = he_id.split(",")[0]
     he_id = re.sub(r"\s*rd$", "", he_id.strip())
+    he_id = re.sub(r"\s*vp$", "", he_id.strip())
     match = re.match(r"(RP)\s+(\d+)/(\d{4})", he_id)
     if match:
         he_id = he_id[2:]
         he_id = "HE" + he_id
-    else:
-        he_id = re.sub(r"\s*vp$", "", he_id.strip())
+    match = re.match(r"(MI)\s+(\d+)/(\d{4})", he_id)
+    if match:
+        he_id = he_id[2:]
+        he_id = "KAA" + he_id
     return he_id
 
 
@@ -38,8 +41,10 @@ def remove_unnecessary_info_from_name(text: str | None) -> str:
 
 
 def get_avoindata_document_index(api_data: dict) -> int | None:
-    index = api_data.get("rowData", [[None]])[0][0]
-    return int(index) if index else None
+    if not api_data.get("rowData"):
+        return 0
+    index = api_data.get("rowData")[0][0]
+    return int(index) if index else 0
 
 
 def continue_condition(data: dict) -> bool:
@@ -97,9 +102,7 @@ def process_government_proposals(api_data: dict) -> list[dict]:
         if all([he_id, name, url]):
             processed_list.append({
                 "heTunnus": he_id,
-                "paivamaara": {
-                    f"{lang_code}": date
-                },
+                "paivamaara": date,
                 "heNimi": {
                     f"{lang_code}": name
                 },

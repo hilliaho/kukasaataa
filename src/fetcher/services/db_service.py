@@ -44,7 +44,9 @@ class DBService:
                 logger.warning("Ei lisätty tunnusta", document["valmistelutunnus"])
         else:
             logger.warning(f"Tunnusta ei voitu jäsentää: {he_id}")
-
+            return None
+        if document["vuosi"] < 2016:
+            return None
         result = self.collection.insert_one(document)
         project_id = he_id or document.get("valmistelutunnus")
         logger.info(f"Lisätty {project_id}")
@@ -107,8 +109,6 @@ class DBService:
         he_id = data.get("heTunnus")
         url = data.get("heUrl").get(f"{lang_code}")
         content = data.get("heSisalto").get(f"{lang_code}")
-        date = data.get("paivamaara").get(f"{lang_code}")
-        logger.info(f"Lisätään puuttuvat he-tiedot {he_id}")
         result = self.collection.update_one(
             {"heTunnus": he_id},
             {
@@ -116,7 +116,6 @@ class DBService:
                     f"heNimi.{lang_code}": name,
                     f"heUrl.{lang_code}": url,
                     f"heSisalto.{lang_code}": content,
-                    f"paivamaara.{lang_code}": date,
                 }
             },
         )
