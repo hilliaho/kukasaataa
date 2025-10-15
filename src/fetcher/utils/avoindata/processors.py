@@ -13,11 +13,18 @@ logger = logging.getLogger(__name__)
 
 # --- YLEISET APUFUNKTIOT ---
 
-def remove_vp(he_id: str | None) -> str:
+def clean_he_id(he_id: str | None) -> str:
     if not he_id:
         return ""
     he_id = he_id.split(",")[0]
-    return re.sub(r"\s*vp$", "", he_id.strip())
+    he_id = re.sub(r"\s*rd$", "", he_id.strip())
+    match = re.match(r"(RP)\s+(\d+)/(\d{4})", he_id)
+    if match:
+        he_id = he_id[2:]
+        he_id = "HE" + he_id
+    else:
+        he_id = re.sub(r"\s*vp$", "", he_id.strip())
+    return he_id
 
 
 def remove_unnecessary_info_from_name(text: str | None) -> str:
@@ -56,7 +63,7 @@ def process_preparatory_documents(api_data: dict) -> list[dict]:
         else:
             name = find_valiokunta_name_from_pdf(url)
 
-        identifier = remove_vp(row[1] or find_proposal_identifier_from_pdf(url))
+        identifier = clean_he_id(row[1] or find_proposal_identifier_from_pdf(url))
 
         if all([identifier, doc_type, name, url]):
             processed_list.append({
@@ -77,7 +84,8 @@ def process_government_proposals(api_data: dict) -> list[dict]:
         url_match = re.search(r'href="([^"]+)"', xml_url or "")
         url = url_match.group(1) if url_match else ""
 
-        he_id = remove_vp(row[1]) or find_proposal_identifier_from_pdf(url)
+        he_id = clean_he_id(row[1]) or find_proposal_identifier_from_pdf(url)
+        lang_code = row[7]
 
         try:
             date = datetime.fromisoformat(row[2])
@@ -89,10 +97,18 @@ def process_government_proposals(api_data: dict) -> list[dict]:
         if all([he_id, name, url]):
             processed_list.append({
                 "heTunnus": he_id,
-                "paivamaara": date,
-                "heNimi": name,
-                "heUrl": url,
-                "heSisalto": proposal_content,
+                "paivamaara": {
+                    f"{lang_code}": date
+                },
+                "heNimi": {
+                    f"{lang_code}": name
+                },
+                "heUrl": {
+                    f"{lang_code}": url
+                },
+                "heSisalto": {
+                    f"{lang_code}": proposal_content
+                },
                 "dokumentit": {
                     "lausunnot": [],
                     "asiantuntijalausunnot": [],

@@ -18,7 +18,7 @@ class Exporter:
         avoindata_service=AvoindataApiService,
         hankeikkuna_service=HankeikkunaApiService,
         per_page: int = 10,
-        max_pages: int = 3,
+        max_pages: int = 10,
     ):
         self.db = db_service
         self.avoindata_service = avoindata_service
@@ -35,6 +35,17 @@ class Exporter:
                 "index_getter": avoindata.get_avoindata_document_index,
                 "continue_checker": avoindata.continue_condition,
                 "adder": self.db.add_document,
+                "updater": self.db.add_he_info
+            },
+            {
+                "document_type": "Regeringens+proposition",
+                "collection": "regeringensPropositioner",
+                "processor": avoindata.process_government_proposals,
+                "checker": self.db.he_exists,
+                "index_getter": avoindata.get_avoindata_document_index,
+                "continue_checker": avoindata.continue_condition,
+                "adder": self.db.add_document,
+                "updater": self.db.add_he_info
             },
             {
                 "document_type": "Kansalaisaloite",
@@ -44,6 +55,7 @@ class Exporter:
                 "index_getter": avoindata.get_avoindata_document_index,
                 "continue_checker": avoindata.continue_condition,
                 "adder": self.db.add_document,
+                "updater": None
             },
             {
                 "document_type": "Hankeikkuna",
@@ -53,6 +65,7 @@ class Exporter:
                 "index_getter": hankeikkuna.get_hankeikkuna_modified_date,
                 "continue_checker": hankeikkuna.continue_condition,
                 "adder": self.db.add_drafts,
+                "updater": None
             },
             {
                 "document_type": "Asiantuntijalausunto",
@@ -64,6 +77,7 @@ class Exporter:
                 "adder": lambda doc: self.db.push_document(
                     doc, doc["heTunnus"], "asiantuntijalausunnot"
                 ),
+                "updater": None
             },
             {
                 "document_type": "Valiokunnan+lausunto",
@@ -75,6 +89,7 @@ class Exporter:
                 "adder": lambda doc: self.db.push_document(
                     doc, doc["heTunnus"], "valiokunnanLausunnot"
                 ),
+                "updater": None
             },
             {
                 "document_type": "Valiokunnan+mietintö",
@@ -86,6 +101,7 @@ class Exporter:
                 "adder": lambda doc: self.db.push_document(
                     doc, doc["heTunnus"], "valiokunnanMietinnot"
                 ),
+                "updater": None
             },
             {
                 "document_type": "Hankeikkuna",
@@ -97,6 +113,7 @@ class Exporter:
                 "adder": lambda doc: self.db.push_submissions(
                     doc, doc["proposalIdentifier"], "lausuntokierroksenLausunnot"
                 ),
+                "updater": None
             },
         ]
 
@@ -111,6 +128,7 @@ class Exporter:
         checker: Optional[Callable[[str], bool]],
         index_getter: Callable[[dict], str],
         adder: Callable[[dict], None],
+        updater: Optional[Callable[[dict], None]],
         continue_checker: Optional[Callable[[dict], bool]],
     ) -> None:
         db_index = self.db.get_last_modified(collection_name)
@@ -144,6 +162,8 @@ class Exporter:
             for doc in processor(api_data) or []:
                 if not checker or not checker(doc):
                     adder(doc)
+                elif updater:
+                    updater(doc)
             if not continue_checker or not continue_checker(api_data):
                 break
             i += 1
@@ -160,4 +180,5 @@ class Exporter:
                 index_getter=job["index_getter"],
                 continue_checker=job["continue_checker"],
                 adder=job["adder"],
+                updater=job["updater"]
             )

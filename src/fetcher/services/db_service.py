@@ -21,14 +21,15 @@ class DBService:
         self.collection_metadata = self.db["projects_metadata"]
 
     def add_document(self, document):
-        if document.get("heTunnus"):
-            match = re.match(r"(HE|KAA)\s+(\d+)/(\d{4})", document["heTunnus"])
+        he_id = document.get("heTunnus")
+        if he_id:
+            match = re.match(r"(HE|KAA)\s+(\d+)/(\d{4})", he_id)
             if match:
                 document["tunnusTyyppi"] = match.group(1)
                 document["numero"] = int(match.group(2))
                 document["vuosi"] = int(match.group(3))
             else:
-                logger.warning("Ei lisätty tunnusta", document.get("heTunnus"))
+                logger.warning("Ei lisätty tunnusta", he_id)
         elif document.get("valmistelutunnus"):
 
             match = re.match(
@@ -42,10 +43,10 @@ class DBService:
             else:
                 logger.warning("Ei lisätty tunnusta", document["valmistelutunnus"])
         else:
-            logger.warning(f"Tunnusta ei voitu jäsentää: {document['heTunnus']}")
+            logger.warning(f"Tunnusta ei voitu jäsentää: {he_id}")
 
         result = self.collection.insert_one(document)
-        project_id = document.get('heTunnus') or document.get('valmistelutunnus')
+        project_id = he_id or document.get("valmistelutunnus")
         logger.info(f"Lisätty {project_id}")
         return result.inserted_id
 
@@ -59,39 +60,71 @@ class DBService:
                 return False
             return True
         return False
-    
+
     def he_exists(self, api_doc):
         he_id = api_doc.get("heTunnus")
-        db_doc = self.collection.find_one({"heTunnus": he_id}) 
+        db_doc = self.collection.find_one({"heTunnus": he_id})
         if db_doc is not None:
-            if not db_doc.get("heNimi"):
-                self.add_he_info(he_id, api_doc.get("heNimi"), api_doc.get("heUrl"), api_doc.get("heSisalto"), api_doc.get("paivamaara"))
             return True
         return False
-        
 
     def create_search_index(self):
         existing_indexes = self.collection.list_indexes()
         index_exists = any(
             idx["key"]
-            == {"heNimi": "text", "heTunnus": "text", "valmistelutunnus": "text"}
+            == {
+                "heNimi.fi": "text",
+                "heNimi.sv": "text",
+                "heTunnus": "text",
+                "valmistelutunnus": "text",
+                "heSisalto.fi": "text",
+                "heSisalto.sv": "text",
+            }
             for idx in existing_indexes
         )
         if not index_exists:
             self.collection.create_index(
-                [("heNimi", "text"), ("heTunnus", "text"), ("valmistelutunnus", "text")]
+                [
+                    ("heNimi.fi", "text"),
+                    ("heNimi.sv", "text"),
+                    ("heTunnus", "text"),
+                    ("valmistelutunnus", "text"),
+                    ("heSisalto.fi", "text"),
+                    ("heSisalto.sv", "text"),
+                ]
             )
             logger.info("Tekstihakemisto luotu.")
         else:
             logger.info("Tekstihakemisto on jo olemassa.")
 
-    def add_he_info(self, he_id, name, url, content, date):
+    def add_he_info(self, data):
+        lang_code = list(data.get("heNimi").keys())[0]
+        name = data.get("heNimi").get(f"{lang_code}")
+        db_doc = self.collection.find_one({f"heNimi.{lang_code}": name})
+        if db_doc is not None:
+            logger.info(f"{name} kielikoodilla {lang_code} on jo tietokannassa")
+            return
+        he_id = data.get("heTunnus")
+        url = data.get("heUrl").get(f"{lang_code}")
+        content = data.get("heSisalto").get(f"{lang_code}")
+        date = data.get("paivamaara").get(f"{lang_code}")
         logger.info(f"Lisätään puuttuvat he-tiedot {he_id}")
         result = self.collection.update_one(
-            {"heTunnus": he_id}, {"$addToSet": {"heNimi": name, "heUrl": url, "heSisalto": content, "paivamaara": date}}
+            {"heTunnus": he_id},
+            {
+                "$addToSet": {
+                    f"heNimi.{lang_code}": name,
+                    f"heUrl.{lang_code}": url,
+                    f"heSisalto.{lang_code}": content,
+                    f"paivamaara.{lang_code}": date,
+                }
+            },
         )
         if result.modified_count > 0:
             logger.info(f"Lisätty puuttuvat he-tiedot {he_id}")
+        else:
+            logger.info(f"Ei lisätty tietoja {he_id}")
+
 
     def push_document(self, data, he_id, document_type):
         result = self.collection.update_one(

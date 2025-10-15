@@ -23,9 +23,11 @@ class DBService:
         if search_query:
             query = {
                 "$or": [
-                    {"heNimi": {"$regex": search_query, "$options": "i"}},
+                    {"heNimi.fi": {"$regex": search_query, "$options": "i"}},
+                    {"heNimi.sv": {"$regex": search_query, "$options": "i"}},
                     {"heTunnus": {"$regex": search_query, "$options": "i"}},
-                    {"heSisalto": {"$regex": search_query, "$options": "i"}},
+                    {"heSisalto.fi": {"$regex": search_query, "$options": "i"}},
+                    {"heSisalto.sv": {"$regex": search_query, "$options": "i"}},
                 ]
             }
 
@@ -46,8 +48,11 @@ class DBService:
         if search_query:
             query = {
                 "$or": [
-                    {"heNimi": {"$regex": search_query, "$options": "i"}},
+                    {"heNimi.fi": {"$regex": search_query, "$options": "i"}},
+                    {"heNimi.sv": {"$regex": search_query, "$options": "i"}},
                     {"heTunnus": {"$regex": search_query, "$options": "i"}},
+                    {"heSisalto.fi": {"$regex": search_query, "$options": "i"}},
+                    {"heSisalto.sv": {"$regex": search_query, "$options": "i"}},
                 ]
             }
 

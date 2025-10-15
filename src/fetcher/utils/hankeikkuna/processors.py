@@ -57,6 +57,7 @@ def _extract_submissions(documents: list[dict]) -> list[dict]:
 def find_proposal_drafts(data: dict) -> list[dict]:
     """Etsi HE-luonnokset hankeikkuna-datasta."""
     drafts = []
+    lang_code = "fi"
     match_list = [
         "he-luonnos",
         "he luonnos",
@@ -103,8 +104,8 @@ def find_proposal_drafts(data: dict) -> list[dict]:
                     "valiokunnanMietinnot": [],
                 },
                 "heTunnus": proposal_identifier,
-                "paivamaara": date,
-                "heSisalto": proposal_content,
+                "paivamaara": {f"{lang_code}": date},
+                "heSisalto":  {f"{lang_code}": proposal_content},
                 "valmistelutunnus": preparatory_identifier,
             })
 
