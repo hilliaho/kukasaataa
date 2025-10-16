@@ -1,6 +1,10 @@
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class DBService:
     _client = None
@@ -58,8 +62,8 @@ class DBService:
 
         try:
             count = self.collection.count_documents(query)
-            print("count: ", count)
+            logger.info("Document count: ", count)
             return count
         except Exception as e:
-            print(f"Error in count_documents: {e}")
+            logger.error(f"Error counting documents: {e}")
             return 0

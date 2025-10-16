@@ -3,10 +3,11 @@ import requests
 import fitz
 import tempfile
 import re
-
+import logging
 from services.db_service import DBService
 
 db_service = DBService()
+logger = logging.getLogger(__name__)
 
 
 def process_hankeikkuna_data(data):
@@ -139,7 +140,7 @@ def find_proposal_name_from_draft_content(content_txt):
 def extract_text_from_pdf(pdf_url):
     response = requests.get(pdf_url)
     if response.status_code != 200:
-        print(f"Failed to fetch PDF: {response.status_code}")
+        logger.warning(f"Failed to fetch PDF: {response.status_code}")
         return ""
 
     try:
@@ -153,7 +154,7 @@ def extract_text_from_pdf(pdf_url):
                 clean_text = re.sub(r"\s+", " ", text).strip()
             return clean_text
     except Exception as e:
-        print(f"Virhe pdf-tiedoston lukemisessa: {e}")
+        logger.warning(f"Virhe pdf-tiedoston lukemisessa: {e}")
 
 
 def continue_condition(data):

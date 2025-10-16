@@ -102,11 +102,11 @@ class DBService:
     def add_he_info(self, data):
         lang_code = list(data.get("heNimi").keys())[0]
         name = data.get("heNimi").get(f"{lang_code}")
+        he_id = data.get("heTunnus")
         db_doc = self.collection.find_one({f"heNimi.{lang_code}": name})
         if db_doc is not None:
-            logger.info(f"{name} kielikoodilla {lang_code} on jo tietokannassa")
+            logger.info(f"{he_id} kielikoodilla {lang_code} on jo tietokannassa")
             return
-        he_id = data.get("heTunnus")
         url = data.get("heUrl").get(f"{lang_code}")
         content = data.get("heSisalto").get(f"{lang_code}")
         result = self.collection.update_one(

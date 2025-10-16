@@ -2,6 +2,9 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from services.db_service import DBService
 from services.selection_db_service import SelectionDbService
+import logging
+
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app)
@@ -18,7 +21,7 @@ def get_data():
         data = db_service.fetch_documents(page, per_page, search_query)
         return jsonify(data), 200
     except Exception as e:
-        print(f"Error fetching data: {e}")
+        logger.error(f"Error fetching data: {e}")
         return jsonify({"error": "Failed to fetch data"}), 500
     
 @app.route("/projects/count", methods=["GET"])
@@ -26,9 +29,9 @@ def get_result_count():
     search_query = request.args.get("search_query", "")
     try:
         total_count = db_service.count_documents(search_query)
-        print("app.py total count:", total_count)
         return jsonify({"count": total_count}), 200
     except Exception as e:
+        logger.error(f"Error counting results: {e}")
         return jsonify({"error": "Failed to get results count"}), 500
     
 @app.route("/selections", methods=["GET"])
@@ -40,7 +43,7 @@ def get_selection_data():
         data = selection_db_service.fetch_documents(page, per_page, search_query)
         return jsonify(data), 200
     except Exception as e:
-        print(f"Error fetching data: {e}")
+        logger.error(f"Error fetching data: {e}")
         return jsonify({"error": "Failed to fetch data"}), 500
     
 @app.route("/selections/join/<code>", methods=["GET"])
@@ -52,7 +55,7 @@ def get_selection_by_joincode(code):
         else:
             return jsonify({"error": "Selection not found"}), 404
     except Exception as e:
-        print(f"Error fetching selection by code: {e}")
+        logger.error(f"Error fetching selection by code: {e}")
         return jsonify({"error": "Failed to fetch selection"}), 500
     
 @app.route("/selections/edit/<code>", methods=["GET"])
@@ -64,7 +67,7 @@ def get_selection_by_editcode(code):
         else:
             return jsonify({"error": "Selection not found"}), 404
     except Exception as e:
-        print(f"Error fetching selection by code: {e}")
+        logger.error(f"Error fetching selection by code: {e}")
         return jsonify({"error": "Failed to fetch selection"}), 500
     
 @app.route("/selections", methods=["POST"])
@@ -74,7 +77,7 @@ def create_selection():
         selection_db_service.create_selection(data)
         return jsonify({"message": "Selection created successfully"}), 201
     except Exception as e:
-        print(f"Error creating selection: {e}")
+        logger.error(f"Error creating selection: {e}")
         return jsonify({"error": "Failed to create selection"}), 500
     
 
