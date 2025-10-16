@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Project from '../components/Project';
+import groupWorkImg from '../assets/group-work.webp'
 
 const StudentView = ({ API_URL, debugLog, debugError }) => {
   const [projects, setProjects] = useState([])
@@ -35,6 +36,7 @@ const StudentView = ({ API_URL, debugLog, debugError }) => {
   return (
     <div className='student-view'>
       <h1>Kuka säätää?</h1>
+      <img className='group-image' src={groupWorkImg} alt='Ryhmä opiskelijoita keskustelemassa ja työskentelemässä'/>
       {projects.map((project) => (
         <div key={project._id} className='student-project'>
           <Project step={"student"} project={project} />
