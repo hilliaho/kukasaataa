@@ -103,11 +103,14 @@ class DBService:
         lang_code = list(data.get("heNimi").keys())[0]
         name = data.get("heNimi").get(f"{lang_code}")
         he_id = data.get("heTunnus")
-        db_doc = self.collection.find_one({f"heNimi.{lang_code}": name})
+        url = data.get("heUrl").get(f"{lang_code}")
+        if not (url and name and he_id):
+            return
+        db_doc = self.collection.find_one({"heTunnus": he_id}, {f"heNimi.{lang_code}": { "exists": True }})
         if db_doc is not None:
             logger.info(f"{he_id} kielikoodilla {lang_code} on jo tietokannassa")
             return
-        url = data.get("heUrl").get(f"{lang_code}")
+
         content = data.get("heSisalto").get(f"{lang_code}")
         result = self.collection.update_one(
             {"heTunnus": he_id},

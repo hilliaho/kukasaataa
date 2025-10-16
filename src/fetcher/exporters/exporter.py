@@ -17,7 +17,7 @@ class Exporter:
         db_service,
         avoindata_service=AvoindataApiService,
         hankeikkuna_service=HankeikkunaApiService,
-        per_page: int = 10,
+        per_page: int = 30,
         max_pages: int = 10,
     ):
         self.db = db_service
