@@ -166,7 +166,7 @@ class Exporter:
             api_index = index_getter(api_data)
             if i == 1:
                 new_index = api_index
-            if db_index >= new_index:
+            if db_index >= api_index:
                 logger.info(f"{collection_name} is up to date")
                 break
             for doc in processor(api_data) or []:
