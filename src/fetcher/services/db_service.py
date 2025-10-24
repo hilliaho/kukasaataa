@@ -115,12 +115,13 @@ class DBService:
         result = self.collection.update_one(
             {"heTunnus": he_id},
             {
-                "$addToSet": {
+                "$set": {
                     f"heNimi.{lang_code}": name,
                     f"heUrl.{lang_code}": url,
                     f"heSisalto.{lang_code}": content,
                 }
             },
+            upsert=True,
         )
         if result.modified_count > 0:
             logger.info(f"Lisätty puuttuvat he-tiedot {he_id}")
