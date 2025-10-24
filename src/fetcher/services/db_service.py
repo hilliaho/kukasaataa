@@ -30,8 +30,9 @@ class DBService:
                 document["vuosi"] = int(match.group(3))
             else:
                 logger.warning("Ei lisätty tunnusta", he_id)
-        elif document.get("valmistelutunnus"):
+                return None
 
+        elif document.get("valmistelutunnus"):
             match = re.match(
                 r"^[A-ZÅÄÖ]+(\d+):(\d+)/(\d{4})$", document["valmistelutunnus"]
             )
@@ -45,8 +46,7 @@ class DBService:
         else:
             logger.warning(f"Tunnusta ei voitu jäsentää: {he_id}")
             return None
-        if document["vuosi"] < 2016:
-            return None
+
         result = self.collection.insert_one(document)
         project_id = he_id or document.get("valmistelutunnus")
         logger.info(f"Lisätty {project_id}")
@@ -106,7 +106,9 @@ class DBService:
         url = data.get("heUrl").get(f"{lang_code}")
         if not (url and name and he_id):
             return
-        db_doc = self.collection.find_one({"heTunnus": he_id}, {f"heNimi.{lang_code}": { "exists": True }})
+        db_doc = self.collection.find_one(
+            {"heTunnus": he_id, f"heNimi.{lang_code}": {"$exists": True}}
+        )
         if db_doc is not None:
             logger.info(f"{he_id} kielikoodilla {lang_code} on jo tietokannassa")
             return
@@ -127,7 +129,6 @@ class DBService:
             logger.info(f"Lisätty puuttuvat he-tiedot {he_id}")
         else:
             logger.info(f"Ei lisätty tietoja {he_id}")
-
 
     def push_document(self, data, he_id, document_type):
         result = self.collection.update_one(
@@ -151,25 +152,24 @@ class DBService:
             self.add_document(data)
 
     def get_last_modified(self, document_type):
+        if document_type == "lausuntokierroksenLausunnot":
+            initial_value = datetime.fromisoformat("2015-01-01T00:00:00")
+        elif document_type == "heLuonnokset":
+            initial_value = datetime.fromisoformat("2016-01-01T00:00:00")
+        else:
+            initial_value = 0
+
         try:
             last_doc = self.collection_metadata.find_one(
                 {"dokumenttiTyyppi": document_type}
             )
 
             if not last_doc:
-                return (
-                    datetime.fromisoformat("2015-01-01T00:00:00")
-                    if document_type in ["lausuntokierroksenLausunnot", "heLuonnokset"]
-                    else 0
-                )
+                return initial_value
 
             modified_value = last_doc.get("viimeisinMuokattu")
             if not modified_value:
-                return (
-                    datetime.fromisoformat("2015-01-01T00:00:00")
-                    if document_type in ["lausuntokierroksenLausunnot", "heLuonnokset"]
-                    else 0
-                )
+                return initial_value
 
             return modified_value
 
