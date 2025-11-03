@@ -1,4 +1,3 @@
-import React from "react";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
@@ -62,7 +61,6 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
 
   return (
     <div className="center-container">
-      <h1>Kuka säätää?</h1>
 
       <div style={{ marginTop: "60px" }}>
         <h2>Osallistu oppilaana</h2>

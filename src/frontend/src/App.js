@@ -6,8 +6,12 @@ import ProjectSelectionView from './views/ProjectSelectionView';
 import DocumentSelectionView from './views/DocumentSelectionView';
 import SummaryView from './views/SummaryView';
 import StudentView from './views/StudentView';
+import Instructions from './components/Instructions'
 import './App.css';
 import LanguageContext from './LanguageContext';
+import logo from './assets/logo2.webp'
+
+
 
 
 const debugLog = (...args) => {
@@ -32,6 +36,7 @@ function App() {
   const [totalSearchResults, setTotalSearchResults] = useState(0);
   const [joinCode, setJoinCode] = useState('')
   const [language, setLanguage] = useState(["fi", "sv"])
+  const [instructions, setInstructions] = useState(false)
   const prefetchedPagesRef = useRef({});
 
 
@@ -88,65 +93,77 @@ function App() {
   }
 
   return (
-    <LanguageContext.Provider value={{language, setLanguage}}>
-      <button className='language-button' onClick={handleLanguageChange}>{language[0]==="fi" ? ("Svenska"):("Suomi")}</button>
-      <Router>
-        <div className="App">
-          <Routes>
-            <Route exact path="/" element={
-              <HomeView
-                API_URL={API_URL}
-                debugLog={debugLog}
-                debugError={debugError}
-                joinCode={joinCode}
-                setJoinCode={setJoinCode}
-                setSelectedProjects={setSelectedProjects}
-              />} />
-            <Route exact path="/:editCode/select-projects" element={
-              <ProjectSelectionView
-                API_URL={API_URL}
-                joinCode={joinCode}
-                setJoinCode={setJoinCode}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                loading={loading}
-                selectedProjects={selectedProjects}
-                setSelectedProjects={setSelectedProjects}
-                searchResults={searchResults}
-                totalSearchResults={totalSearchResults}
-                setSearchResults={setSearchResults}
-                setTotalSearchResults={setTotalSearchResults}
-                fetchProjects={fetchProjects}
-                fetchTotalCount={fetchTotalCount}
-                prefetchedPagesRef={prefetchedPagesRef}
-                debugLog={debugLog}
-                debugError={debugError}
-              />} />
-            <Route exact path="/:editCode/select-documents" element={
-              <DocumentSelectionView
-                API_URL={API_URL}
-                selectedProjects={selectedProjects}
-                setSelectedProjects={setSelectedProjects}
-                setLoading={setLoading}
-                joinCode={joinCode}
-                debugLog={debugLog}
-                debugError={debugError}
-              />} />
-            <Route exact path="/:editCode/summary" element={
-              <SummaryView
-                joinCode={joinCode}
-                setJoinCode={setJoinCode}
-                selectedProjects={selectedProjects}
-                setSelectedProjects={setSelectedProjects} />} />
-            <Route exact path="/student/:joinCode" element={
-              <StudentView
-                API_URL={API_URL}
-                debugLog={debugLog}
-                debugError={debugError}
-              />} />
-          </Routes>
+    <LanguageContext.Provider value={{ language, setLanguage }}>
+      <div className='header-container'>
+        <div className='button-row'>
+          <button className='language-button' onClick={() => setInstructions(!instructions)}>{language[0] === "fi" ? ("Ohjeet") : ("Ohjeet")}</button>
+          <button className='language-button' onClick={handleLanguageChange}>{language[0] === "fi" ? ("Svenska") : ("Suomi")}</button>
         </div>
-      </Router>
+        <div className='header-row'>
+          <img className='logo' src={logo} alt='kukasäätää-logo: ryhmä ihmisiä' />
+          <h1>Kuka säätää?</h1>
+        </div>
+      </div>
+      {instructions && (<Instructions instructions={instructions} setInstructions={setInstructions} />)}
+      {!instructions && (
+        <Router>
+          <div className="App">
+            <Routes>
+              <Route exact path="/" element={
+                <HomeView
+                  API_URL={API_URL}
+                  debugLog={debugLog}
+                  debugError={debugError}
+                  joinCode={joinCode}
+                  setJoinCode={setJoinCode}
+                  setSelectedProjects={setSelectedProjects}
+                />} />
+              <Route exact path="/:editCode/select-projects" element={
+                <ProjectSelectionView
+                  API_URL={API_URL}
+                  joinCode={joinCode}
+                  setJoinCode={setJoinCode}
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  loading={loading}
+                  selectedProjects={selectedProjects}
+                  setSelectedProjects={setSelectedProjects}
+                  searchResults={searchResults}
+                  totalSearchResults={totalSearchResults}
+                  setSearchResults={setSearchResults}
+                  setTotalSearchResults={setTotalSearchResults}
+                  fetchProjects={fetchProjects}
+                  fetchTotalCount={fetchTotalCount}
+                  prefetchedPagesRef={prefetchedPagesRef}
+                  debugLog={debugLog}
+                  debugError={debugError}
+                />} />
+              <Route exact path="/:editCode/select-documents" element={
+                <DocumentSelectionView
+                  API_URL={API_URL}
+                  selectedProjects={selectedProjects}
+                  setSelectedProjects={setSelectedProjects}
+                  setLoading={setLoading}
+                  joinCode={joinCode}
+                  debugLog={debugLog}
+                  debugError={debugError}
+                />} />
+              <Route exact path="/:editCode/summary" element={
+                <SummaryView
+                  joinCode={joinCode}
+                  setJoinCode={setJoinCode}
+                  selectedProjects={selectedProjects}
+                  setSelectedProjects={setSelectedProjects} />} />
+              <Route exact path="/student/:joinCode" element={
+                <StudentView
+                  API_URL={API_URL}
+                  debugLog={debugLog}
+                  debugError={debugError}
+                />} />
+            </Routes>
+          </div>
+        </Router>
+      )}
     </LanguageContext.Provider>
   );
 }
