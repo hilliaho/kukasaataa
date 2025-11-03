@@ -6,7 +6,7 @@ import arrow from '../assets/dropdown-arrow.png'
 const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 	const { language } = useContext(LanguageContext)
 	const [expandedContent, setExpandedContent] = useState(false);
-	const isSelected = step === "student" ? true : selectedProjects.includes(project._id)
+	const isSelected = step === "student" ? true : selectedProjects.some(p => p._id === project._id)
 	const type = step === "document selection" ? "checkbox" : "link"
 
 	const countDocuments = () => {
