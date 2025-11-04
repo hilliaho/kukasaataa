@@ -4,7 +4,7 @@ import Project from './Project';
 const SearchResults = ({ results, selectedProjects, setSelectedProjects, searchQuery }) => {
 	return (
 		<div className='project-container'>
-			{searchQuery ? (<h2>Hakutulokset hakusanalla "{searchQuery}"</h2>):(<h2>Kaikki hankkeet</h2>)}
+			{searchQuery ? (<h3>Hakutulokset hakusanalla "{searchQuery}"</h3>):(<h3>Kaikki hankkeet</h3>)}
 			{results.filter(result => !selectedProjects.includes(result)).map((project, index) => (
 					<div className='project-container' key={index}>
 						<Project

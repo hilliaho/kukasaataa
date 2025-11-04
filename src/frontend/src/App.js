@@ -104,7 +104,7 @@ function App() {
           <h1>Kuka säätää?</h1>
         </div>
       </div>
-      {instructions && (<Instructions instructions={instructions} setInstructions={setInstructions} />)}
+      {instructions && (<div className='center-container'><Instructions instructions={instructions} setInstructions={setInstructions} /></div>)}
       {!instructions && (
         <Router>
           <div className="App">

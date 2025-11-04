@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import BackButton from "../components/BackButton"
 import { useLocation } from 'react-router-dom'
@@ -53,8 +53,12 @@ const DocumentSelectionView = ({ API_URL, selectedProjects, setSelectedProjects,
         <BackButton handleFunction={handleBackToSelection} />
       </div>
       <div className="center-container">
-        <h1>Valitse asiakirjat</h1>
-        <p>Valitut hankkeet:</p>
+        <h2>Valitse asiakirjat</h2>
+        <div className="page-instructions">
+          <p>Voit rajata pois hankkeen asiakirjoja, jotka eivät ole pelaajille tarpeen.</p>
+          <p>Erityisen hyödyllisiä pelissä ovat ”Lausuntokierroksen asiakirjat”, joista pelaajat voivat ottaa mallia omiin lausuntoihinsa.</p>
+        </div>
+        <h3>Valitut hankkeet:</h3>
         <ul>
           {selectedProjects.map((p, index) =>
             <div key={index}>

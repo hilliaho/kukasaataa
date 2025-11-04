@@ -1,4 +1,3 @@
-import React from "react"
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import BackButton from "../components/BackButton";
@@ -85,9 +84,7 @@ const ProjectSelectionView = ({ API_URL, joinCode, setJoinCode, searchQuery, set
 
   return (
     <>
-      <div className="back-button">
-        <BackButton handleFunction={handleBackToHome} />
-      </div>
+      <BackButton handleFunction={handleBackToHome} />
       <div className="center-container">
         <SearchField
           searchQuery={searchQuery}

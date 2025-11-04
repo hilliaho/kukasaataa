@@ -4,14 +4,14 @@ const SearchField = ({ searchQuery, setSearchQuery, handleSearch }) => {
     const [localQuery, setLocalQuery] = useState(searchQuery);
 
     return (
-        <div style={{ marginTop: '20px' }}>
+        <div className='search-container'>
             <label htmlFor="search-input" className="search-label">
-                Valitse hanke tai hankkeet, joita haluat käyttää simulaatiossa
+                Valitse hanke tai hankkeet, joita haluat käyttää pelissä
             </label>
             <input
                 id="search-input"
                 type="text"
-                placeholder="Hae hallituksen esityksistä"
+                placeholder="Hae lakihankkeista"
                 value={localQuery}
                 onChange={(e) => setLocalQuery(e.target.value)}
                 onKeyDown={(e) => {
@@ -23,7 +23,9 @@ const SearchField = ({ searchQuery, setSearchQuery, handleSearch }) => {
             />
             <button onClick={() => { setSearchQuery(localQuery); handleSearch(localQuery); }}>
                 Hae
-            </button>  
+            </button>
+            <p>Voit hakea hankkeita hakusanalla (esim. nikotiinipussi) tai diaarinumerolla (esim. HE 96/2025). </p>
+            <p>Jos et vielä tiedä, mitä lakihanketta haluat käyttää pelissä, voit etsiä sopivaa <a href='https://lakitutka.fi/' target='_blank' rel='noopener noreferrer'>Lakitutkasta</a></p>
         </div>
     );
 };

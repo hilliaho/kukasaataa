@@ -4,7 +4,7 @@ import Project from "./Project";
 const SelectedProjects = ({ selectedProjects, setSelectedProjects }) => {
     return (
         <div className="project-container">
-            <h2>Valitut hankkeet</h2>
+            <h3>Valitut hankkeet</h3>
             <ul>
                 {selectedProjects.length === 0 ? (
                     <p>Ei valittuja hankkeita</p>

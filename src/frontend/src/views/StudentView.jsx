@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Project from '../components/Project';

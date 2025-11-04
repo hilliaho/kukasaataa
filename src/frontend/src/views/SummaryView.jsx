@@ -1,4 +1,3 @@
-import React from "react"
 import { useEffect } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import BackButton from "../components/BackButton"
@@ -29,15 +28,13 @@ const SummaryView = ({ joinCode, setJoinCode, selectedProjects, setSelectedProje
   }
 
   return (
-    <div>
-      <div className="back-button">
-        <BackButton handleFunction={handleBackToSelection} />
-        <button onClick={handleBackToHome}>Etusivulle</button>
-      </div>
+    <div className="summary-container">
+      <BackButton handleFunction={handleBackToSelection} />
+      <button className="continue-button" onClick={handleBackToHome}>Etusivulle</button>
       <div className="code-notification">
-        <h3>
-          Materiaalivalinnat tallennettu.
-        </h3>
+        <strong>
+          Materiaalivalinnat tallennettu. Ota koodit talteen!
+        </strong>
         <p>
           Pelialustan liittymiskoodi:
         </p>

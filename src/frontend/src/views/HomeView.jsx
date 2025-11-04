@@ -62,8 +62,8 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
   return (
     <div className="center-container">
 
-      <div style={{ marginTop: "60px" }}>
-        <h2>Osallistu oppilaana</h2>
+      <div className="join-form">
+        <h2>Osallistu peliin</h2>
         <form onSubmit={handleJoinWithCode}>
           <input
             type="text"
@@ -81,8 +81,8 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
         </form>
       </div>
 
-      <div style={{ marginTop: "40px" }}>
-        <h3>Luo uusi tai muokkaa dokumenttivalikoimaa</h3>
+      <div className="create-form">
+        <h3>Luo tai muokkaa pelimateriaaleja</h3>
         <button
           onClick={createNewSession}
         >
@@ -114,6 +114,13 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
             Muokkaa
           </button>
         }
+      </div>
+
+      <div className="home-instructions">
+        <p>Tämä on Kuka säätää? -lainvalmistelupelin verkkoalusta, jossa voit valita materiaalit peliin ja jakaa ne simulaation osallistujille.</p>
+        <p>Jos olet pelin osallistuja, voit syöttää saamasi koodin yllä olevaan kenttään.</p>
+        <p>Jos olet pelin järjestäjä, voit luoda uuden pelin tai muokata aiemmin luomaasi peliä. Tarvittaessa voit katsoa lisäohjeita yläkulman linkistä ”Ohjeet”.</p>
+        <p>Muista ottaa lopuksi talteen pelisi jako- ja muokkauskoodit!</p>
       </div>
 
     </div>
