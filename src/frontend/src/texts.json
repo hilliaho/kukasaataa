@@ -72,7 +72,8 @@
         "Asiantuntijalausunnot",
         "Valiokunnan lausunnot",
         "Valiokunnan mietinnöt"
-      ]
+      ],
+      "code": "HE"
     },
     "searchField": {
       "label": "Valitse hanke tai hankkeet, joita haluat käyttää pelissä",
@@ -165,7 +166,8 @@
         "Sakkunnigutlåtanden",
         "Utskottets utlåtanden",
         "Utskottets betänkanden"
-      ]
+      ],
+      "code": "RP"
     },
     "searchField": {
       "label": "Välj ett eller flera projekt som du vill använda i spelet",

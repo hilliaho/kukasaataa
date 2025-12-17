@@ -89,7 +89,7 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 					onChange={() => handleCheckboxChange(project)}
 				/>
 			}
-			{project.heTunnus && <strong>{project.heTunnus}</strong>}
+			{project.heTunnus && project.vuosi && project.numero && <strong>{t.code} {project.vuosi}/{project.numero}</strong>}
 			{!project.heTunnus && <strong>{project.valmistelutunnus}</strong>}
 			{project.heNimi &&
 				<div className="download-a">
