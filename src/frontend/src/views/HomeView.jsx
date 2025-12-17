@@ -85,7 +85,7 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
       </div>
 
       <div className="create-form">
-        <h3>{t.createOrEdit}</h3>
+        <h2>{t.createOrEdit}</h2>
         <button
           onClick={createNewSession}
         >
@@ -99,7 +99,6 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
                 value={editCode}
                 onChange={(e) => setEditCode(e.target.value)}
                 placeholder={t.editCodePlaceholder}
-                style={{ padding: "10px", fontSize: "16px", marginTop: "10px" }}
               />
               <button
                 onClick={() => handleEdit()}

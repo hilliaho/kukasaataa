@@ -29,7 +29,7 @@ const SearchField = ({ searchQuery, setSearchQuery, handleSearch }) => {
             </button>
             <div className='page-instructions'>
                 <p>{t.instructions[0]}</p>
-                <p>{t.instructions[1]} <a className='link' href='https://lakitutka.fi/' target='_blank' rel='noopener noreferrer'>{t.instructions[2]}</a></p>
+                <p>{t.instructions[1]} <a className='link' href='https://lakitutka.fi/' target='_blank' rel='noopener noreferrer'>{t.instructions[2]}</a>.</p>
             </div>
         </div>
     );

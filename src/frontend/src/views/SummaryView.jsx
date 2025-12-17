@@ -31,7 +31,7 @@ const SummaryView = ({ joinCode, setJoinCode, selectedProjects, setSelectedProje
   }
 
   return (
-    <div className="summary-container">
+    <div className="center-container">
       <BackButton handleFunction={handleBackToSelection} />
       <button className="continue-button" onClick={handleBackToHome}>{t.homeButton}</button>
       <div className="code-notification">
@@ -47,7 +47,7 @@ const SummaryView = ({ joinCode, setJoinCode, selectedProjects, setSelectedProje
         </p>
         <strong>{editCode}</strong>
       </div>
-      <h3 className="summary-selected-documents-h3">Valitut asiakirjat</h3>
+      <h2>{t.selectedDocuments}</h2>
       <ul>
         {selectedProjects.map((project, index) => <div key={index}>
           <Project 

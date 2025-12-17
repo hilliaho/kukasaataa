@@ -8,7 +8,7 @@ const SearchResults = ({ results, selectedProjects, setSelectedProjects, searchQ
 
 	return (
 		<div className='project-container'>
-			{searchQuery ? (<h3>{t.results} "{searchQuery}"</h3>) : (<h3>{t.allProjects}</h3>)}
+			{searchQuery ? (<h2>{t.results} "{searchQuery}"</h2>) : (<h2>{t.allProjects}</h2>)}
 			{results.filter(result => !selectedProjects.includes(result)).map((project, index) => (
 				<div className='project-container' key={index}>
 					<Project

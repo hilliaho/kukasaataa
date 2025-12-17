@@ -42,7 +42,8 @@
       "homeButton": "Etusivulle",
       "saved": "Materiaalivalinnat tallennettu. Ota koodit talteen!",
       "joinCode": "Pelialustan liittymiskoodi:",
-      "editCode": "Pelialustan muokkaamiskoodi:"
+      "editCode": "Pelialustan muokkaamiskoodi:",
+      "selectedDocuments": "Valitut asiakirjat"
     },
     "student": {
       "wrongCodeNotification": "Koodilla ei löytynyt dokumentteja. Tarkista, että koodi on oikein.",
@@ -136,7 +137,8 @@
       "homeButton": "Till startsidan",
       "saved": "Materialvalen har sparats. Kom ihåg att spara koderna!",
       "joinCode": "Anslutningskod till spelplattformen:",
-      "editCode": "Redigeringskod till spelplattformen:"
+      "editCode": "Redigeringskod till spelplattformen:",
+      "selectedDocuments": "Valda dokument"
     },
     "student": {
       "wrongCodeNotification": "Inga dokument hittades med koden. Kontrollera att koden är korrekt.",

@@ -8,7 +8,7 @@ const SelectedProjects = ({ selectedProjects, setSelectedProjects }) => {
 
     return (
         <div className="project-container">
-            <h3>{t.selectedProjects}</h3>
+            <h2>{t.selectedProjects}</h2>
             <ul>
                 {selectedProjects.length === 0 ? (
                     <p>{t.noSelectedProjects}</p>
