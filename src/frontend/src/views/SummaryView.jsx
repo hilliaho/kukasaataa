@@ -1,12 +1,15 @@
-import { useEffect } from "react"
+import { useEffect, useContext } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import BackButton from "../components/BackButton"
 import Project from "../components/Project"
+import LanguageContext from "../LanguageContext"
 
 const SummaryView = ({ joinCode, setJoinCode, selectedProjects, setSelectedProjects }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const editCode = location.pathname.split("/")[1]
+  const { texts } = useContext(LanguageContext)
+  const t = texts.summary
 
 
   useEffect(() => {
@@ -20,7 +23,7 @@ const SummaryView = ({ joinCode, setJoinCode, selectedProjects, setSelectedProje
   }
 
   const handleBackToHome = () => {
-    if(window.confirm("Otithan liittymis- ja muokkaamiskoodin talteen? Haluatko varmasti siirtyä etusivulle?")) {
+    if(window.confirm(t.confirm)) {
       setJoinCode('')
       setSelectedProjects([])
       navigate("/")
@@ -30,17 +33,17 @@ const SummaryView = ({ joinCode, setJoinCode, selectedProjects, setSelectedProje
   return (
     <div className="summary-container">
       <BackButton handleFunction={handleBackToSelection} />
-      <button className="continue-button" onClick={handleBackToHome}>Etusivulle</button>
+      <button className="continue-button" onClick={handleBackToHome}>{t.homeButton}</button>
       <div className="code-notification">
         <strong>
-          Materiaalivalinnat tallennettu. Ota koodit talteen!
+          {t.saved}
         </strong>
         <p>
-          Pelialustan liittymiskoodi:
+          {t.joinCode}
         </p>
         <strong>{joinCode}</strong>
         <p>
-          Pelialustan muokkaamiskoodi:
+          {t.editCode}
         </p>
         <strong>{editCode}</strong>
       </div>

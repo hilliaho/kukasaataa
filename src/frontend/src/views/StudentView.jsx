@@ -1,12 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Project from '../components/Project';
 import groupWorkImg from '../assets/group-work.webp'
+import LanguageContext from '../LanguageContext';
+
 
 const StudentView = ({ API_URL, debugLog, debugError }) => {
   const [projects, setProjects] = useState([])
   const location = useLocation()
   const navigate = useNavigate()
+  const { texts } = useContext(LanguageContext)
+  const t = texts.student
 
   useEffect(() => {
     const fetchStudentProjects = async () => {
@@ -19,22 +23,21 @@ const StudentView = ({ API_URL, debugLog, debugError }) => {
           debugLog("[StudentView]: Oppilaan data:", data);
           setProjects(data.documents);
         } else {
-          alert("Koodilla ei löytynyt dokumentteja.");
+          alert(t.wrongCodeNotification);
         }
       } catch (error) {
         debugError("[StudentView]: Virhe haettaessa oppilaan näkymän projekteja:", error);
         navigate("/")
-        alert("Jokin meni pieleen. Yritä uudelleen.");
+        alert(t.error);
       }
     }
     fetchStudentProjects()
 
 
-  }, [API_URL, debugError, debugLog, location.pathname, navigate])
+  }, [API_URL, debugError, debugLog, location.pathname, navigate, t.error, t.wrongCodeNotification])
 
   return (
     <div className='student-view'>
-      <h1>Kuka säätää?</h1>
       <img className='group-image' src={groupWorkImg} alt='Ryhmä opiskelijoita keskustelemassa ja työskentelemässä'/>
       {projects.map((project) => (
         <div key={project._id} className='student-project'>

@@ -1,12 +1,19 @@
+import { useContext } from "react"
+import LanguageContext from "../LanguageContext"
+
+
 const Instructions = ({ instructions, setInstructions }) => {
+  const { texts } = useContext(LanguageContext)
+  const t = texts.instructions
+
   return (
     <div className="instructions">
       <button className="x-button" onClick={() => setInstructions(!instructions)}>X</button>
-      <p>Ohjeet</p>
-      <p>Tämä on Kuka säätää? -lainvalmistelupelin verkkoalusta, jossa voit valita materiaalit peliin ja jakaa ne simulaation osallistujille.</p>
-      <p>Jos olet pelin osallistuja, voit syöttää saamasi koodin yllä olevaan kenttään.</p>
-      <p>Jos olet pelin järjestäjä, voit luoda uuden pelin tai muokata aiemmin luomaasi peliä. Tarvittaessa voit katsoa lisäohjeita yläkulman linkistä ”Ohjeet”.</p>
-      <p>Muista ottaa lopuksi talteen pelisi jako- ja muokkauskoodit!</p>
+      <p>{t.instructions[0]}</p>
+      <p>{t.instructions[1]}</p>
+      <p>{t.instructions[2]}</p>
+      <p>{t.instructions[3]}</p>
+      <p>{t.instructions[4]}</p>
     </div>
   )
 }

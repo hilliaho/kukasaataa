@@ -1,0 +1,186 @@
+{
+  "fi": {
+    "app": {
+      "instructionsButton": "Ohjeet",
+      "languageButton": "Svenska"
+    },
+    "home": {
+      "wrongCodeNotification": "Koodilla ei löytynyt dokumentteja. Tarkista, että koodi on oikein.",
+      "join": "Osallistu peliin",
+      "codeInput": "Syötä koodi",
+      "joinButton": "Liity alustalle",
+      "createOrEdit": "Luo tai muokkaa pelimateriaaleja",
+      "createButton": "Luo uusi",
+      "editButton": "Muokkaa",
+      "editCodePlaceholder": "Syötä muokkauskoodi",
+      "instructions": [
+        "Tämä on Kuka säätää? -lainvalmistelupelin verkkoalusta, jossa voit valita materiaalit peliin ja jakaa ne simulaation osallistujille.",
+        "Jos olet pelin osallistuja, voit syöttää saamasi koodin yllä olevaan kenttään.",
+        "Jos olet pelin järjestäjä, voit luoda uuden pelin tai muokata aiemmin luomaasi peliä. Tarvittaessa voit katsoa lisäohjeita yläkulman linkistä ”Ohjeet”.",
+        "Muista ottaa lopuksi talteen pelisi jako- ja muokkauskoodit!"
+      ],
+      "error": "Jokin meni pieleen. Yritä uudelleen.",
+      "continueButton": "Tallenna ja siirry eteenpäin"
+    },
+    "projectSelection": {
+      "notification": "Tehdyt valinnat menetetään, haluatko varmasti palata etusivulle?",
+      "loading": "Ladataan hankkeita...",
+      "noSearchResults": "Ei hakutuloksia hakusanalla",
+      "resetSearchButton": "Peruuta haku",
+      "continueButton": "Tallenna ja siirry eteenpäin"
+    },
+    "documentSelection": {
+      "select": "Valitse asiakirjat",
+      "instructions": [
+        "Voit rajata pois hankkeen asiakirjoja, jotka eivät ole pelaajille tarpeen.",
+        "Erityisen hyödyllisiä pelissä ovat Lausuntokierroksen asiakirjat, joista pelaajat voivat ottaa mallia omiin lausuntoihinsa."
+      ],
+      "saveButton": "Tallenna valinnat"
+    },
+    "summary": {
+      "confirm": "Otithan liittymis- ja muokkaamiskoodin talteen? Haluatko varmasti siirtyä etusivulle?",
+      "homeButton": "Etusivulle",
+      "saved": "Materiaalivalinnat tallennettu. Ota koodit talteen!",
+      "joinCode": "Pelialustan liittymiskoodi:",
+      "editCode": "Pelialustan muokkaamiskoodi:"
+    },
+    "student": {
+      "wrongCodeNotification": "Koodilla ei löytynyt dokumentteja. Tarkista, että koodi on oikein.",
+      "error": "Jokin meni pieleen. Yritä uudelleen."
+    },
+    "backButton": {
+      "backButton": "Takaisin"
+    },
+    "documentInfo": {
+      "noSubmissions": "Ei lausuntoja."
+    },
+    "instructions": {
+      "instructions": [
+        "Ohjeet",
+        "Tämä on Kuka säätää? -lainvalmistelupelin verkkoalusta, jossa voit valita materiaalit peliin ja jakaa ne simulaation osallistujille.",
+        "Jos olet pelin osallistuja, voit syöttää saamasi koodin yllä olevaan kenttään.",
+        "Jos olet pelin järjestäjä, voit luoda uuden pelin tai muokata aiemmin luomaasi peliä. Tarvittaessa voit katsoa lisäohjeita yläkulman linkistä ”Ohjeet”.",
+        "Muista ottaa lopuksi talteen pelisi jako- ja muokkauskoodit!"
+      ]
+    },
+    "project": {
+      "documents": "Valmisteluasiakirjat",
+      "headers": [
+        "Luonnos hallituksen esitykseksi",
+        "Lausuntokierroksen lausunnot",
+        "Asiantuntijalausunnot",
+        "Valiokunnan lausunnot",
+        "Valiokunnan mietinnöt"
+      ]
+    },
+    "searchField": {
+      "label": "Valitse hanke tai hankkeet, joita haluat käyttää pelissä",
+      "placeholder": "Hae lakihankkeista",
+      "instructions": [
+        "Voit hakea hankkeita hakusanalla (esim. nikotiinipussi) tai diaarinumerolla (esim. HE 96/2025).",
+        "Jos et vielä tiedä, mitä lakihanketta haluat käyttää pelissä, voit etsiä sopivaa",
+        "Lakitutkasta"
+      ]
+    },
+    "searchResults": {
+      "results": "Hakutulokset hakusanalla",
+      "allProjects": "Kaikki hankkeet"
+    },
+    "selectedProjects": {
+      "selectedProjects": "Valitut hankkeet",
+      "noSelectedProjects": "Ei valittuja hankkeita"
+    }
+  },
+  "sv": {
+    "app": {
+      "instructionsButton": "Instruktioner",
+      "languageButton": "Suomi"
+    },
+    "home": {
+      "wrongCodeNotification": "Inga dokument hittades med koden. Kontrollera att koden är korrekt.",
+      "join": "Delta i spelet",
+      "codeInput": "Ange kod",
+      "joinButton": "Gå med i plattformen",
+      "createOrEdit": "Skapa eller redigera spelmaterial",
+      "createButton": "Skapa ny",
+      "editButton": "Redigera",
+      "editCodePlaceholder": "Ange redigeringskod",
+      "instructions": [
+        "Detta är webbplattformen för lagberedningsspelet Vem bestämmer?, där du kan välja material till spelet och dela dem med deltagarna i simuleringen.",
+        "Om du är deltagare i spelet kan du ange den kod du fått i fältet ovan.",
+        "Om du är arrangör av spelet kan du skapa ett nytt spel eller redigera ett spel du tidigare skapat. Vid behov kan du se ytterligare instruktioner via länken ”Instruktioner” i övre hörnet.",
+        "Kom ihåg att till sist spara spelets delnings- och redigeringskoder!"
+      ],
+      "error": "Något gick fel. Försök igen.",
+      "continueButton": "Spara och gå vidare"
+    },
+    "projectSelection": {
+      "notification": "Gjorda val kommer att gå förlorade. Är du säker på att du vill återvända till startsidan?",
+      "loading": "Laddar projekt...",
+      "noSearchResults": "Inga sökresultat för sökordet",
+      "resetSearchButton": "Avbryt sökning",
+      "continueButton": "Spara och gå vidare"
+    },
+    "documentSelection": {
+      "select": "Välj dokument",
+      "instructions": [
+        "Du kan utesluta projektets dokument som inte är nödvändiga för spelarna.",
+        "Särskilt användbara i spelet är dokument från remissrundan, som spelarna kan använda som mall för sina egna utlåtanden."
+      ],
+      "saveButton": "Spara val"
+    },
+    "summary": {
+      "confirm": "Har du sparat anslutnings- och redigeringskoderna? Är du säker på att du vill gå till startsidan?",
+      "homeButton": "Till startsidan",
+      "saved": "Materialvalen har sparats. Kom ihåg att spara koderna!",
+      "joinCode": "Anslutningskod till spelplattformen:",
+      "editCode": "Redigeringskod till spelplattformen:"
+    },
+    "student": {
+      "wrongCodeNotification": "Inga dokument hittades med koden. Kontrollera att koden är korrekt.",
+      "error": "Något gick fel. Försök igen."
+    },
+    "backButton": {
+      "backButton": "Tillbaka"
+    },
+    "documentInfo": {
+      "noSubmissions": "Inga utlåtanden."
+    },
+    "instructions": {
+      "instructions": [
+        "Instruktioner",
+        "Detta är webbplattformen för lagberedningsspelet Vem bestämmer?, där du kan välja material till spelet och dela dem med deltagarna i simuleringen.",
+        "Om du är deltagare i spelet kan du ange den kod du fått i fältet ovan.",
+        "Om du är arrangör av spelet kan du skapa ett nytt spel eller redigera ett spel du tidigare skapat. Vid behov kan du se ytterligare instruktioner via länken ”Instruktioner” i övre hörnet.",
+        "Kom ihåg att till sist spara spelets delnings- och redigeringskoder!"
+      ]
+    },
+    "project": {
+      "documents": "Beredningsdokument",
+      "headers": [
+        "Utkast till regeringens proposition",
+        "Utlåtanden från remissrundan",
+        "Sakkunnigutlåtanden",
+        "Utskottets utlåtanden",
+        "Utskottets betänkanden"
+      ]
+    },
+    "searchField": {
+      "label": "Välj ett eller flera projekt som du vill använda i spelet",
+      "placeholder": "Sök bland lagprojekt",
+      "instructions": [
+        "Du kan söka projekt med sökord (t.ex. nikotinpåse) eller diarienummer (t.ex. RP 96/2025).",
+        "Om du ännu inte vet vilket lagprojekt du vill använda i spelet kan du söka ett lämpligt",
+        "i Lakitutka"
+      ]
+    },
+    "searchResults": {
+      "results": "Sökresultat för sökordet",
+      "allProjects": "Alla projekt"
+    },
+    "selectedProjects": {
+      "selectedProjects": "Valda projekt",
+      "noSelectedProjects": "Inga valda projekt"
+    }
+  }
+}

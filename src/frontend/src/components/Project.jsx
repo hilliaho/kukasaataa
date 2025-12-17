@@ -4,10 +4,11 @@ import DocumentInfo from './DocumentInfo';
 import arrow from '../assets/dropdown-arrow.png'
 
 const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
-	const { language } = useContext(LanguageContext)
 	const [expandedContent, setExpandedContent] = useState(false);
 	const isSelected = step === "student" ? true : selectedProjects.some(p => p._id === project._id)
 	const type = step === "document selection" ? "checkbox" : "link"
+	const { language, texts } = useContext(LanguageContext)
+	const t = texts.project
 
 	const countDocuments = () => {
 		const docs = project.dokumentit
@@ -92,10 +93,10 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 			{!project.heTunnus && <strong>{project.valmistelutunnus}</strong>}
 			{project.heNimi &&
 				<div className="download-a">
-					{<a href={project["heUrl"][`${language[0]}`]} target='_blank' rel='noopener noreferrer'>{project["heNimi"][`${language[0]}`]||project["heNimi"][`${language[1]}`]}</a>}
+					{<a href={project["heUrl"][`${language[0]}`]} target='_blank' rel='noopener noreferrer'>{project["heNimi"][`${language[0]}`] || project["heNimi"][`${language[1]}`]}</a>}
 				</div>}
 			<p className='document-info-name' onClick={() => setExpandedContent(!expandedContent)}>
-				Valmisteluasiakirjat ({documentCount})
+				{t.documents} ({documentCount})
 				<img
 					className='dropdown-arrow'
 					src={arrow}
@@ -107,19 +108,19 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 				<div className='expanded-content'>
 					{(step === "summary" || step === "student") &&
 						<div>
-							{<DocumentInfo type={type} projectId={project._id} objectName={"heLuonnokset"} header={"Luonnos hallituksen esitykseksi"} submissions={project.dokumentit.heLuonnokset.filter((submission) => submission.selected)} />}
-							{<DocumentInfo type={type} projectId={project._id} objectName={"lausuntokierroksenLausunnot"} header={"Lausuntokierroksen lausunnot"} submissions={project.dokumentit.lausuntokierroksenLausunnot.filter((submission) => submission.selected)} />}
-							{<DocumentInfo type={type} projectId={project._id} objectName={"asiantuntijalausunnot"} header={"Asiantuntijalausunnot"} submissions={project.dokumentit.asiantuntijalausunnot.filter((submission) => submission.selected)} />}
-							{<DocumentInfo type={type} projectId={project._id} objectName={"valiokunnanLausunnot"} header={"Valiokunnan lausunnot"} submissions={project.dokumentit.valiokunnanLausunnot.filter((submission) => submission.selected)} />}
-							{<DocumentInfo type={type} projectId={project._id} objectName={"valiokunnanMietinnot"} header={"Valiokunnan mietinnöt"} submissions={project.dokumentit.valiokunnanMietinnot.filter((submission) => submission.selected)} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"heLuonnokset"} header={t.headers[0]} submissions={project.dokumentit.heLuonnokset.filter((submission) => submission.selected)} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"lausuntokierroksenLausunnot"} header={t.headers[1]} submissions={project.dokumentit.lausuntokierroksenLausunnot.filter((submission) => submission.selected)} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"asiantuntijalausunnot"} header={t.headers[2]} submissions={project.dokumentit.asiantuntijalausunnot.filter((submission) => submission.selected)} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"valiokunnanLausunnot"} header={t.headers[3]} submissions={project.dokumentit.valiokunnanLausunnot.filter((submission) => submission.selected)} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"valiokunnanMietinnot"} header={t.headers[4]} submissions={project.dokumentit.valiokunnanMietinnot.filter((submission) => submission.selected)} />}
 						</div>}
 					{(step === "project selection" || step === "document selection") &&
 						<div>
-							{<DocumentInfo type={type} projectId={project._id} objectName={"heLuonnokset"} header={"Luonnos hallituksen esitykseksi"} submissions={project.dokumentit.heLuonnokset ?? []} setSelectedProjects={setSelectedProjects} />}
-							{<DocumentInfo type={type} projectId={project._id} objectName={"lausuntokierroksenLausunnot"} header={"Lausuntokierroksen lausunnot"} submissions={project.dokumentit.lausuntokierroksenLausunnot ?? []} setSelectedProjects={setSelectedProjects} />}
-							{<DocumentInfo type={type} projectId={project._id} objectName={"asiantuntijalausunnot"} header={"Asiantuntijalausunnot"} submissions={project.dokumentit.asiantuntijalausunnot ?? []} setSelectedProjects={setSelectedProjects} />}
-							{<DocumentInfo type={type} projectId={project._id} objectName={"valiokunnanLausunnot"} header={"Valiokunnan lausunnot"} submissions={project.dokumentit.valiokunnanLausunnot ?? []} setSelectedProjects={setSelectedProjects} />}
-							{<DocumentInfo type={type} projectId={project._id} objectName={"valiokunnanMietinnot"} header={"Valiokunnan mietinnöt"} submissions={project.dokumentit.valiokunnanMietinnot ?? []} setSelectedProjects={setSelectedProjects} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"heLuonnokset"} header={t.headers[0]} submissions={project.dokumentit.heLuonnokset ?? []} setSelectedProjects={setSelectedProjects} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"lausuntokierroksenLausunnot"} header={t.headers[1]} submissions={project.dokumentit.lausuntokierroksenLausunnot ?? []} setSelectedProjects={setSelectedProjects} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"asiantuntijalausunnot"} header={t.headers[2]} submissions={project.dokumentit.asiantuntijalausunnot ?? []} setSelectedProjects={setSelectedProjects} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"valiokunnanLausunnot"} header={t.headers[3]} submissions={project.dokumentit.valiokunnanLausunnot ?? []} setSelectedProjects={setSelectedProjects} />}
+							{<DocumentInfo type={type} projectId={project._id} objectName={"valiokunnanMietinnot"} header={t.headers[4]} submissions={project.dokumentit.valiokunnanMietinnot ?? []} setSelectedProjects={setSelectedProjects} />}
 						</div>}
 				</div>}
 		</div>

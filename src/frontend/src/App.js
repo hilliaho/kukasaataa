@@ -10,6 +10,7 @@ import Instructions from './components/Instructions'
 import './App.css';
 import LanguageContext from './LanguageContext';
 import logo from './assets/logo2.webp'
+import textsJson from './texts.json'
 
 
 
@@ -36,8 +37,10 @@ function App() {
   const [totalSearchResults, setTotalSearchResults] = useState(0);
   const [joinCode, setJoinCode] = useState('')
   const [language, setLanguage] = useState(["fi", "sv"])
+  const [texts, setTexts] = useState(textsJson.fi)
   const [instructions, setInstructions] = useState(false)
   const prefetchedPagesRef = useRef({});
+  const t = texts.app
 
 
   useEffect(() => {
@@ -87,17 +90,19 @@ function App() {
   const handleLanguageChange = () => {
     if (language[0] === "fi") {
       setLanguage(["sv", "fi"])
+      setTexts(textsJson.sv)
     } else {
       setLanguage(["fi", "sv"])
+      setTexts(textsJson.fi)
     }
   }
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage }}>
+    <LanguageContext.Provider value={{ texts, language }}>
       <div className='header-container'>
         <div className='button-row'>
-          <button className='language-button' onClick={() => setInstructions(!instructions)}>{language[0] === "fi" ? ("Ohjeet") : ("Ohjeet")}</button>
-          <button className='language-button' onClick={handleLanguageChange}>{language[0] === "fi" ? ("Svenska") : ("Suomi")}</button>
+          <button className='link-button' onClick={() => setInstructions(!instructions)}>{t.instructionsButton}</button>
+          <button className='link-button' onClick={handleLanguageChange}>{t.languageButton}</button>
         </div>
         <div className='header-row'>
           <img className='logo' src={logo} alt='kukasäätää-logo: ryhmä ihmisiä' />

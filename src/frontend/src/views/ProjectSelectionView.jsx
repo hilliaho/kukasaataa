@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import BackButton from "../components/BackButton";
 import SearchField from "../components/SearchField";
 import SelectedProjects from "../components/SelectedProjects";
 import SearchResults from "../components/SearchResults";
 import Pagination from "../components/Pagination";
+import LanguageContext from "../LanguageContext";
+
 
 const ProjectSelectionView = ({ API_URL, joinCode, setJoinCode, searchQuery, setSearchQuery, selectedProjects, searchResults,
   totalSearchResults,
@@ -15,6 +17,8 @@ const ProjectSelectionView = ({ API_URL, joinCode, setJoinCode, searchQuery, set
   const navigate = useNavigate()
   const location = useLocation()
   const editCode = location.pathname.split("/")[1]
+  const { texts } = useContext(LanguageContext)
+  const t = texts.projectSelection
 
 
   useEffect(() => {
@@ -46,7 +50,7 @@ const ProjectSelectionView = ({ API_URL, joinCode, setJoinCode, searchQuery, set
   }, [API_URL, currentPage, debugError, debugLog, joinCode, navigate, prefetchedPagesRef, searchQuery, selectedProjects]);
 
   const handleBackToHome = () => {
-    if (window.confirm("Tehdyt valinnat menetetään, haluatko varmasti palata etusivulle?")) {
+    if (window.confirm(t.notification)) {
       setJoinCode('')
       setSelectedProjects([])
       navigate('/')
@@ -91,7 +95,7 @@ const ProjectSelectionView = ({ API_URL, joinCode, setJoinCode, searchQuery, set
           setSearchQuery={setSearchQuery}
           handleSearch={handleSearch}
         />
-        {loading && <p>Ladataan hankkeita...</p>}
+        {loading && <p>{t.loading}</p>}
         <>
           <SelectedProjects
             selectedProjects={selectedProjects}
@@ -113,7 +117,7 @@ const ProjectSelectionView = ({ API_URL, joinCode, setJoinCode, searchQuery, set
           searchResults.length === 0 &&
           totalSearchResults === 0 && (
             <div>
-              <p>Ei hakutuloksia hakusanalla {searchQuery}.</p>
+              <p>{t.noSearchResults} {searchQuery}.</p>
               <button
                 onClick={() => {
                   setSearchQuery("");
@@ -122,13 +126,13 @@ const ProjectSelectionView = ({ API_URL, joinCode, setJoinCode, searchQuery, set
                 }}
                 className="reset-search-button"
               >
-                Peruuta haku
+                {t.resetSearchButton}
               </button>
             </div>
           )}
       </div>
       <button className="continue-button" onClick={handleContinue}>
-        Tallenna ja siirry eteenpäin
+        {t.continueButton}
       </button>
     </>
   )

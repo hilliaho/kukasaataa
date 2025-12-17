@@ -1,17 +1,20 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useNavigate } from "react-router-dom";
+import LanguageContext from "../LanguageContext";
 
 const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSelectedProjects }) => {
   const navigate = useNavigate()
   const [showEditCodeInput, setShowEditCodeInput] = useState(false)
   const [editCode, setEditCode] = useState('')
+  const { texts } = useContext(LanguageContext)
+  const t = texts.home
 
   const handleJoinWithCode = async (e) => {
     try {
       e.preventDefault();
       const res = await fetch(`${API_URL}/selections/join/${joinCode}`);
       if (!res.ok) {
-        alert(`Koodilla ${joinCode} ei löytynyt dokumentteja. Tarkista, että koodi on oikein.`);
+        alert(`${t.wrongCodeNotification}`);
         return;
       }
       const data = await res.json();
@@ -27,7 +30,7 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
     try {
       const res = await fetch(`${API_URL}/selections/edit/${editCode}`);
       if (!res.ok) {
-        alert(`Koodilla ${editCode} ei löytynyt dokumentteja. Tarkista, että koodi on oikein.`);
+        alert(`${t.wrongCodeNotification}`);
         return;
       }
       const data = await res.json();
@@ -37,7 +40,7 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
       navigate(`/${editCode}/select-projects`)
     } catch (error) {
       debugError("Virhe liittyessä alustalle:", error);
-      alert("Jokin meni pieleen. Yritä uudelleen.");
+      alert(t.error);
     }
   }
 
@@ -63,30 +66,30 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
     <div className="center-container">
 
       <div className="join-form">
-        <h2>Osallistu peliin</h2>
+        <h2>{t.join}</h2>
         <form onSubmit={handleJoinWithCode}>
           <input
             type="text"
             value={joinCode}
             onChange={(e) => setJoinCode(e.target.value)}
-            placeholder="Syötä koodi"
+            placeholder={t.codeInput}
             style={{ padding: "10px", fontSize: "16px", marginTop: "10px" }}
           />
           <button
             type="submit"
             style={{ marginTop: "15px" }}
           >
-            Liity alustalle
+            {t.joinButton}
           </button>
         </form>
       </div>
 
       <div className="create-form">
-        <h3>Luo tai muokkaa pelimateriaaleja</h3>
+        <h3>{t.createOrEdit}</h3>
         <button
           onClick={createNewSession}
         >
-          Luo uusi
+          {t.createButton}
         </button>
         {showEditCodeInput &&
           <>
@@ -95,14 +98,14 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
                 type="text"
                 value={editCode}
                 onChange={(e) => setEditCode(e.target.value)}
-                placeholder="Syötä muokkauskoodi"
+                placeholder={t.editCodePlaceholder}
                 style={{ padding: "10px", fontSize: "16px", marginTop: "10px" }}
               />
               <button
                 onClick={() => handleEdit()}
                 style={{ marginTop: "15px" }}
               >
-                Muokkaa
+                {t.editButton}
               </button>
             </div>
           </>}
@@ -111,16 +114,16 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
             onClick={() => setShowEditCodeInput(true)}
             style={{ marginTop: "15px" }}
           >
-            Muokkaa
+            {t.editButton}
           </button>
         }
       </div>
 
       <div className="home-instructions">
-        <p>Tämä on Kuka säätää? -lainvalmistelupelin verkkoalusta, jossa voit valita materiaalit peliin ja jakaa ne simulaation osallistujille.</p>
-        <p>Jos olet pelin osallistuja, voit syöttää saamasi koodin yllä olevaan kenttään.</p>
-        <p>Jos olet pelin järjestäjä, voit luoda uuden pelin tai muokata aiemmin luomaasi peliä. Tarvittaessa voit katsoa lisäohjeita yläkulman linkistä ”Ohjeet”.</p>
-        <p>Muista ottaa lopuksi talteen pelisi jako- ja muokkauskoodit!</p>
+        <p>{t.instructions[0]}</p>
+        <p>{t.instructions[1]}</p>
+        <p>{t.instructions[2]}</p>
+        <p>{t.instructions[3]}</p>
       </div>
 
     </div>

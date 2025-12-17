@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import Submission from "./Submission"
 import arrow from '../assets/dropdown-arrow.png'
 import greyArrow from '../assets/grey-dropdown-arrow.png'
+import LanguageContext from "../LanguageContext"
 
 
 const DocumentInfo = ({ type, projectId, submissions, objectName, header, setSelectedProjects }) => {
 	const [expanded, setExpanded] = useState(false)
 	const [submissionList, setSubmissionList] = useState(
 		submissions.sort(function (a, b) {
-		if (a.nimi < b.nimi) {
-			return -1;
-		}
-		if (a.nimi > b.nimi) {
-			return 1
-		}
-		return 0
-	})
+			if (a.nimi < b.nimi) {
+				return -1;
+			}
+			if (a.nimi > b.nimi) {
+				return 1
+			}
+			return 0
+		})
 	)
+	const { texts } = useContext(LanguageContext)
+	const t = texts.documentInfo
 
 	const handleCheckboxChange = () => {
 		const newSelectedState = !submissionList.every(sub => sub.selected)
@@ -101,7 +104,7 @@ const DocumentInfo = ({ type, projectId, submissions, objectName, header, setSel
 									/>
 								))
 							) : (
-								<p>Ei lausuntoja.</p>
+								<p>{t.noSubmissions}</p>
 							)}
 						</div>
 					</ul>

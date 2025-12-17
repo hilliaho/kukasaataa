@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
+import LanguageContext from '../LanguageContext';
 
 const SearchField = ({ searchQuery, setSearchQuery, handleSearch }) => {
     const [localQuery, setLocalQuery] = useState(searchQuery);
+    const { texts } = useContext(LanguageContext)
+    const t = texts.searchField
 
     return (
         <div className='search-container'>
             <label htmlFor="search-input" className="search-label">
-                Valitse hanke tai hankkeet, joita haluat käyttää pelissä
+                {t.label}
             </label>
             <input
                 id="search-input"
                 type="text"
-                placeholder="Hae lakihankkeista"
+                placeholder={t.placeholder}
                 value={localQuery}
                 onChange={(e) => setLocalQuery(e.target.value)}
                 onKeyDown={(e) => {
@@ -25,8 +28,8 @@ const SearchField = ({ searchQuery, setSearchQuery, handleSearch }) => {
                 Hae
             </button>
             <div className='page-instructions'>
-                <p>Voit hakea hankkeita hakusanalla (esim. nikotiinipussi) tai diaarinumerolla (esim. HE 96/2025). </p>
-                <p>Jos et vielä tiedä, mitä lakihanketta haluat käyttää pelissä, voit etsiä sopivaa <a className='link' href='https://lakitutka.fi/' target='_blank' rel='noopener noreferrer'>Lakitutkasta</a></p>
+                <p>{t.instructions[0]}</p>
+                <p>{t.instructions[1]} <a className='link' href='https://lakitutka.fi/' target='_blank' rel='noopener noreferrer'>{t.instructions[2]}</a></p>
             </div>
         </div>
     );

@@ -1,14 +1,16 @@
-import { useEffect } from "react"
+import { useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import BackButton from "../components/BackButton"
 import { useLocation } from 'react-router-dom'
 import Project from "../components/Project"
+import LanguageContext from "../LanguageContext"
 
 const DocumentSelectionView = ({ API_URL, selectedProjects, setSelectedProjects, setLoading, joinCode, debugLog, debugError }) => {
-
   const navigate = useNavigate()
   const location = useLocation()
   const editCode = location.pathname.split("/")[1]
+  const { texts } = useContext(LanguageContext)
+  const t = texts.documentSelection
 
   useEffect(() => {
     if (selectedProjects.length === 0) {
@@ -53,10 +55,10 @@ const DocumentSelectionView = ({ API_URL, selectedProjects, setSelectedProjects,
         <BackButton handleFunction={handleBackToSelection} />
       </div>
       <div className="center-container">
-        <h2>Valitse asiakirjat</h2>
+        <h2>{t.select}</h2>
         <div className="page-instructions">
-          <p>Voit rajata pois hankkeen asiakirjoja, jotka eivät ole pelaajille tarpeen.</p>
-          <p>Erityisen hyödyllisiä pelissä ovat ”Lausuntokierroksen asiakirjat”, joista pelaajat voivat ottaa mallia omiin lausuntoihinsa.</p>
+          <p>{t.instructions[0]}</p>
+          <p>{t.instructions[1]}</p>
         </div>
         <h3>Valitut hankkeet:</h3>
         <ul>
@@ -68,7 +70,7 @@ const DocumentSelectionView = ({ API_URL, selectedProjects, setSelectedProjects,
         </ul>
       </div>
       <button className="continue-button" onClick={createSelection}>
-        Tallenna valinnat
+        {t.saveButton}
       </button>
     </>
   )
