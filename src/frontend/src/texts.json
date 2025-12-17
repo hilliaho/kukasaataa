@@ -60,7 +60,7 @@
         "Ohjeet",
         "Tämä on Kuka säätää? -lainvalmistelupelin verkkoalusta, jossa voit valita materiaalit peliin ja jakaa ne simulaation osallistujille.",
         "Jos olet pelin osallistuja, voit syöttää saamasi koodin yllä olevaan kenttään.",
-        "Jos olet pelin järjestäjä, voit luoda uuden pelin tai muokata aiemmin luomaasi peliä. Tarvittaessa voit katsoa lisäohjeita yläkulman linkistä ”Ohjeet”.",
+        "Jos olet pelin järjestäjä, voit luoda uuden pelin tai muokata aiemmin luomaasi peliä.",
         "Muista ottaa lopuksi talteen pelisi jako- ja muokkauskoodit!"
       ]
     },
@@ -154,7 +154,7 @@
         "Instruktioner",
         "Detta är webbplattformen för lagberedningsspelet Vem bestämmer?, där du kan välja material till spelet och dela dem med deltagarna i simuleringen.",
         "Om du är deltagare i spelet kan du ange den kod du fått i fältet ovan.",
-        "Om du är arrangör av spelet kan du skapa ett nytt spel eller redigera ett spel du tidigare skapat. Vid behov kan du se ytterligare instruktioner via länken ”Instruktioner” i övre hörnet.",
+        "Om du är arrangör av spelet kan du skapa ett nytt spel eller redigera ett spel du tidigare skapat.",
         "Kom ihåg att till sist spara spelets delnings- och redigeringskoder!"
       ]
     },

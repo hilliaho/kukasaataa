@@ -322,7 +322,7 @@ input[type="text"] {
 	width: 90vw;
 	max-width: 50rem;
 	margin-top: 10rem;
-	border: 1px solid #ccc;
+	background-color: var(--ks-light-green);
 	padding: 1rem;
 }
 
