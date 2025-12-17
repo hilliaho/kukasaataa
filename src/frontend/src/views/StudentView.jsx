@@ -37,8 +37,9 @@ const StudentView = ({ API_URL, debugLog, debugError }) => {
   }, [API_URL, debugError, debugLog, location.pathname, navigate, t.error, t.wrongCodeNotification])
 
   return (
-    <div className='student-view'>
+    <div className='center-container'>
       <img className='group-image' src={groupWorkImg} alt='Ryhmä opiskelijoita keskustelemassa ja työskentelemässä'/>
+      <h2>{t.header}</h2>
       {projects.map((project) => (
         <div key={project._id} className='student-project'>
           <Project step={"student"} project={project} />

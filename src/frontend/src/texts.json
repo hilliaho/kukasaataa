@@ -33,7 +33,7 @@
       "select": "Valitse asiakirjat",
       "instructions": [
         "Voit rajata pois hankkeen asiakirjoja, jotka eivät ole pelaajille tarpeen.",
-        "Erityisen hyödyllisiä pelissä ovat Lausuntokierroksen asiakirjat, joista pelaajat voivat ottaa mallia omiin lausuntoihinsa."
+        "Erityisen hyödyllisiä pelissä ovat ”Lausuntokierroksen asiakirjat”, joista pelaajat voivat ottaa mallia omiin lausuntoihinsa."
       ],
       "saveButton": "Tallenna valinnat"
     },
@@ -46,7 +46,8 @@
     },
     "student": {
       "wrongCodeNotification": "Koodilla ei löytynyt dokumentteja. Tarkista, että koodi on oikein.",
-      "error": "Jokin meni pieleen. Yritä uudelleen."
+      "error": "Jokin meni pieleen. Yritä uudelleen.",
+      "header": "Hankkeet"
     },
     "backButton": {
       "backButton": "Takaisin"
@@ -138,7 +139,8 @@
     },
     "student": {
       "wrongCodeNotification": "Inga dokument hittades med koden. Kontrollera att koden är korrekt.",
-      "error": "Något gick fel. Försök igen."
+      "error": "Något gick fel. Försök igen.",
+      "header": "Projekt"
     },
     "backButton": {
       "backButton": "Tillbaka"
