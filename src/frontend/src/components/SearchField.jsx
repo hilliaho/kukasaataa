@@ -24,8 +24,10 @@ const SearchField = ({ searchQuery, setSearchQuery, handleSearch }) => {
             <button onClick={() => { setSearchQuery(localQuery); handleSearch(localQuery); }}>
                 Hae
             </button>
-            <p>Voit hakea hankkeita hakusanalla (esim. nikotiinipussi) tai diaarinumerolla (esim. HE 96/2025). </p>
-            <p>Jos et vielä tiedä, mitä lakihanketta haluat käyttää pelissä, voit etsiä sopivaa <a href='https://lakitutka.fi/' target='_blank' rel='noopener noreferrer'>Lakitutkasta</a></p>
+            <div className='page-instructions'>
+                <p>Voit hakea hankkeita hakusanalla (esim. nikotiinipussi) tai diaarinumerolla (esim. HE 96/2025). </p>
+                <p>Jos et vielä tiedä, mitä lakihanketta haluat käyttää pelissä, voit etsiä sopivaa <a className='link' href='https://lakitutka.fi/' target='_blank' rel='noopener noreferrer'>Lakitutkasta</a></p>
+            </div>
         </div>
     );
 };

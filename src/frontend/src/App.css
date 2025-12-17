@@ -3,15 +3,14 @@
 	/* colors */
 	/*--primary: hsl(202, 67%, 36%);*/
 	--primary: #00a7bd;
-	--primary2: #0192a5;
-	--primary-dark: hsl(202, 67%, 28%);
+	--primary-dark: #006a78;
 	--background: hsl(0, 0%, 100%);
 	--ks-purple: #9063cd;
-	--ks-light-purple: #e8dafd;
+	--ks-light-purple: #e8dafdbd;
 	--ks-green: #adcb00;
 	--ks-pink: #f8485e;
 	--ks-blue: #78c8d2;
-	--ks-light-green: #e5f58b;
+	--ks-light-green: #e2ffabb8;
 }
 
 * {
@@ -145,7 +144,7 @@ input[type="text"] {
 	display: flex;
 }
 
-.language-button {
+.link-button {
 	margin: 0;
 	padding: 0.6rem;
 	background: none;
@@ -154,16 +153,24 @@ input[type="text"] {
 	font-size: 1rem;
 }
 
-.language-button:hover {
+.link-button:hover {
 	background: none;
 	color: #002d68;
+}
+
+.link {
+	color: var(--primary-dark);
+}
+
+.link:hover {
+	color: black;
 }
 
 .continue-button {
 	position: fixed;
 	bottom: 2rem;
 	right: 16px;
-	border: 0.2px solid var(--primary2);
+	border: 0.1px solid var(--primary-dark);
 	box-shadow: 1px 1px 7px #ccc;
 }
 
@@ -171,7 +178,7 @@ input[type="text"] {
 	position: fixed;
 	bottom: 2rem;
 	left: 2rem;
-	border: 0.2px solid var(--primary2);
+	border: 0.1px solid var(--primary-dark);
 	box-shadow: 1px 1px 7px #ccc;
 }
 
@@ -219,7 +226,7 @@ input[type="text"] {
 
 .page-item {
 	margin: 0 5px;
-	border: 1px solid var(--primary2);
+	border: 1px solid var(--primary-dark);
 	padding: 5px 1rem;
 	cursor: pointer;
 }
@@ -277,7 +284,7 @@ input[type="text"] {
 
 .code-notification strong {
 	margin-top: 1rem;
-	color: var(--primary2);
+	color: var(--primary-dark);
 	font-size: 1.2rem;
 }
 
@@ -331,9 +338,9 @@ input[type="text"] {
 
 .home-instructions {
 	margin: 2rem;
-	padding: 1.2rem;
-	padding-top: 0.2rem;
-	padding-bottom: 0.2rem;
+	padding: 1.6rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
 	margin-top: 5rem;
 	max-width: 40rem;
 	background-color: var(--ks-light-purple);
@@ -342,12 +349,12 @@ input[type="text"] {
 .page-instructions {
 	display: flex;
 	flex-direction: column;
-	max-width: 40rem;
+	max-width: 50rem;
 	margin-bottom: 3rem;
 	background-color: var(--ks-light-purple);
-	padding: 1.2rem;
-	padding-top: 0.5rem;
-	padding-bottom: 0.5rem;
+	padding: 1.6rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
 }
 
 .page-instructions p {
