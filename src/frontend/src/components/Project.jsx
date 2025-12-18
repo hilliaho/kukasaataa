@@ -48,8 +48,8 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 			}));
 		}
 
-		if (Array.isArray(project.dokumentit.lausunnot)) {
-			project.dokumentit.lausunnot = project.dokumentit.lausunnot.map((lausunto) => ({
+		if (Array.isArray(project.dokumentit.lausuntokierroksenLausunnot)) {
+			project.dokumentit.lausuntokierroksenLausunnot = project.dokumentit.lausuntokierroksenLausunnot.map((lausunto) => ({
 				...lausunto,
 				selected: true,
 			}));

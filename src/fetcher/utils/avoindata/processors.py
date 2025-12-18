@@ -113,7 +113,7 @@ def process_government_proposals(api_data: dict) -> list[dict]:
                     f"{lang_code}": proposal_content
                 },
                 "dokumentit": {
-                    "lausunnot": [],
+                    "lausuntokierroksenLausunnot": [],
                     "asiantuntijalausunnot": [],
                     "valiokunnanLausunnot": [],
                     "valiokunnanMietinnot": [],
