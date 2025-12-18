@@ -22,7 +22,7 @@ const Submission = ({ submission, onSelectionChange, type }) => {
                     onChange={handleCheckboxChange}
                 />
             )}
-            <a href={submission.url} target="_blank" rel="noopener noreferrer">
+            <a className="document-a" href={submission.url} target="_blank" rel="noopener noreferrer">
                 {submission.nimi}
             </a>
         </div>

@@ -92,10 +92,10 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 			{project.heTunnus && project.vuosi && project.numero && <strong>{t.code} {project.vuosi}/{project.numero}</strong>}
 			{!project.heTunnus && <strong>{project.valmistelutunnus}</strong>}
 			{project.heNimi &&
-				<div className="download-a">
-					{<a href={project["heUrl"][`${language[0]}`]} target='_blank' rel='noopener noreferrer'>{project["heNimi"][`${language[0]}`] || project["heNimi"][`${language[1]}`]}</a>}
+				<div>
+					{<a className='document-a' href={project["heUrl"][`${language[0]}`]} target='_blank' rel='noopener noreferrer'>{project["heNimi"][`${language[0]}`] || project["heNimi"][`${language[1]}`]}</a>}
 				</div>}
-			<p className='document-info-name' onClick={() => setExpandedContent(!expandedContent)}>
+			<p className='document-category-name-p' onClick={() => setExpandedContent(!expandedContent)}>
 				{t.documents} ({documentCount})
 				<img
 					className='dropdown-arrow'

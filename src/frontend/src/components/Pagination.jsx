@@ -34,7 +34,7 @@ const Pagination = ({ currentPage, paginate, totalSearchResults }) => {
         {pageNumbers.map((number, index) => (
           <button
             key={index}
-            className={`page-item ${currentPage === number ? "active" : ""}`}
+            className={`pagination-button ${currentPage === number ? "active" : ""}`}
             onClick={() => typeof number === "number" && paginate(number)}
             disabled={typeof number !== "number"}
           >

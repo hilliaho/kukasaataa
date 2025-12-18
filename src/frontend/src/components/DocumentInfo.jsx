@@ -67,7 +67,7 @@ const DocumentInfo = ({ type, projectId, submissions, objectName, header, setSel
 					/>
 				}
 				{submissions.length > 0 ? (
-					<p className='document-info-name' onClick={() => setExpanded(!expanded)}>
+					<p className='document-category-name-p' onClick={() => setExpanded(!expanded)}>
 						{header} ({submissions.length})
 						<img
 							className='dropdown-arrow'
@@ -77,7 +77,7 @@ const DocumentInfo = ({ type, projectId, submissions, objectName, header, setSel
 						/>
 					</p>
 				) : (
-					<p className='document-info-name-grey'>
+					<p className='document-category-name-p-grey'>
 						{header} ({submissions.length})
 						<img
 							className='dropdown-arrow'
@@ -91,7 +91,7 @@ const DocumentInfo = ({ type, projectId, submissions, objectName, header, setSel
 			{expanded &&
 				<div>
 					<ul>
-						<div className="preparatory-documents">
+						<div>
 							{submissionList.length > 0 ? (
 								submissionList.map((submission, index) => (
 									<Submission
