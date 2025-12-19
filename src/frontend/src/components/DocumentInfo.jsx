@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react"
 import Submission from "./Submission"
-import arrow from '../assets/dropdown-arrow.png'
+import arrowDown from '../assets/dropdown-arrow-down.png'
+import arrowRight from '../assets/dropdown-arrow-right.png'
 import greyArrow from '../assets/grey-dropdown-arrow.png'
 import LanguageContext from "../LanguageContext"
 
@@ -69,12 +70,20 @@ const DocumentInfo = ({ type, projectId, submissions, objectName, header, setSel
 				{submissions.length > 0 ? (
 					<p className='document-category-name-p' onClick={() => setExpanded(!expanded)}>
 						{header} ({submissions.length})
-						<img
-							className='dropdown-arrow'
-							src={arrow}
-							alt='dropdown arrow'
-							onClick={() => setExpanded(!expanded)}
-						/>
+						{expanded ? (
+							<img
+								className='dropdown-arrow'
+								src={arrowDown}
+								alt='dropdown arrow'
+								onClick={() => setExpanded(!expanded)}
+							/>) : (
+							<img
+								className='dropdown-arrow'
+								src={arrowRight}
+								alt='dropdown arrow'
+								onClick={() => setExpanded(!expanded)}
+							/>
+						)}
 					</p>
 				) : (
 					<p className='document-category-name-p-grey'>

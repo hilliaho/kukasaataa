@@ -1,7 +1,9 @@
 import { useState, useContext } from 'react';
 import LanguageContext from "../LanguageContext"
 import DocumentInfo from './DocumentInfo';
-import arrow from '../assets/dropdown-arrow.png'
+import arrowDown from '../assets/dropdown-arrow-down.png'
+import arrowRight from '../assets/dropdown-arrow-right.png'
+
 
 const Project = ({ step, project, selectedProjects, setSelectedProjects, location }) => {
 	const [expandedContent, setExpandedContent] = useState(false);
@@ -95,16 +97,26 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects, locatio
 			{!project.heTunnus && <strong>{project.valmistelutunnus}</strong>}
 			{project.heNimi &&
 				<div>
-					{<a className='document-a' href={project["heUrl"][`${language[0]}`]} target='_blank' rel='noopener noreferrer'>{project["heNimi"][`${language[0]}`] || project["heNimi"][`${language[1]}`]}</a>}
+					{<a className='project-a' href={project["heUrl"][`${language[0]}`]} target='_blank' rel='noopener noreferrer'>{project["heNimi"][`${language[0]}`] || project["heNimi"][`${language[1]}`]}</a>}
 				</div>}
-			<p className='document-category-name-p' onClick={() => setExpandedContent(!expandedContent)}>
+			<p className='document-list-name-p' onClick={() => setExpandedContent(!expandedContent)}>
 				{t.documents} ({documentCount})
-				<img
-					className='dropdown-arrow'
-					src={arrow}
-					alt='dropdown arrow'
-					onClick={() => setExpandedContent(!expandedContent)}
-				/>
+				{expandedContent ? (
+					<img
+						className='dropdown-arrow'
+						src={arrowDown}
+						alt='dropdown arrow'
+						onClick={() => setExpandedContent(!expandedContent)}
+					/>
+				) : (
+					<img
+						className='dropdown-arrow'
+						src={arrowRight}
+						alt='dropdown arrow'
+						onClick={() => setExpandedContent(!expandedContent)}
+					/>
+				)}
+
 			</p>
 			{expandedContent &&
 				<div className='expanded-content'>
