@@ -73,11 +73,9 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
             value={joinCode}
             onChange={(e) => setJoinCode(e.target.value)}
             placeholder={t.codeInput}
-            style={{ padding: "10px", fontSize: "16px", marginTop: "10px" }}
           />
           <button
             type="submit"
-            style={{ marginTop: "15px" }}
           >
             {t.joinButton}
           </button>
