@@ -3,12 +3,14 @@ import LanguageContext from "../LanguageContext"
 import DocumentInfo from './DocumentInfo';
 import arrow from '../assets/dropdown-arrow.png'
 
-const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
+const Project = ({ step, project, selectedProjects, setSelectedProjects, location }) => {
 	const [expandedContent, setExpandedContent] = useState(false);
 	const isSelected = step === "student" ? true : selectedProjects.some(p => p._id === project._id)
 	const type = step === "document selection" ? "checkbox" : "link"
 	const { language, texts } = useContext(LanguageContext)
 	const t = texts.project
+
+	const classNameString = location ? ('selected-project-item') : ('project-item')
 
 	const countDocuments = () => {
 		const docs = project.dokumentit
@@ -81,7 +83,7 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 
 
 	return (
-		<div key={project._id} className='project-item'>
+		<div key={project._id} className={classNameString}>
 			{step === "project selection" &&
 				<input
 					type="checkbox"
@@ -89,7 +91,7 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects }) => {
 					onChange={() => handleCheckboxChange(project)}
 				/>
 			}
-			{project.heTunnus && project.vuosi && project.numero && <strong>{t.code} {project.vuosi}/{project.numero}</strong>}
+			{project.heTunnus && project.vuosi && project.numero && <strong>{t.code} {project.numero}/{project.vuosi}</strong>}
 			{!project.heTunnus && <strong>{project.valmistelutunnus}</strong>}
 			{project.heNimi &&
 				<div>

@@ -7,8 +7,8 @@ const SelectedProjects = ({ selectedProjects, setSelectedProjects }) => {
     const t = texts.selectedProjects
 
     return (
-        <div className="project-container">
-            <h2>{t.selectedProjects}</h2>
+        <div>
+            <h2 className="selected-projects-h2">{t.selectedProjects}</h2>
             <ul>
                 {selectedProjects.length === 0 ? (
                     <p>{t.noSelectedProjects}</p>
@@ -20,6 +20,7 @@ const SelectedProjects = ({ selectedProjects, setSelectedProjects }) => {
                                 project={project}
                                 selectedProjects={selectedProjects}
                                 setSelectedProjects={setSelectedProjects}
+						        location={"selected projects"}
                             />
                         </div>
                     ))
