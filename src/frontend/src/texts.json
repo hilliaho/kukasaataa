@@ -91,7 +91,7 @@
     },
     "selectedProjects": {
       "selectedProjects": "Valitut hankkeet",
-      "noSelectedProjects": "Ei valittuja hankkeita"
+      "noSelectedProjects": "Ei valittuja hankkeita."
     }
   },
   "sv": {
@@ -186,7 +186,7 @@
     },
     "selectedProjects": {
       "selectedProjects": "Valda projekt",
-      "noSelectedProjects": "Inga valda projekt"
+      "noSelectedProjects": "Inga valda projekt."
     }
   }
 }
