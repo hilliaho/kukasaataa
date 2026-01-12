@@ -59,6 +59,7 @@ const DocumentSelectionView = ({ API_URL, selectedProjects, setSelectedProjects,
         <div className="page-instructions">
           <p>{t.instructions[0]}</p>
           <p>{t.instructions[1]}</p>
+          <p>{t.instructions[2]}</p>
         </div>
         <h3>Valitut hankkeet:</h3>
         <ul>

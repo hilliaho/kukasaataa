@@ -2,7 +2,8 @@
   "fi": {
     "app": {
       "instructionsButton": "Ohjeet",
-      "languageButton": "Svenska"
+      "languageButton": "Svenska",
+      "header": "Kuka säätää?"
     },
     "home": {
       "wrongCodeNotification": "Koodilla ei löytynyt dokumentteja. Tarkista, että koodi on oikein.",
@@ -33,7 +34,8 @@
       "select": "Valitse asiakirjat",
       "instructions": [
         "Voit rajata pois hankkeen asiakirjoja, jotka eivät ole pelaajille tarpeen.",
-        "Erityisen hyödyllisiä pelissä ovat ”Lausuntokierroksen asiakirjat”, joista pelaajat voivat ottaa mallia omiin lausuntoihinsa."
+        "Erityisen hyödyllisiä pelissä ovat valmisteluasiakirjoihin kuuluvat ”Lausuntokierroksen lausunnot”, joista pelaajat voivat ottaa mallia omiin lausuntoihinsa.",
+        "Voit lukea asiakirjan klikkaamalla sen nimeä. ​Asiakirja avautuu uuteen välilehteen.​"
       ],
       "saveButton": "Tallenna valinnat"
     },
@@ -57,14 +59,21 @@
       "noSubmissions": "Ei lausuntoja."
     },
     "instructions": {
-      "instructions": [
+      "text": [
         "Ohjeet",
-        "Tämä on Kuka säätää? -lainvalmistelupelin verkkoalusta, jossa voit valita materiaalit peliin ja jakaa ne simulaation osallistujille.",
-        "Jos olet pelin osallistuja, voit syöttää saamasi koodin yllä olevaan kenttään.",
-        "Jos olet pelin järjestäjä, voit luoda uuden pelin tai muokata aiemmin luomaasi peliä.",
+        "Tämä on Kuka säätää? -lainvalmistelupelin verkkoalusta, jossa voit valita materiaalit peliin ja jakaa ne simulaation osallistujille. Itse pelin ohjeet löydät",
+        "Jos olet pelin osallistuja, syötä saamasi koodi etusivun tekstikenttään.",
+        "Jos olet pelin järjestäjä, voit luoda uuden pelin tai muokata aiemmin luomaasi peliä. Tarvittaessa voit katsoa lisäohjeita yläkulman linkistä ”Ohjeet”.",
         "Muista ottaa lopuksi talteen pelisi jako- ja muokkauskoodit!"
-      ]
+      ],
+      "link": "https://sites.utu.fi/kuka-saataa/opettajaohjeet-02-2026/",
+      "linkName": "tästä linkistä"
     },
+    "studentInstructions": [
+      "Ohjeet",
+      "Voit lukea lakihankkeen asiakirjoja klikkaamalla sinisiä linkkejä. Asiakirjat avautuvat uuteen välilehteen.",
+      "Listat avautuvat, kun klikkaat listan otsikkoa (esim. ”Valmisteluasiakirjat”) tai nuolta sen perässä. Lista sulkeutuu samanlaisella klikkauksella."
+    ],
     "project": {
       "documents": "Valmisteluasiakirjat",
       "headers": [
@@ -79,11 +88,16 @@
     "searchField": {
       "label": "Valitse hanke tai hankkeet, joita haluat käyttää pelissä",
       "placeholder": "Hae lakihankkeista",
-      "instructions": [
-        "Voit hakea hankkeita hakusanalla (esim. nikotiinipussi) tai diaarinumerolla (esim. HE 96/2025).",
-        "Jos et vielä tiedä, mitä lakihanketta haluat käyttää pelissä, voit etsiä sopivaa",
-        "Lakitutkasta"
-      ]
+      "instructions": {
+        "text": [
+          "Voit hakea hankkeita hakusanalla (esim. nikotiinipussi) tai diaarinumerolla (esim. HE 96/2025).",
+          "Jos et vielä tiedä, mitä lakihanketta haluat käyttää pelissä, voit etsiä sopivaa",
+          "Valitse hanke pelin aineistoihin klikkaamalla ruutua sen edessä."
+        ],
+        "link": "https://lakitutka.fi",
+        "linkName": "Lakitutkasta"
+      },
+      "button": "Hae"
     },
     "searchResults": {
       "results": "Hakutulokset hakusanalla",
@@ -97,7 +111,8 @@
   "sv": {
     "app": {
       "instructionsButton": "Instruktioner",
-      "languageButton": "Suomi"
+      "languageButton": "Suomi",
+      "header": "Joxa med lagen!"
     },
     "home": {
       "wrongCodeNotification": "Inga dokument hittades med koden. Kontrollera att koden är korrekt.",
@@ -128,7 +143,8 @@
       "select": "Välj dokument",
       "instructions": [
         "Du kan utesluta projektets dokument som inte är nödvändiga för spelarna.",
-        "Särskilt användbara i spelet är dokument från remissrundan, som spelarna kan använda som mall för sina egna utlåtanden."
+        "Särskilt nyttiga i spelet är ”Utlåtanden från remissrundan”, som finns bland ”Beredningsdokument”. Spelarna kan använda dem som modeller för sina egna utlåtanden.",
+        "Du kan läsa dokumentet genom att klicka på dess namn. Dokumentet öppnas i en ny flik."
       ],
       "saveButton": "Spara val"
     },
@@ -152,14 +168,21 @@
       "noSubmissions": "Inga utlåtanden."
     },
     "instructions": {
-      "instructions": [
+      "text": [
         "Instruktioner",
-        "Detta är webbplattformen för lagberedningsspelet Vem bestämmer?, där du kan välja material till spelet och dela dem med deltagarna i simuleringen.",
-        "Om du är deltagare i spelet kan du ange den kod du fått i fältet ovan.",
+        "Detta är webbplattformen för lagberedningsspelet Joxa med lagen!, där du kan välja material till spelet och dela dem med deltagarna i simuleringen. Instruktionerna för spelet hittar du på",
+        "Om du är deltagare i spelet kan du ange den kod du fått i fältet på framsidan.",
         "Om du är arrangör av spelet kan du skapa ett nytt spel eller redigera ett spel du tidigare skapat.",
         "Kom ihåg att till sist spara spelets delnings- och redigeringskoder!"
-      ]
+      ],
+      "link": "https://sites.utu.fi/kuka-saataa/lararinstruktioner-02-2026/",
+      "linkName": "denna länk"
     },
+    "studentInstructions": [
+      "Instruktioner",
+      "Du kan läsa projektets dokument genom att klicka på de blå länkarna. Dokumenten öppnas i en ny flik.",
+      "Listorna öppnas när du klickar på listans rubrik (t.ex. ”Beredningsdokument”) eller pilen efter den. Listan stängs med samma typ av klick.​"
+    ],
     "project": {
       "documents": "Beredningsdokument",
       "headers": [
@@ -174,11 +197,16 @@
     "searchField": {
       "label": "Välj ett eller flera projekt som du vill använda i spelet",
       "placeholder": "Sök bland lagprojekt",
-      "instructions": [
-        "Du kan söka projekt med sökord (t.ex. nikotinpåse) eller diarienummer (t.ex. RP 96/2025).",
-        "Om du ännu inte vet vilket lagprojekt du vill använda i spelet kan du söka ett lämpligt",
-        "i Lakitutka"
-      ]
+      "instructions": {
+        "text": [
+          "Du kan söka projekt med sökord (t.ex. nikotinpåsar) eller med diarienummer (t.ex. RP 96/2025).",
+          "​Om du ännu inte vet vilket lagprojekt du vill använda i spelet kan du hitta ett lämpligt projekt med",
+          "Välj projekt för spelets material genom att klicka på rutan framför det."
+        ],
+        "link": "https://lakitutka.fi/?lang=se",
+        "linkName": "Lagradarn"
+      },
+      "button": "Söka"
     },
     "searchResults": {
       "results": "Sökresultat för sökordet",

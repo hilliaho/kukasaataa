@@ -25,11 +25,12 @@ const SearchField = ({ searchQuery, setSearchQuery, handleSearch }) => {
                 }}
             />
             <button onClick={() => { setSearchQuery(localQuery); handleSearch(localQuery); }}>
-                Hae
+                {t.button}
             </button>
             <div className='page-instructions'>
-                <p>{t.instructions[0]}</p>
-                <p>{t.instructions[1]} <a href='https://lakitutka.fi/' target='_blank' rel='noopener noreferrer'>{t.instructions[2]}</a>.</p>
+                <p>{t.instructions.text[0]}</p>
+                <p>{t.instructions.text[1]} <a href={t.instructions.link} target='_blank' rel='noopener noreferrer'>{t.instructions.linkName}</a>.</p>
+                <p>{t.instructions.text[2]}</p>
             </div>
         </div>
     );
