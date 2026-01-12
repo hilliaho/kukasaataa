@@ -112,7 +112,7 @@ def find_proposal_drafts(data):
                                         "url": url,
                                     }
                                 ],
-                                "lausunnot": [],
+                                "lausuntokierroksenLausunnot": [],
                                 "asiantuntijalausunnot": [],
                                 "valiokunnanLausunnot": [],
                                 "valiokunnanMietinnot": [],
