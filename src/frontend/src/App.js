@@ -107,7 +107,7 @@ function App() {
         </div>
         <div className='header-row'>
           <img className='logo' src={logo} alt='kukasäätää-logo: ryhmä ihmisiä' />
-          <h1>Kuka säätää?</h1>
+          <h1>{t.header}</h1>
         </div>
       </div>
       {instructions && (<div className='center-container'><Instructions instructions={instructions} setInstructions={setInstructions} role={role}/></div>)}
