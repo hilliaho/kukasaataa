@@ -2,7 +2,7 @@ import { useState, useContext } from "react"
 import { useNavigate } from "react-router-dom";
 import LanguageContext from "../LanguageContext";
 
-const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSelectedProjects }) => {
+const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSelectedProjects, setRole }) => {
   const navigate = useNavigate()
   const [showEditCodeInput, setShowEditCodeInput] = useState(false)
   const [editCode, setEditCode] = useState('')
@@ -18,6 +18,7 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
         return;
       }
       const data = await res.json();
+      setRole("student");
       debugLog("[HomeView] Oppilaan data:", data);
       navigate(`/student/${joinCode}`)
     } catch (error) {
@@ -35,8 +36,8 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
       }
       const data = await res.json();
       debugLog("[HomeView] Muokattava data:", data);
-      setSelectedProjects(data.documents)
-      setJoinCode(data.joinCode)
+      setSelectedProjects(data.documents);
+      setJoinCode(data.joinCode);
       navigate(`/${editCode}/select-projects`)
     } catch (error) {
       debugError("Virhe liittyessä alustalle:", error);
@@ -48,6 +49,7 @@ const HomeView = ({ API_URL, joinCode, setJoinCode, debugLog, debugError, setSel
     const join = generateCode();
     const edit = generateCode();
     setJoinCode(join);
+    setRole("teacher");
     navigate(`/${edit}/select-projects`)
   }
 
