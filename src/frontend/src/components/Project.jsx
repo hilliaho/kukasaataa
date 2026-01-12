@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import LanguageContext from "../LanguageContext"
 import DocumentInfo from './DocumentInfo';
 import arrowDown from '../assets/dropdown-arrow-down.png'
@@ -13,6 +13,10 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects, locatio
 	const t = texts.project
 
 	const classNameString = location ? ('selected-project-item') : ('project-item')
+
+	useEffect(()=>{
+		setExpandedContent(false)
+	}, [project])
 
 	const countDocuments = () => {
 		const docs = project.dokumentit
