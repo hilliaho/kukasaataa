@@ -39,6 +39,7 @@ function App() {
   const [language, setLanguage] = useState(["fi", "sv"])
   const [texts, setTexts] = useState(textsJson.fi)
   const [instructions, setInstructions] = useState(false)
+  const [role, setRole] = useState("undefined")
   const prefetchedPagesRef = useRef({});
   const t = texts.app
 
@@ -109,7 +110,7 @@ function App() {
           <h1>Kuka säätää?</h1>
         </div>
       </div>
-      {instructions && (<div className='center-container'><Instructions instructions={instructions} setInstructions={setInstructions} /></div>)}
+      {instructions && (<div className='center-container'><Instructions instructions={instructions} setInstructions={setInstructions} role={role}/></div>)}
       {!instructions && (
         <Router>
           <div className="App">
@@ -122,6 +123,7 @@ function App() {
                   joinCode={joinCode}
                   setJoinCode={setJoinCode}
                   setSelectedProjects={setSelectedProjects}
+                  setRole={setRole}
                 />} />
               <Route exact path="/:editCode/select-projects" element={
                 <ProjectSelectionView
