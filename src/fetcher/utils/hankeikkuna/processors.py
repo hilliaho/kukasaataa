@@ -12,18 +12,22 @@ def process_hankeikkuna_data(data: dict) -> list[dict]:
 
     for item in data.get("result", []):
         preparatory_identifier = item.get("kohde", {}).get("tunnus")
-        proposal_identifier = _extract_proposal_identifier(item) or preparatory_identifier
+        proposal_identifier = (
+            _extract_proposal_identifier(item) or preparatory_identifier
+        )
         documents = item.get("asiakirjat", [])
         submissions = _extract_submissions(documents)
 
         if not proposal_identifier or not submissions:
             continue
 
-        submission_data.append({
-            "preparatoryIdentifier": preparatory_identifier,
-            "proposalIdentifier": proposal_identifier,
-            "submissions": submissions,
-        })
+        submission_data.append(
+            {
+                "preparatoryIdentifier": preparatory_identifier,
+                "proposalIdentifier": proposal_identifier,
+                "submissions": submissions,
+            }
+        )
 
     return submission_data
 
@@ -59,10 +63,9 @@ def find_proposal_drafts(data: dict) -> list[dict]:
     drafts = []
     lang_code = "fi"
     match_list = [
-        "he-luonnos",
-        "he luonnos",
-        "luonnos he",
-        "luonnos hallituksen esitykseksi",
+        "förslag till lag",
+        "luonnos",
+        "utkast"
     ]
 
     for item in data.get("result", []):
@@ -73,7 +76,12 @@ def find_proposal_drafts(data: dict) -> list[dict]:
         for doc in documents:
             name = doc.get("nimi", {}).get("fi", "")
             url = doc.get("url", "")
-            if not name or not url:
+            type = doc.get("tyyppi", "")
+
+            if not name or not url or not type:
+                continue
+
+            if type == "LAUSUNTO":
                 continue
 
             if not any(match in name.lower() for match in match_list):
@@ -93,21 +101,23 @@ def find_proposal_drafts(data: dict) -> list[dict]:
             if not proposal_name:
                 continue
 
-            drafts.append({
-                "dokumentit": {
-                    "heLuonnokset": [
-                        {"nimi": f"Luonnos: {proposal_name}", "url": url}
-                    ],
-                    "lausunnot": [],
-                    "asiantuntijalausunnot": [],
-                    "valiokunnanLausunnot": [],
-                    "valiokunnanMietinnot": [],
-                },
-                "heTunnus": proposal_identifier,
-                "paivamaara": date,
-                "heSisalto":  {f"{lang_code}": proposal_content},
-                "valmistelutunnus": preparatory_identifier,
-            })
+            drafts.append(
+                {
+                    "dokumentit": {
+                        "heLuonnokset": [
+                            {"nimi": f"Luonnos: {proposal_name}", "url": url}
+                        ],
+                        "lausunnot": [],
+                        "asiantuntijalausunnot": [],
+                        "valiokunnanLausunnot": [],
+                        "valiokunnanMietinnot": [],
+                    },
+                    "heTunnus": proposal_identifier,
+                    "paivamaara": date,
+                    "heSisalto": {f"{lang_code}": proposal_content},
+                    "valmistelutunnus": preparatory_identifier,
+                }
+            )
 
     return drafts
 
