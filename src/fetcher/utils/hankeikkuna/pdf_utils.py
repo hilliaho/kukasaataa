@@ -40,4 +40,10 @@ def find_proposal_name_from_draft_content(content_txt: str) -> str:
         content_txt,
         re.S,
     )
+    if not match:
+        match = re.search(
+            r"(Regeringens proposition till riksdage.*?)(?=PROPOSITIONENS HUVUDSAKLIGA INNEHÅLL)",
+            content_txt,
+            re.S,
+    )
     return match.group(1).strip() if match else ""

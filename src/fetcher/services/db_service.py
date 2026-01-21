@@ -138,13 +138,43 @@ class DBService:
             logger.info(f"Lisätty {he_id}: {document_type}: {data['nimi']}")
         return result.modified_count
 
+    def push_committee_document(self, data, he_id, document_type, lang_code):
+        result = self.collection.update_one(
+            {"heTunnus": he_id, f"dokumentit.{document_type}.id": data.get("id")},
+            {"$set": {f"dokumentit.{document_type}.$.{lang_code}": data}},
+        )
+
+        if result.modified_count > 0:
+            logger.info(
+                f"Päivitetty {he_id}: {document_type}: {data['nimi']} ({lang_code})"
+            )
+            return 1
+
+        new_doc = {"id": data.get("id, lang_code: data")}
+
+        result = self.collection.update_one(
+            {"heTunnus": he_id}, {"$push": {f"dokumentit.{document_type}": new_doc}}
+        )
+
+        if result.modified_count > 0:
+            logger.info(
+                f"Lisätty {he_id}: {document_type}: {data['nimi']} ({lang_code})"
+            )
+
+        return result.modified_count
+
     def push_submissions(self, project, he_id, document_type):
         for submission in project.get("submissions"):
             self.push_document(submission, he_id, document_type)
 
     def add_drafts(self, data):
         he_id = data.get("heTunnus")
+        preparatory_id = data.get("valmistelutunnus")
         if he_id and self.he_exists(data):
+            self.push_document(
+                data["dokumentit"]["heLuonnokset"][0], data["heTunnus"], "heLuonnokset"
+            )
+        elif preparatory_id and self.he_exists(data):
             self.push_document(
                 data["dokumentit"]["heLuonnokset"][0], data["heTunnus"], "heLuonnokset"
             )

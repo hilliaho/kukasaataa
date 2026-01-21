@@ -18,7 +18,7 @@ class Exporter:
         avoindata_service=AvoindataApiService,
         hankeikkuna_service=HankeikkunaApiService,
         per_page: int = 30,
-        max_pages: int = 10,
+        max_pages: int = 10000,
     ):
         self.db = db_service
         self.avoindata_service = avoindata_service
@@ -35,7 +35,7 @@ class Exporter:
                 "index_getter": avoindata.get_avoindata_document_index,
                 "continue_checker": avoindata.continue_condition,
                 "adder": self.db.add_document,
-                "updater": self.db.add_he_info
+                "updater": self.db.add_he_info,
             },
             {
                 "document_type": "Regeringens+proposition",
@@ -45,7 +45,7 @@ class Exporter:
                 "index_getter": avoindata.get_avoindata_document_index,
                 "continue_checker": avoindata.continue_condition,
                 "adder": self.db.add_document,
-                "updater": self.db.add_he_info
+                "updater": self.db.add_he_info,
             },
             {
                 "document_type": "Kansalaisaloite",
@@ -55,7 +55,7 @@ class Exporter:
                 "index_getter": avoindata.get_avoindata_document_index,
                 "continue_checker": avoindata.continue_condition,
                 "adder": self.db.add_document,
-                "updater": self.db.add_he_info
+                "updater": self.db.add_he_info,
             },
             {
                 "document_type": "Medborgarinitiativ",
@@ -65,7 +65,7 @@ class Exporter:
                 "index_getter": avoindata.get_avoindata_document_index,
                 "continue_checker": avoindata.continue_condition,
                 "adder": self.db.add_document,
-                "updater": self.db.add_he_info
+                "updater": self.db.add_he_info,
             },
             {
                 "document_type": "Hankeikkuna",
@@ -75,7 +75,7 @@ class Exporter:
                 "index_getter": hankeikkuna.get_hankeikkuna_modified_date,
                 "continue_checker": hankeikkuna.continue_condition,
                 "adder": self.db.add_drafts,
-                "updater": None
+                "updater": None,
             },
             {
                 "document_type": "Asiantuntijalausunto",
@@ -87,7 +87,7 @@ class Exporter:
                 "adder": lambda doc: self.db.push_document(
                     doc, doc["heTunnus"], "asiantuntijalausunnot"
                 ),
-                "updater": None
+                "updater": None,
             },
             {
                 "document_type": "Valiokunnan+lausunto",
@@ -96,10 +96,22 @@ class Exporter:
                 "checker": None,
                 "index_getter": avoindata.get_avoindata_document_index,
                 "continue_checker": avoindata.continue_condition,
-                "adder": lambda doc: self.db.push_document(
-                    doc, doc["heTunnus"], "valiokunnanLausunnot"
+                "adder": lambda doc: self.db.push_committee_document(
+                    doc, doc["heTunnus"], "valiokunnanLausunnot", "fi"
                 ),
-                "updater": None
+                "updater": None,
+            },
+            {
+                "document_type": "Utl%C3%A5tande", # Valiokunnan lausunto ruotsiksi
+                "collection": "utlatande",
+                "processor": avoindata.process_preparatory_documents,
+                "checker": None,
+                "index_getter": avoindata.get_avoindata_document_index,
+                "continue_checker": avoindata.continue_condition,
+                "adder": lambda doc: self.db.push_committee_document(
+                    doc, doc["heTunnus"], "valiokunnanLausunnot", "sv"
+                ),
+                "updater": None,
             },
             {
                 "document_type": "Valiokunnan+mietintö",
@@ -108,10 +120,22 @@ class Exporter:
                 "checker": None,
                 "index_getter": avoindata.get_avoindata_document_index,
                 "continue_checker": avoindata.continue_condition,
-                "adder": lambda doc: self.db.push_document(
-                    doc, doc["heTunnus"], "valiokunnanMietinnot"
+                "adder": lambda doc: self.db.push_committee_document(
+                    doc, doc["heTunnus"], "valiokunnanMietinnot", "fi"
                 ),
-                "updater": None
+                "updater": None,
+            },
+            {
+                "document_type": "Bet%C3%A4nkande", # Valiokunnan mietintö ruotsiksi
+                "collection": "betankade",
+                "processor": avoindata.process_preparatory_documents,
+                "checker": None,
+                "index_getter": avoindata.get_avoindata_document_index,
+                "continue_checker": avoindata.continue_condition,
+                "adder": lambda doc: self.db.push_committee_document(
+                    doc, doc["heTunnus"], "valiokunnanMietinnot", "sv"
+                ),
+                "updater": None,
             },
             {
                 "document_type": "Hankeikkuna",
@@ -123,7 +147,7 @@ class Exporter:
                 "adder": lambda doc: self.db.push_submissions(
                     doc, doc["proposalIdentifier"], "lausuntokierroksenLausunnot"
                 ),
-                "updater": None
+                "updater": None,
             },
         ]
 
@@ -190,5 +214,5 @@ class Exporter:
                 index_getter=job["index_getter"],
                 continue_checker=job["continue_checker"],
                 adder=job["adder"],
-                updater=job["updater"]
+                updater=job["updater"],
             )

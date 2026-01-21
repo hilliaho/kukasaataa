@@ -51,7 +51,7 @@ def continue_condition(data: dict) -> bool:
     return bool(data.get("hasMore"))
 
 
-# --- VARSINAISTEN DOKUMENTTIEN KÄSITTELY ---
+# --- DOKUMENTTIEN KÄSITTELY ---
 
 
 def process_preparatory_documents(api_data: dict) -> list[dict]:
@@ -70,12 +70,18 @@ def process_preparatory_documents(api_data: dict) -> list[dict]:
 
         identifier = clean_he_id(row[1] or find_proposal_identifier_from_pdf(url))
 
-        if all([identifier, doc_type, name, url]):
+        doc_id = row[0]
+        lang_code = row[7]
+
+        if all([identifier, doc_type, name, url, doc_id, lang_code]):
             processed_list.append({
                 "heTunnus": identifier,
                 "nimi": name,
                 "url": url,
+                "id": doc_id,
             })
+        else:
+            logger.info("Dataa puuttuu listasta: ", identifier, doc_type, name, url, doc_id, lang_code)
     return processed_list
 
 

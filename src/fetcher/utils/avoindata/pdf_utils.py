@@ -26,6 +26,23 @@ VALIOKUNNAT = [
     "Ulkoasiainvaliokunta",
     "Valtiovarainvaliokunta",
     "Ympäristövaliokunta",
+    "Stora utskottet",
+    "Grundlagsutskottet",
+    "Utrikesutskottet",
+    "Finansutskottet",
+    "Revisionsutskottet",
+    "Arbetslivs- och jämställdhetsutskottet",
+    "Ekonomiutskottet",
+    "Framtidsutskottet",
+    "Försvarsutskottet",
+    "Förvaltningsutskottet",
+    "Jord- och skogsbruksutskottet",
+    "Kommunikationsutskottet",
+    "Kulturutskottet",
+    "Lagutskottet",
+    "Miljöutskottet",
+    "Social- och hälsovårdsutskottet",
+    "Underrättelsetillsynsutskottet",
 ]
 
 VALIOKUNTA_PATTERN = r"\b(" + "|".join(map(re.escape, VALIOKUNNAT)) + r")\b"
