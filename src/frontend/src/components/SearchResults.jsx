@@ -12,6 +12,7 @@ const SearchResults = ({ results, selectedProjects, setSelectedProjects, searchQ
 			{results.map((project, index) => (
 				<div className='project-container' key={index}>
 					<Project
+						key={project._id}
 						step={"project selection"}
 						project={project}
 						selectedProjects={selectedProjects}

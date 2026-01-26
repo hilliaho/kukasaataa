@@ -14,9 +14,6 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects, locatio
 
 	const classNameString = location ? ('selected-project-item') : ('project-item')
 
-	useEffect(()=>{
-		setExpandedContent(false)
-	}, [project])
 
 	const countDocuments = () => {
 		const docs = project.dokumentit

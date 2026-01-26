@@ -16,6 +16,7 @@ const SelectedProjects = ({ selectedProjects, setSelectedProjects }) => {
                     selectedProjects.map((project, index) => (
                         <div className='project-container' key={index}>
                             <Project
+                                key={project._id}
                                 step={"project selection"}
                                 project={project}
                                 selectedProjects={selectedProjects}
