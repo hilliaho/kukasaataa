@@ -79,6 +79,7 @@ def process_preparatory_documents(api_data: dict) -> list[dict]:
                 "nimi": name,
                 "url": url,
                 "id": doc_id,
+                "kielikoodi": lang_code
             })
         else:
             logger.info("Dataa puuttuu listasta: ", identifier, doc_type, name, url, doc_id, lang_code)

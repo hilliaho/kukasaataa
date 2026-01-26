@@ -150,7 +150,8 @@ class DBService:
             )
             return 1
 
-        new_doc = {"id": data.get("id, lang_code: data")}
+        new_doc = {"id": data.get("id"), 
+                   f"{data.get('kielikoodi')}": {"url": data.get("url"), "nimi": data.get("nimi")}}
 
         result = self.collection.update_one(
             {"heTunnus": he_id}, {"$push": {f"dokumentit.{document_type}": new_doc}}
