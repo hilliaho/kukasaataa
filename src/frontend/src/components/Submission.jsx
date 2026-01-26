@@ -1,7 +1,21 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
+import LanguageContext from "../LanguageContext"
+
 
 const Submission = ({ submission, onSelectionChange, type }) => {
     const [isSelected, setSelected] = useState(submission.selected ?? false)
+
+    const { language } = useContext(LanguageContext)
+
+    const langPrimary = language[0];
+    const langFallback = language[1];
+
+    const localized = submission[langPrimary]
+        || submission[langFallback]
+        || submission;
+
+    const name = localized.nimi;
+    const url = localized.url;
 
     useEffect(() => {
         setSelected(submission.selected ?? false)
@@ -22,8 +36,8 @@ const Submission = ({ submission, onSelectionChange, type }) => {
                     onChange={handleCheckboxChange}
                 />
             )}
-            <a className="document-a" href={submission.url} target="_blank" rel="noopener noreferrer">
-                {submission.nimi}
+            <a className="document-a" href={url} target="_blank" rel="noopener noreferrer">
+                {name}
             </a>
         </div>
     )
