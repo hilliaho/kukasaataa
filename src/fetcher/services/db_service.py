@@ -71,33 +71,18 @@ class DBService:
         return False
 
     def create_search_index(self):
-        existing_indexes = self.collection.list_indexes()
-        index_exists = any(
-            idx["key"]
-            == {
-                "heNimi.fi": "text",
-                "heNimi.sv": "text",
-                "heTunnus": "text",
-                "valmistelutunnus": "text",
-                "heSisalto.fi": "text",
-                "heSisalto.sv": "text",
-            }
-            for idx in existing_indexes
+        self.collection.create_index(
+            [
+                ("heNimi.fi", "text"),
+                ("heNimi.sv", "text"),
+                ("heTunnus", "text"),
+                ("valmistelutunnus", "text"),
+                ("heSisalto.fi", "text"),
+                ("heSisalto.sv", "text"),
+            ],
+            name="text_search_idx",
         )
-        if not index_exists:
-            self.collection.create_index(
-                [
-                    ("heNimi.fi", "text"),
-                    ("heNimi.sv", "text"),
-                    ("heTunnus", "text"),
-                    ("valmistelutunnus", "text"),
-                    ("heSisalto.fi", "text"),
-                    ("heSisalto.sv", "text"),
-                ]
-            )
-            logger.info("Tekstihakemisto luotu.")
-        else:
-            logger.info("Tekstihakemisto on jo olemassa.")
+        logger.info("Tekstihakemisto luotu.")
 
     def add_he_info(self, data):
         lang_code = list(data.get("heNimi").keys())[0]
