@@ -8,10 +8,46 @@ from .pdf_utils import (
     extract_text_from_pdf,
 )
 
-logger = logging.getLogger(__name__)
+VALIOKUNTA_MAP = {
+    "suuri valiokunta": 1,
+    "stora utskottet": 1,
+    "perustuslakivaliokunta": 2,
+    "grundlagsutskottet": 2,
+    "ulkoasiainvaliokunta": 3,
+    "utrikesutskottet": 3,
+    "valtiovarainvaliokunta": 4,
+    "finansutskottet": 4,
+    "tarkastusvaliokunta": 5,
+    "revisionsutskottet": 5,
+    "hallintovaliokunta": 6,
+    "förvaltningsutskottet": 6,
+    "lakivaliokunta": 7,
+    "lagutskottet": 7,
+    "liikenne- ja viestintävaliokunta": 8,
+    "kommunikationsutskottet": 8,
+    "maa- ja metsätalousvaliokunta": 9,
+    "jord- och skogsbruksutskottet": 9,
+    "puolustusvaliokunta": 10,
+    "försvarsutskottet": 10,
+    "sivistysvaliokunta": 11,
+    "kulturutskottet": 11,
+    "sosiaali- ja terveysvaliokunta": 12,
+    "social- och hälsovårdsutskottet": 12,
+    "talousvaliokunta": 13,
+    "ekonomiutskottet": 13,
+    "tiedusteluvalvontavaliokunta": 14,
+    "underrättelsetillsynsutskottet": 14,
+    "tulevaisuusvaliokunta": 15,
+    "framtidsutskottet": 15,
+    "työelämä- ja tasa-arvovaliokunta": 16,
+    "arbetslivs- och jämställdhetsutskottet": 16,
+    "ympäristövaliokunta": 17,
+    "miljöutskottet": 17,
+}
 
 
 # --- YLEISET APUFUNKTIOT ---
+
 
 def clean_he_id(he_id: str | None) -> str:
     if not he_id:
@@ -71,18 +107,22 @@ def process_preparatory_documents(api_data: dict) -> list[dict]:
         identifier = clean_he_id(row[1] or find_proposal_identifier_from_pdf(url))
 
         doc_id = row[0]
+
+        if name.lower() in VALIOKUNTA_MAP.keys():
+            doc_id = VALIOKUNTA_MAP[name.lower()]
+
         lang_code = row[7]
 
         if all([identifier, doc_type, name, url, doc_id, lang_code]):
-            processed_list.append({
-                "heTunnus": identifier,
-                "nimi": name,
-                "url": url,
-                "id": doc_id,
-                "kielikoodi": lang_code
-            })
-        else:
-            logger.info("Dataa puuttuu listasta: ", identifier, doc_type, name, url, doc_id, lang_code)
+            processed_list.append(
+                {
+                    "heTunnus": identifier,
+                    "nimi": name,
+                    "url": url,
+                    "id": doc_id,
+                    "kielikoodi": lang_code,
+                }
+            )
     return processed_list
 
 
@@ -107,24 +147,20 @@ def process_government_proposals(api_data: dict) -> list[dict]:
         proposal_content = extract_text_from_pdf(url) or ""
 
         if all([he_id, name, url]):
-            processed_list.append({
-                "heTunnus": he_id,
-                "paivamaara": date,
-                "heNimi": {
-                    f"{lang_code}": name
-                },
-                "heUrl": {
-                    f"{lang_code}": url
-                },
-                "heSisalto": {
-                    f"{lang_code}": proposal_content
-                },
-                "dokumentit": {
-                    "heLuonnokset": [],
-                    "lausuntokierroksenLausunnot": [],
-                    "asiantuntijalausunnot": [],
-                    "valiokunnanLausunnot": [],
-                    "valiokunnanMietinnot": [],
-                },
-            })
+            processed_list.append(
+                {
+                    "heTunnus": he_id,
+                    "paivamaara": date,
+                    "heNimi": {f"{lang_code}": name},
+                    "heUrl": {f"{lang_code}": url},
+                    "heSisalto": {f"{lang_code}": proposal_content},
+                    "dokumentit": {
+                        "heLuonnokset": [],
+                        "lausuntokierroksenLausunnot": [],
+                        "asiantuntijalausunnot": [],
+                        "valiokunnanLausunnot": [],
+                        "valiokunnanMietinnot": [],
+                    },
+                }
+            )
     return processed_list
