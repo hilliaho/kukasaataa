@@ -83,7 +83,8 @@
         "Valiokunnan lausunnot",
         "Valiokunnan mietinnöt"
       ],
-      "code": "HE"
+      "heCode": "HE",
+      "kaaCode": "KAA"
     },
     "searchField": {
       "label": "Valitse hanke tai hankkeet, joita haluat käyttää pelissä",
@@ -192,7 +193,8 @@
         "Utskottets utlåtanden",
         "Utskottets betänkanden"
       ],
-      "code": "RP"
+      "heCode": "RP",
+      "kaaCode": "MI"
     },
     "searchField": {
       "label": "Välj ett eller flera projekt som du vill använda i spelet",

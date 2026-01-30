@@ -14,6 +14,13 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects, locatio
 
 	const classNameString = location ? ('selected-project-item') : ('project-item')
 
+	let code = ""
+	if (project.tunnusTyyppi === "HE") {
+		code = t.heCode
+	} else if (project.tunnusTyyppi === "KAA") {
+		code = t.kaaCode
+	}
+
 
 	const countDocuments = () => {
 		const docs = project.dokumentit
@@ -94,7 +101,7 @@ const Project = ({ step, project, selectedProjects, setSelectedProjects, locatio
 					onChange={() => handleCheckboxChange(project)}
 				/>
 			}
-			{project.heTunnus && project.vuosi && project.numero && <strong>{t.code} {project.numero}/{project.vuosi}</strong>}
+			{project.heTunnus && project.vuosi && project.numero && <strong>{code} {project.numero}/{project.vuosi}</strong>}
 			{!project.heTunnus && <strong>{project.valmistelutunnus}</strong>}
 			{project.heNimi &&
 				<div>
