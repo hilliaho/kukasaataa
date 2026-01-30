@@ -29,7 +29,7 @@ class DBService:
                 document["numero"] = int(match.group(2))
                 document["vuosi"] = int(match.group(3))
             else:
-                logger.warning("Ei lisätty tunnusta", he_id)
+                logger.warning(f"Ei lisätty tunnusta {he_id}")
                 return None
 
         elif document.get("valmistelutunnus"):
@@ -42,7 +42,7 @@ class DBService:
                 document["numero"] = int(numero_str)
                 document["vuosi"] = int(match.group(3))
             else:
-                logger.warning("Ei lisätty tunnusta", document["valmistelutunnus"])
+                logger.warning(f"Ei lisätty tunnusta {document['valmistelutunnus']}")
         else:
             logger.warning(f"Tunnusta ei voitu jäsentää: {he_id}")
             return None
