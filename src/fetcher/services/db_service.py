@@ -52,17 +52,6 @@ class DBService:
         logger.info(f"Lisätty {project_id}")
         return result.inserted_id
 
-    def draft_exists(self, api_doc):
-        preparatory_id = api_doc.get("valmistelutunnus")
-        he_id = api_doc.get("heTunnus")
-        db_doc = self.collection.find_one({"valmistelutunnus": preparatory_id})
-        if db_doc is not None:
-            if he_id and not db_doc.get("heTunnus"):
-                logger.info(f"Päivitetään {preparatory_id}: lisätään he-tunnus {he_id}")
-                return False
-            return True
-        return False
-
     def he_exists(self, api_doc):
         he_id = api_doc.get("heTunnus")
         db_doc = self.collection.find_one({"heTunnus": he_id})
@@ -166,19 +155,67 @@ class DBService:
         for submission in project.get("submissions"):
             self.push_document(submission, he_id, document_type)
 
-    def add_drafts(self, data):
+    def add_draft(self, data: dict) -> None:
+        preparatory_id = data["valmistelutunnus"]
         he_id = data.get("heTunnus")
-        preparatory_id = data.get("valmistelutunnus")
-        if he_id and self.he_exists(data):
-            self.push_document(
-                data["dokumentit"]["heLuonnokset"][0], data["heTunnus"], "heLuonnokset"
-            )
-        elif preparatory_id and self.he_exists(data):
-            self.push_document(
-                data["dokumentit"]["heLuonnokset"][0], data["heTunnus"], "heLuonnokset"
-            )
-        else:
+        draft = data["dokumentit"]["heLuonnokset"][0]
+        draft_name = draft["nimi"]
+
+        # 1. Tarkista, onko projekti jo tietokannassa ja jos ei, niin lisää se
+        project = None
+
+        if he_id:
+            project = self.collection.find_one({"heTunnus": he_id})
+
+        if not project and preparatory_id:
+            project = self.collection.find_one({"valmistelutunnus": preparatory_id})
+
+        if not project:
             self.add_document(data)
+            logger.info(
+                f"Lisätty uusi hanke {he_id} {preparatory_id} ja sille luonnos: {draft_name}"
+            )
+            return
+
+        # 2. Päivitä heTunnus tai valmistelutunnus, jos ne puuttuvat
+        if he_id and preparatory_id:
+            if not project.get("heTunnus"):
+                self.collection.update_one(
+                    {"valmistelutunnus": preparatory_id},
+                    {"$set": {"heTunnus": he_id}},
+                )
+                logger.info(f"Lisätty he-tunnus {he_id} projektiin {preparatory_id}")
+
+            if not project.get("valmistelutunnus"):
+                self.collection.update_one(
+                    {"heTunnus": he_id},
+                    {"$set": {"valmistelutunnus": preparatory_id}},
+                )
+                logger.info(
+                    f"Lisätty valmistelutunnus {preparatory_id} projektiin {he_id}"
+                )
+
+        # 3. Jos löytyy jo samanniminen luonnos, niin korvaa se
+        replace_result = self.collection.update_one(
+            {
+                "valmistelutunnus": preparatory_id,
+                "dokumentit.heLuonnokset.nimi": draft_name,
+            },
+            {"$set": {"dokumentit.heLuonnokset.$": draft}},
+        )
+
+        if replace_result.matched_count > 0:
+            logger.info(
+                f"Päivitetty samanniminen luonnos {he_id} {preparatory_id}: {draft_name}"
+            )
+            return
+
+        # 4. Muuten lisää luonnos olemassaolevan projektin listaan
+        self.collection.update_one(
+            {"valmistelutunnus": preparatory_id},
+            {"$push": {"dokumentit.heLuonnokset": draft}},
+        )
+        logger.info(f"Lisätty uusi luonnos {preparatory_id}: {draft_name}")
 
     def get_last_modified(self, document_type):
         if document_type == "lausuntokierroksenLausunnot":

@@ -18,7 +18,7 @@ class Exporter:
         avoindata_service=AvoindataApiService,
         hankeikkuna_service=HankeikkunaApiService,
         per_page: int = 30,
-        max_pages: int = 10000,
+        max_pages: int = 1000,
     ):
         self.db = db_service
         self.avoindata_service = avoindata_service
@@ -71,10 +71,10 @@ class Exporter:
                 "document_type": "Hankeikkuna",
                 "collection": "heLuonnokset",
                 "processor": hankeikkuna.find_proposal_drafts,
-                "checker": self.db.draft_exists,
+                "checker": None,
                 "index_getter": hankeikkuna.get_hankeikkuna_modified_date,
                 "continue_checker": hankeikkuna.continue_condition,
-                "adder": self.db.add_drafts,
+                "adder": self.db.add_draft,
                 "updater": None,
             },
             {

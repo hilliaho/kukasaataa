@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 def process_hankeikkuna_data(data: dict) -> list[dict]:
-    """Poimi hankeikkuna-datasta valmistelutunnus, he-tunnus ja lausunnot."""
+    """Käsittele lausuntokierroksen lausunnot."""
     submission_data = []
 
     for item in data.get("result", []):
