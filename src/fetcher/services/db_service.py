@@ -70,6 +70,19 @@ class DBService:
             return True
         return False
 
+    def ensure_indexes(self):
+        self.create_search_index()
+        self.create_draft_index()
+
+    def create_draft_index(self):
+        self.collection.create_index(
+            [
+                ("valmistelutunnus", 1),
+                ("dokumentit.heLuonnokset.nimi", 1),
+            ],
+            name="draft_lookup_idx",
+        )
+
     def create_search_index(self):
         self.collection.create_index(
             [

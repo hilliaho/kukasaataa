@@ -151,9 +151,6 @@ class Exporter:
             },
         ]
 
-    def create_search_index(self) -> None:
-        self.db.create_search_index()
-
     def export(
         self,
         document_type: str,
