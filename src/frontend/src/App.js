@@ -28,8 +28,7 @@ const debugError = (...args) => {
 };
 
 function App() {
-  const API_URL = ''
-  //const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.REACT_APP_API_URL;
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedProjects, setSelectedProjects] = useState([]);

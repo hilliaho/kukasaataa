@@ -200,7 +200,6 @@ class Exporter:
                     updater(doc)
             if not continue_checker or not continue_checker(api_data):
                 break
-            i += 1
         if new_index:
             self.db.add_last_modified(collection_name, new_index)
 
