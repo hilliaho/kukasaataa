@@ -126,9 +126,22 @@ class DBService:
         return result.modified_count
 
     def push_committee_document(self, data, he_id, document_type, lang_code):
+        doc_id = data.get("id")
+        if doc_id is None:
+            logger.warning(f"No id provided for {he_id}, skipping")
+            return 0
+
+        # 1. Jos id:llä löytyy jo dokumentti, niin lisätään sille mahdollisesti erikielinen versio
         result = self.collection.update_one(
-            {"heTunnus": he_id, f"dokumentit.{document_type}.id": data.get("id")},
-            {"$set": {f"dokumentit.{document_type}.$.{lang_code}": data}},
+            {"heTunnus": he_id, f"dokumentit.{document_type}.id": doc_id},
+            {
+                "$set": {
+                    f"dokumentit.{document_type}.$.{lang_code}": {
+                        "url": data.get("url"),
+                        "nimi": data.get("nimi"),
+                    }
+                }
+            },
         )
 
         if result.modified_count > 0:
@@ -137,8 +150,14 @@ class DBService:
             )
             return 1
 
-        new_doc = {"id": data.get("id"), 
-                   f"{data.get('kielikoodi')}": {"url": data.get("url"), "nimi": data.get("nimi")}}
+        # 2. Jos id:tä ei löytynyt, lisätään uusi dokumentti
+        new_doc = {
+            "id": doc_id,
+            lang_code: {
+                "url": data.get("url"),
+                "nimi": data.get("nimi"),
+            },
+        }
 
         result = self.collection.update_one(
             {"heTunnus": he_id}, {"$push": {f"dokumentit.{document_type}": new_doc}}
