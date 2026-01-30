@@ -102,7 +102,7 @@ class Exporter:
                 "updater": None,
             },
             {
-                "document_type": "Utl%C3%A5tande", # Valiokunnan lausunto ruotsiksi
+                "document_type": "Utl%C3%A5tande",  # Valiokunnan lausunto ruotsiksi
                 "collection": "utlatande",
                 "processor": avoindata.process_preparatory_documents,
                 "checker": None,
@@ -126,7 +126,7 @@ class Exporter:
                 "updater": None,
             },
             {
-                "document_type": "Bet%C3%A4nkande", # Valiokunnan mietintö ruotsiksi
+                "document_type": "Bet%C3%A4nkande",  # Valiokunnan mietintö ruotsiksi
                 "collection": "betankade",
                 "processor": avoindata.process_preparatory_documents,
                 "checker": None,
@@ -164,7 +164,8 @@ class Exporter:
     ) -> None:
         db_index = self.db.get_last_modified(collection_name)
         search_after = ""
-        for i in range(1, self.max_pages):
+        new_index = None
+        for i in range(0, self.max_pages):
             logger.info(f"Fetching {collection_name} from page {i}")
             if document_type == "Hankeikkuna":
                 api_data = retry_with_backoff(
@@ -174,6 +175,9 @@ class Exporter:
                         search_after,
                     )
                 )
+                if search_after == api_data["nextSearchAfter"]:
+                    logger.info(f"{collection_name} is up to date")
+                    break
                 search_after = api_data["nextSearchAfter"]
             else:
                 api_data = retry_with_backoff(
@@ -187,6 +191,7 @@ class Exporter:
             api_index = index_getter(api_data)
             if i == 1:
                 new_index = api_index
+
             if db_index >= api_index:
                 logger.info(f"{collection_name} is up to date")
                 break

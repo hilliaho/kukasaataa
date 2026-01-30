@@ -73,6 +73,9 @@ def find_proposal_drafts(data: dict) -> list[dict]:
         proposal_identifier = _extract_proposal_identifier(item)
         documents = item.get("asiakirjat", [])
 
+        if not preparatory_identifier:
+            continue
+
         for doc in documents:
             name = doc.get("nimi", {}).get("fi", "")
             url = doc.get("url", "")
