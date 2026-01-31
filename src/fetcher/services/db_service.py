@@ -131,24 +131,29 @@ class DBService:
             logger.warning(f"No id provided for {he_id}, skipping")
             return 0
 
-        # 1. Jos id:llä löytyy jo dokumentti, niin lisätään sille mahdollisesti erikielinen versio
-        result = self.collection.update_one(
+        existing = self.collection.find_one(
             {"heTunnus": he_id, f"dokumentit.{document_type}.id": doc_id},
-            {
-                "$set": {
-                    f"dokumentit.{document_type}.$.{lang_code}": {
-                        "url": data.get("url"),
-                        "nimi": data.get("nimi"),
-                    }
-                }
-            },
+            {f"dokumentit.{document_type}.$": 1},
         )
-
-        if result.modified_count > 0:
-            logger.info(
-                f"Päivitetty {he_id}: {document_type}: {data['nimi']} ({lang_code})"
+        if existing:
+            # 1. Jos id:llä löytyy jo dokumentti, niin lisätään sille mahdollisesti erikielinen versio
+            result = self.collection.update_one(
+                {"heTunnus": he_id, f"dokumentit.{document_type}.id": doc_id},
+                {
+                    "$set": {
+                        f"dokumentit.{document_type}.$.{lang_code}": {
+                            "url": data.get("url"),
+                            "nimi": data.get("nimi"),
+                        }
+                    }
+                },
             )
-            return 1
+
+            if result.modified_count > 0:
+                logger.info(
+                    f"Päivitetty {he_id}: {document_type}: {data['nimi']} ({lang_code})"
+                )
+            return
 
         # 2. Jos id:tä ei löytynyt, lisätään uusi dokumentti
         new_doc = {
