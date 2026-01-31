@@ -189,7 +189,7 @@ class Exporter:
                 logger.info(f"No documents found for {collection_name} on page {i}")
                 break
             api_index = index_getter(api_data)
-            if i == 1:
+            if i == 0:
                 new_index = api_index
 
             if db_index >= api_index:
